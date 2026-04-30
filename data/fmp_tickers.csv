@@ -1,0 +1,263 @@
+ticker,tier,subsector,directional
+NVR,1,Homebuilders,Long
+DHI,1,Homebuilders,Long
+LEN,1,Homebuilders,Long
+PHM,1,Homebuilders,Long
+TOL,1,Homebuilders,Long
+KBH,1,Homebuilders,Long
+MTH,1,Homebuilders,Long
+TMHC,1,Homebuilders,Long
+GRBK,1,Homebuilders,Long
+MHO,1,Homebuilders,Long
+SKY,1,Homebuilders,Long
+CCS,1,Homebuilders,Long
+LGIH,1,Homebuilders,Long
+RKT,1,Mortgage Originators,Long
+UWMC,1,Mortgage Originators,Long
+PFSI,1,Mortgage Originators,Long
+LDI,1,Mortgage Originators,Long
+PFBC,1,Mortgage Originators,Long
+FNF,1,Title Insurance,Long
+FAF,1,Title Insurance,Long
+STC,1,Title Insurance,Long
+WD,1,Title Insurance,Long
+RMAX,1,Title Insurance,Long
+Z,1,RE Brokerages,Long
+ZG,1,RE Brokerages,Long
+OPEN,1,RE Brokerages,Long
+COMP,1,RE Brokerages,Long
+EXPI,1,RE Brokerages,Long
+DOUG,1,RE Brokerages,Long
+BEKE,1,RE Brokerages,Long
+NRDS,1,RE Brokerages,Long
+TREE,1,RE Brokerages,Long
+LMND,1,RE Brokerages,Long
+HCI,1,RE Brokerages,Long
+FPH,1,Land Developers,Long
+TPH,1,Land Developers,Long
+STRW,1,Land Developers,Long
+INVH,2,SFR REITs,Short on unlock
+AMH,2,SFR REITs,Short on unlock
+TRNO,2,SFR REITs,Short on unlock
+HD,2,Home Improvement,Long
+LOW,2,Home Improvement,Long
+FND,2,Home Improvement,Long
+TILE,2,Home Improvement,Long
+TCHI,2,Home Improvement,Long
+UHAL,2,Moving/Storage,Long
+EXR,2,Moving/Storage,Long
+CUBE,2,Moving/Storage,Long
+PSA,2,Moving/Storage,Long
+NSA,2,Moving/Storage,Long
+REXR,2,Moving/Storage,Long
+RH,2,Home Furnishings,Long
+WSM,2,Home Furnishings,Long
+ARHS,2,Home Furnishings,Long
+BBWI,2,Home Furnishings,Long
+LOVE,2,Home Furnishings,Long
+SNBR,2,Home Furnishings,Long
+LEG,2,Home Furnishings,Long
+HBB,2,Home Furnishings,Long
+BURL,2,Home Furnishings,Long
+ETSY,2,Home Furnishings,Long
+WHR,2,Appliances,Long
+MAS,2,Appliances,Long
+FBIN,2,Appliances,Long
+SWK,2,Appliances,Long
+ALLE,2,Appliances,Long
+AOS,2,Appliances,Long
+GNRC,2,Appliances,Long
+REZI,2,Appliances,Long
+BLDR,2,Building Products,Long
+IBP,2,Building Products,Long
+TREX,2,Building Products,Long
+OC,2,Building Products,Long
+AWI,2,Building Products,Long
+APOG,2,Building Products,Long
+SITE,2,Building Products,Long
+POOL,2,Building Products,Long
+PATK,2,Building Products,Long
+AAON,2,Building Products,Long
+ROCK,2,Building Products,Long
+NX,2,Building Products,Long
+AMWD,2,Building Products,Long
+IIIN,2,Building Products,Long
+HAYW,2,Building Products,Long
+WY,3,Lumber/Timber,Long
+RYN,3,Lumber/Timber,Long
+LPX,3,Lumber/Timber,Long
+UFPI,3,Lumber/Timber,Long
+WFG,3,Lumber/Timber,Long
+SHW,3,Paint/Coatings,Long
+RPM,3,Paint/Coatings,Long
+PPG,3,Paint/Coatings,Long
+AXTA,3,Paint/Coatings,Long
+LII,3,HVAC/Plumbing,Long
+CARR,3,HVAC/Plumbing,Long
+TT,3,HVAC/Plumbing,Long
+WMS,3,HVAC/Plumbing,Long
+ATKR,3,HVAC/Plumbing,Long
+XYL,3,HVAC/Plumbing,Long
+NWL,3,HVAC/Plumbing,Long
+IEX,3,HVAC/Plumbing,Long
+WTS,3,HVAC/Plumbing,Long
+ADT,3,Security/PropTech,Long
+CSGP,3,Security/PropTech,Long
+BKSY,3,Security/PropTech,Long
+REAL,3,Security/PropTech,Long
+APPF,3,Security/PropTech,Long
+RENT,3,Security/PropTech,Long
+WFC,3,Banks,Long
+JPM,3,Banks,Long
+BAC,3,Banks,Long
+USB,3,Banks,Long
+KEY,3,Banks,Long
+FITB,3,Banks,Long
+RF,3,Banks,Long
+CFG,3,Banks,Long
+HBAN,3,Banks,Long
+TFC,3,Banks,Long
+ZION,3,Banks,Long
+BOKF,3,Banks,Long
+FHN,3,Banks,Long
+IBCP,3,Banks,Long
+BANR,3,Banks,Long
+TRMK,3,Banks,Long
+WAFD,3,Banks,Long
+COLB,3,Banks,Long
+AX,3,Banks,Long
+NBTB,3,Banks,Long
+STBA,3,Banks,Long
+FBNC,3,Banks,Long
+ESNT,3,Private Mortgage Insurance,Complex
+MTG,3,Private Mortgage Insurance,Complex
+RDN,3,Private Mortgage Insurance,Complex
+NMIH,3,Private Mortgage Insurance,Complex
+ALL,3,P&C Insurance,Long
+TRV,3,P&C Insurance,Long
+HIG,3,P&C Insurance,Long
+CB,3,P&C Insurance,Long
+PGR,3,P&C Insurance,Long
+MKL,3,P&C Insurance,Long
+UVE,3,P&C Insurance,Long
+GLRE,3,P&C Insurance,Long
+CAT,3,Construction Equipment,Long
+DE,3,Construction Equipment,Long
+TEX,3,Construction Equipment,Long
+PCAR,3,Construction Equipment,Long
+MTW,3,Construction Equipment,Long
+AGCO,3,Construction Equipment,Long
+MHK,3,Flooring/Pool,Long
+LXU,3,Flooring/Pool,Long
+LESL,3,Flooring/Pool,Long
+BCC,3,Landscape/Pool,Long
+DNOW,3,Landscape/Pool,Long
+TPC,3,Landscape/Pool,Long
+NNN,3,REITs Co-Movement,Long
+O,3,REITs Co-Movement,Long
+STAG,3,REITs Co-Movement,Long
+FR,3,REITs Co-Movement,Long
+EGP,3,REITs Co-Movement,Long
+PLD,3,REITs Co-Movement,Long
+AHH,3,REITs Co-Movement,Long
+ITB,3,Housing ETFs,Monitor
+XHB,3,Housing ETFs,Monitor
+REZ,3,Housing ETFs,Monitor
+HOMZ,3,Housing ETFs,Monitor
+KBE,3,Housing ETFs,Monitor
+KRE,3,Housing ETFs,Monitor
+MORT,3,Housing ETFs,Monitor
+REM,3,Housing ETFs,Monitor
+PFFR,3,Housing ETFs,Monitor
+TMF,3,Housing ETFs,Monitor
+TBT,3,Housing ETFs,Monitor
+RIET,3,Housing ETFs,Monitor
+EQR,4,Apartment REITs,Short on unlock
+AVB,4,Apartment REITs,Short on unlock
+MAA,4,Apartment REITs,Short on unlock
+CPT,4,Apartment REITs,Short on unlock
+UDR,4,Apartment REITs,Short on unlock
+ESS,4,Apartment REITs,Short on unlock
+AIV,4,Apartment REITs,Short on unlock
+NXRT,4,Apartment REITs,Short on unlock
+CSR,4,Apartment REITs,Short on unlock
+IRT,4,Apartment REITs,Short on unlock
+BRT,4,Apartment REITs,Short on unlock
+VRE,4,Apartment REITs,Short on unlock
+ELME,4,Multifamily,Short on unlock
+NMR,4,Multifamily,Short on unlock
+UPBD,4,Rent-to-Own,Short on unlock
+SUI,4,Manufactured Housing REITs,Complex
+ELS,4,Manufactured Housing REITs,Complex
+MLM,5,Cement/Aggregates,Long
+VMC,5,Cement/Aggregates,Long
+EXP,5,Cement/Aggregates,Long
+CRH,5,Cement/Aggregates,Long
+CMPR,5,Cement/Aggregates,Long
+NUE,5,Steel/Rebar,Long
+STLD,5,Steel/Rebar,Long
+CMC,5,Steel/Rebar,Long
+RS,5,Steel/Rebar,Long
+WOR,5,Steel/Rebar,Long
+CLF,5,Steel/Rebar,Long
+SXT,5,Specialty Chemicals,Long
+HUN,5,Specialty Chemicals,Long
+IFF,5,Specialty Chemicals,Long
+AVY,5,Specialty Chemicals,Long
+FUL,5,Specialty Chemicals,Long
+JELD,5,Doors/Electrical,Long
+NVT,5,Doors/Electrical,Long
+ETN,5,Doors/Electrical,Long
+HUBB,5,Doors/Electrical,Long
+SYF,5,Consumer Finance,Long
+COF,5,Consumer Finance,Long
+ALLY,5,Consumer Finance,Long
+NAVI,5,Consumer Finance,Long
+GDOT,5,Consumer Finance,Long
+SOFI,5,Consumer Finance,Long
+LC,5,Consumer Finance,Long
+GXO,5,Logistics,Long
+XPO,5,Logistics,Long
+SAIA,5,Logistics,Long
+ODFL,5,Logistics,Long
+GOOGL,5,Internet/Platform,Long
+META,5,Internet/Platform,Long
+PINS,5,Internet/Platform,Long
+ANGI,5,Internet/Platform,Long
+IAC,5,Internet/Platform,Long
+FTDR,5,Home Warranty,Long
+HMN,5,Home Warranty,Long
+CTAS,5,Home Warranty,Long
+CVCO,1,Homebuilders,Long
+DFH,1,Homebuilders,Long
+BZH,1,Homebuilders,Long
+HOV,1,Homebuilders,Long
+LEGH,1,Homebuilders,Long
+MRP,2,SFR REITs,Complex
+UMH,2,SFR REITs,Complex
+FOR,1,Land Developers,Long
+HHH,1,Land Developers,Long
+JOE,1,Land Developers,Long
+W,2,Home Furnishings,Long
+BOBS,2,Home Furnishings,Long
+OPAD,1,RE Brokerages,Long
+CBRE,3,RE Services,Long
+JLL,3,RE Services,Long
+NMRK,3,RE Services,Long
+PNC,3,Banks,Long
+MTB,3,Banks,Long
+FCNCA,3,Banks,Long
+WBS,3,Banks,Long
+WTFC,3,Banks,Long
+BPOP,3,Banks,Long
+SSB,3,Banks,Long
+WAL,3,Banks,Long
+PNFP,3,Banks,Long
+FNB,3,Banks,Long
+HOMB,3,Banks,Long
+OZK,3,Banks,Long
+TCBI,3,Banks,Long
+UBSI,3,Banks,Long
+ABCB,3,Banks,Long
+FLG,3,Banks,Long
+HWC,3,Banks,Long

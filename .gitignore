@@ -1,0 +1,17 @@
+.env
+.venv/
+data/fmp_prices/
+data/fmp_financials/
+data/fred_data.csv
+data/fhfa_distribution.csv
+data/coiled_spring_scenarios.csv
+data/sec_reit_homes.csv
+data/ciq_segments.csv
+data/ciq_homebuilder_ops.csv
+data/sec_stream_log.csv
+data/news_stream_log.csv
+data/last_run.json
+logs/
+__pycache__/
+*.pyc
+.DS_Store
