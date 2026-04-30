@@ -45,7 +45,7 @@ def pull_ticker(ticker, default_from):
     if start > date.today():
         return 0, "up-to-date"
 
-    data = fmp_get("historical-price-eod-light", {
+    data = fmp_get("historical-price-eod/light", {
         "symbol": ticker,
         "from": start.isoformat(),
         "to": date.today().isoformat(),
