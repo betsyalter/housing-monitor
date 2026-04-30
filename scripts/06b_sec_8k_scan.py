@@ -88,25 +88,24 @@ def main():
     universe = set(pd.read_csv(f"{DATA_DIR}/fmp_tickers.csv")["ticker"].dropna().astype(str))
     seen = existing_accessions()
 
+    item_code_re = re.compile(r"Item\s+(\d+\.\d+[A-Z]?)", re.IGNORECASE)
+
     new_rows = []
+    matched_count = 0
     for f in filings:
         accession = f.get("accessionNo", "")
         if not accession or accession in seen:
             continue
 
-        ticker = ""
-        for entity in f.get("entities", []):
-            t = entity.get("ticker") or ""
-            if t and t in universe:
-                ticker = t
-                break
-        if not ticker:
+        ticker = (f.get("ticker") or "").upper()
+        if not ticker or ticker not in universe:
             continue
 
         items_raw = f.get("items") or []
-        item_codes = sorted({i.split(" ")[0].rstrip(".") for i in items_raw if i})
+        item_codes = sorted({m.group(1) for s in items_raw if s for m in [item_code_re.search(s)] if m})
         if not (set(item_codes) & RELEVANT_ITEMS):
             continue
+        matched_count += 1
 
         primary_doc_url = f.get("linkToFilingDetails") or ""
         for doc in f.get("documentFormatFiles", []):
@@ -144,6 +143,8 @@ def main():
         })
 
         time.sleep(0.2)
+
+    print(f"  In-universe + relevant-item matches: {matched_count}")
 
     if not new_rows:
         print("No new in-universe 8-Ks with relevant items. Nothing to append.")
