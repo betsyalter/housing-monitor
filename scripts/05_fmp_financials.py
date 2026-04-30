@@ -14,7 +14,7 @@ TIERS = [1, 2]
 STATEMENTS = {
     "income": "income-statement",
     "balance": "balance-sheet-statement",
-    "cashflow": "cashflow-statement",
+    "cashflow": "cash-flow-statement",
 }
 
 
