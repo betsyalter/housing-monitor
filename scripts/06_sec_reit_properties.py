@@ -36,39 +36,81 @@ def latest_10k(ticker):
     return filings[0] if filings else None
 
 
-def extract_item2(filing_url):
+def extract_item(filing_url, item):
     r = requests.get(EXTRACTOR_URL, params={
-        "url": filing_url, "item": "2", "type": "text", "token": SEC_API_KEY,
+        "url": filing_url, "item": item, "type": "text", "token": SEC_API_KEY,
     }, timeout=60)
     r.raise_for_status()
     return r.text
 
 
+def extract_property_sections(filing_url):
+    """Pull Item 1 (Business), Item 2 (Properties), Item 7 (MD&A).
+    Many REITs cross-reference Item 2 → Item 7 for the actual portfolio detail."""
+    sections = {}
+    for item in ["1", "2", "7"]:
+        try:
+            sections[item] = extract_item(filing_url, item)
+            time.sleep(0.3)
+        except Exception:
+            sections[item] = ""
+    return sections
+
+
 def parse_headline(text):
-    """V1 best-effort: pull total home/unit count, avg rent, occupancy from Item 2 text."""
+    """V1 best-effort: pull total home/unit count, avg rent, occupancy.
+    Looks for portfolio totals — homes, units, sites, apartment homes, senior living units."""
     homes = None
     rent = None
     occ = None
 
-    for pat in [
-        r"approximately\s+([\d,]+)\s+(?:single-family\s+)?homes",
-        r"owned\s+([\d,]+)\s+(?:single-family\s+)?(?:homes|units)",
-        r"portfolio\s+(?:of|consisted of)\s+([\d,]+)\s+(?:homes|units|sites)",
-        r"([\d,]+)\s+(?:homes|units|sites)\s+in\s+(?:our|the)\s+portfolio",
-        r"total\s+(?:homes|units|sites)[:\s]+([\d,]+)",
-    ]:
+    home_patterns = [
+        r"portfolio\s+of\s+([\d,]{4,})\s+(?:wholly[- ]owned\s+)?(?:single-family\s+)?(?:rental\s+)?homes",
+        r"owned\s+(?:and\s+operated\s+)?([\d,]{4,})\s+(?:single-family\s+)?(?:rental\s+)?homes",
+        r"approximately\s+([\d,]{4,})\s+(?:single-family\s+)?(?:rental\s+)?homes",
+        r"([\d,]{4,})\s+single-family\s+(?:rental\s+)?homes",
+        r"([\d,]{4,})\s+homes\s+(?:in\s+(?:our|the)\s+|under\s+management|across)",
+        r"portfolio\s+(?:of|consisted\s+of|comprised\s+of)\s+([\d,]{3,})\s+(?:apartment\s+homes|apartment\s+units|units|sites|properties)",
+        r"owned\s+(?:or\s+had\s+an\s+(?:ownership\s+)?interest\s+in\s+)?([\d,]{3,})\s+(?:apartment\s+(?:homes|communities|units)|operating\s+communities|properties)",
+        r"([\d,]{3,})\s+(?:apartment\s+homes|apartment\s+units|operating\s+apartment)",
+        r"([\d,]{3,})\s+manufactured[- ]home\s+sites",
+        r"approximately\s+([\d,]{3,})\s+(?:senior\s+housing\s+)?(?:communities|properties|units)",
+        r"total\s+(?:homes|units|sites|properties)[:\s]+([\d,]{3,})",
+    ]
+    for pat in home_patterns:
         m = re.search(pat, text, re.IGNORECASE)
         if m:
-            homes = int(m.group(1).replace(",", ""))
-            break
+            n = int(m.group(1).replace(",", ""))
+            if 100 <= n <= 1_000_000:
+                homes = n
+                break
 
-    m = re.search(r"average\s+monthly\s+(?:rent|rental\s+rate)[^$\d]*\$?([\d,]+(?:\.\d+)?)", text, re.IGNORECASE)
-    if m:
-        rent = float(m.group(1).replace(",", ""))
+    rent_patterns = [
+        r"average\s+monthly\s+rent(?:al)?(?:\s+(?:rate|per\s+(?:home|unit|site)))?[^$\d]*\$\s*([\d,]+(?:\.\d+)?)",
+        r"monthly\s+(?:rent|rental\s+rate)\s+per\s+(?:home|unit|site)[^$\d]*\$\s*([\d,]+(?:\.\d+)?)",
+        r"average\s+(?:effective\s+)?monthly\s+(?:rental\s+)?rate[^$\d]*\$\s*([\d,]+(?:\.\d+)?)",
+        r"average\s+(?:monthly\s+)?rent\s+(?:was|of)[^$\d]*\$\s*([\d,]+(?:\.\d+)?)",
+    ]
+    for pat in rent_patterns:
+        m = re.search(pat, text, re.IGNORECASE)
+        if m:
+            v = float(m.group(1).replace(",", ""))
+            if 200 <= v <= 20000:
+                rent = v
+                break
 
-    m = re.search(r"(?:average\s+)?occupancy(?:\s+rate)?[^\d]*([\d.]+)\s*%", text, re.IGNORECASE)
-    if m:
-        occ = float(m.group(1))
+    occ_patterns = [
+        r"average\s+(?:weighted\s+)?(?:physical\s+)?occupancy(?:\s+rate)?[^\d]{0,30}([\d]{2,3}(?:\.\d+)?)\s*%",
+        r"occupancy\s+(?:rate\s+)?(?:was|of)[^\d]{0,20}([\d]{2,3}(?:\.\d+)?)\s*%",
+        r"([\d]{2,3}(?:\.\d+)?)\s*%\s+(?:average\s+)?(?:weighted\s+)?(?:physical\s+)?occupancy",
+    ]
+    for pat in occ_patterns:
+        m = re.search(pat, text, re.IGNORECASE)
+        if m:
+            v = float(m.group(1))
+            if 50 <= v <= 100:
+                occ = v
+                break
 
     return homes, rent, occ
 
@@ -93,14 +135,19 @@ def main():
             filed_at = filing.get("filedAt", "")[:10]
             period = filing.get("periodOfReport", "")
 
-            text = extract_item2(filing_url)
-            raw_path = os.path.join(RAW_DIR, f"{ticker}_10K_item2.txt")
-            with open(raw_path, "w", encoding="utf-8") as f:
-                f.write(f"# {ticker} 10-K Item 2 — filed {filed_at} — accession {accession}\n")
-                f.write(f"# source: {filing_url}\n\n")
-                f.write(text)
+            sections = extract_property_sections(filing_url)
+            for item, body in sections.items():
+                if not body:
+                    continue
+                raw_path = os.path.join(RAW_DIR, f"{ticker}_10K_item{item}.txt")
+                with open(raw_path, "w", encoding="utf-8") as f:
+                    f.write(f"# {ticker} 10-K Item {item} — filed {filed_at} — accession {accession}\n")
+                    f.write(f"# source: {filing_url}\n\n")
+                    f.write(body)
 
-            homes, rent, occ = parse_headline(text)
+            combined = "\n\n".join(sections.values())
+            raw_path = os.path.join(RAW_DIR, f"{ticker}_10K_item2.txt")  # primary path for compatibility
+            homes, rent, occ = parse_headline(combined)
             rows.append({
                 "ticker": ticker,
                 "filing_date": filed_at,
