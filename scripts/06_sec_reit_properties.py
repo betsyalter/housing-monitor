@@ -65,25 +65,22 @@ def parse_headline(text):
     occ = None
 
     home_patterns = [
-        r"portfolio\s+of\s+([\d,]{4,})\s+(?:wholly[- ]owned\s+)?(?:single-family\s+)?(?:rental\s+)?homes",
-        r"owned\s+(?:and\s+operated\s+)?([\d,]{4,})\s+(?:single-family\s+)?(?:rental\s+)?homes",
-        r"approximately\s+([\d,]{4,})\s+(?:single-family\s+)?(?:rental\s+)?homes",
-        r"([\d,]{4,})\s+single-family\s+(?:rental\s+)?homes",
-        r"([\d,]{4,})\s+homes\s+(?:in\s+(?:our|the)\s+|under\s+management|across)",
-        r"portfolio\s+(?:of|consisted\s+of|comprised\s+of)\s+([\d,]{3,})\s+(?:apartment\s+homes|apartment\s+units|units|sites|properties)",
-        r"owned\s+(?:or\s+had\s+an\s+(?:ownership\s+)?interest\s+in\s+)?([\d,]{3,})\s+(?:apartment\s+(?:homes|communities|units)|operating\s+communities|properties)",
-        r"([\d,]{3,})\s+(?:apartment\s+homes|apartment\s+units|operating\s+apartment)",
+        r"([\d,]{3,})\s+(?:wholly[- ]owned\s+)?(?:single-family\s+)?(?:rental\s+)?homes",
+        r"([\d,]{3,})\s+single-family\s+(?:rental\s+)?homes",
+        r"([\d,]{3,})\s+(?:apartment\s+homes|apartment\s+units|operating\s+apartment\s+homes)",
         r"([\d,]{3,})\s+manufactured[- ]home\s+sites",
-        r"approximately\s+([\d,]{3,})\s+(?:senior\s+housing\s+)?(?:communities|properties|units)",
+        r"([\d,]{3,})\s+(?:senior\s+housing\s+)?(?:communities|properties)",
         r"total\s+(?:homes|units|sites|properties)[:\s]+([\d,]{3,})",
+        r"portfolio\s+(?:of|consisted\s+of|comprised\s+of)\s+([\d,]{3,})",
     ]
+    candidates = []
     for pat in home_patterns:
-        m = re.search(pat, text, re.IGNORECASE)
-        if m:
+        for m in re.finditer(pat, text, re.IGNORECASE):
             n = int(m.group(1).replace(",", ""))
-            if 100 <= n <= 1_000_000:
-                homes = n
-                break
+            if 200 <= n <= 1_000_000:
+                candidates.append(n)
+    if candidates:
+        homes = max(candidates)
 
     rent_patterns = [
         r"average\s+monthly\s+rent(?:al)?(?:\s+(?:rate|per\s+(?:home|unit|site)))?[^$\d]*\$\s*([\d,]+(?:\.\d+)?)",
