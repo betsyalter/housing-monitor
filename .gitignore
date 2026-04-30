@@ -4,3 +4,16 @@ __pycache__/
 .venv/
 logs/
 *.log
+.pytest_cache/
+.ruff_cache/
+
+# DuckDB working files (snapshots in data/snapshots/ are tracked)
+data/housing.duckdb
+data/housing.duckdb.wal
+
+# Bootstrap installer accidentally committed previously
+get-pip.py
+
+# Bundle/base64 transit artifacts
+*.bundle
+phase0.b64

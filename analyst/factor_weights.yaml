@@ -1,0 +1,14 @@
+# 5-factor attribution for housing transaction volume.
+# Updated quarterly via PR (manual or Perplexity Computer-generated).
+# Weights must sum to 1.0 (yaml_config.load_factor_weights enforces this).
+last_updated: "2026-04-30"
+weights:
+  rate_lockin: 0.40        # share attributable to mortgage rate lock-in
+  affordability: 0.25      # monthly cost vs rent / income
+  inventory: 0.15          # supply tightness
+  demographics: 0.10       # household formation, ownership-rate drift
+  policy: 0.10             # legislation, Fed posture, GSE rules
+notes: |
+  Weights are an Analyst judgement, not a regression. Quarterly review:
+  confirm weights still reflect contribution; bump up policy during
+  legislative cycles, bump up rate_lockin during sharp Fed moves.
