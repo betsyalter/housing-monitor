@@ -16,7 +16,11 @@ PAGE_SIZE = 50
 MAX_PAGES = 20
 
 RELEVANT_ITEMS = {"1.01", "1.02", "1.03", "2.01", "2.02", "2.03", "2.04",
-                  "2.05", "2.06", "5.02", "7.01", "8.01"}
+                  "2.05", "2.06", "4.02", "5.02", "7.01", "8.01"}
+# Intentionally excluded as noise:
+#   5.07 (security holder votes — annual meeting routine)
+#   5.03 (bylaw/charter amendments — usually procedural)
+#   9.01 alone (exhibits-only filings — material is in the paired item)
 
 COLUMNS = [
     "detected_at", "filed_at", "ticker", "cik", "company_name", "form_type",
