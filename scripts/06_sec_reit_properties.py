@@ -76,8 +76,14 @@ def parse_headline(text):
     candidates = []
     for pat in home_patterns:
         for m in re.finditer(pat, text, re.IGNORECASE):
-            n = int(m.group(1).replace(",", ""))
-            if 200 <= n <= 1_000_000:
+            raw = m.group(1)
+            n = int(raw.replace(",", ""))
+            # 10-Ks write 4+ digit counts with commas. A bare "2024" with no comma
+            # is almost always a year — fail to None rather than corrupt the value.
+            # Coordinated w/ codex (Wyatt's side) — homes is best-effort, not load-bearing.
+            if n >= 1000 and "," not in raw:
+                continue
+            if 200 <= n <= 1_500_000:
                 candidates.append(n)
     if candidates:
         homes = max(candidates)

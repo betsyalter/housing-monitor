@@ -92,18 +92,31 @@ def main():
 
     new_rows = []
     matched_count = 0
+    drop_no_ticker = 0
+    drop_not_in_universe = 0
+    drop_no_relevant_items = 0
+    sample_other_tickers = []
+
     for f in filings:
         accession = f.get("accessionNo", "")
         if not accession or accession in seen:
             continue
 
         ticker = (f.get("ticker") or "").upper()
-        if not ticker or ticker not in universe:
+        if not ticker:
+            drop_no_ticker += 1
+            continue
+        if ticker not in universe:
+            drop_not_in_universe += 1
+            if len(sample_other_tickers) < 10:
+                sample_other_tickers.append(ticker)
             continue
 
         items_raw = f.get("items") or []
         item_codes = sorted({m.group(1) for s in items_raw if s for m in [item_code_re.search(s)] if m})
         if not (set(item_codes) & RELEVANT_ITEMS):
+            drop_no_relevant_items += 1
+            print(f"  [skipped {ticker}] items={item_codes}")
             continue
         matched_count += 1
 
@@ -144,6 +157,9 @@ def main():
 
         time.sleep(0.2)
 
+    print(f"  Drop breakdown: no_ticker={drop_no_ticker}, not_in_universe={drop_not_in_universe}, no_relevant_items={drop_no_relevant_items}")
+    if sample_other_tickers:
+        print(f"  Sample non-universe tickers: {sample_other_tickers}")
     print(f"  In-universe + relevant-item matches: {matched_count}")
 
     if not new_rows:
