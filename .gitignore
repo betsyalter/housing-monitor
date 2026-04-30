@@ -8,5 +8,8 @@ data/fmp_prices/
 data/fmp_financials/
 data/fmp_transcripts/
 data/fmp_insider/
+data/sec_filings/
+data/sec_raw/
+data/sec_stream_log.csv
 data/last_run.json
 get-pip.py
