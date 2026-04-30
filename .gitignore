@@ -4,3 +4,9 @@ __pycache__/
 .venv/
 logs/
 *.log
+data/fmp_prices/
+data/fmp_financials/
+data/fmp_transcripts/
+data/fmp_insider/
+data/last_run.json
+get-pip.py
