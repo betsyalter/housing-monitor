@@ -11,5 +11,6 @@ data/fmp_insider/
 data/sec_filings/
 data/sec_raw/
 data/sec_stream_log.csv
+data/homebuilder_press_releases/
 data/last_run.json
 get-pip.py
