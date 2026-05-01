@@ -1,29 +1,31 @@
 {
   "report_date": "2026-05-04",
-  "run_completed_utc": "2026-05-01T16:02:00Z",
+  "run_completed_utc": "2026-05-01T16:30:00Z",
   "framework_sha": "3bc1b7f47d6ad22a010ad104b8ca7ade6417d109",
   "factor_weights_last_updated": "2026-04-30",
   "pipeline_data_generated_at": "2026-05-01 14:54 UTC",
   "first_run": true,
   "executive_summary": {
-    "bottom_line": "FOMC held 11-1 with 2026 cut probability collapsing from 18% to 3%, even as the 30yr mortgage drifted down 16 bps to 6.30% — Factor 1 actually weakened on a forward-looking basis despite the spot-rate move.",
-    "coiled_spring_state": "Mechanically loosened (rates -16 bps WoW, ~95.1% of mortgages still locked below current), but no scenario-grid threshold crossed; nearest unlock at 6.25% would release ~5.4M owners and add ~1.5M SAAR.",
-    "whats_new": "RE/MAX agreed to be acquired by Real Brokerage on April 27, driving RMAX +63% on the week — explains the headline mover with no read-across to the broader thesis."
+    "bottom_line": "Most thesis-disconfirming week of trailing quarter. 30yr fell 16 bps to 6.30% but FOMC's hawkish hold drove 2026 cut probability from ~18% to ~3%, and Powell's exit hands the chair to Warsh, who has signaled he wants to abandon forward guidance and the dot plot entirely. Mechanical coiled spring unchanged at ~95% locked, but the policy path to 5.5% just lengthened materially.",
+    "coiled_spring_state": "Mechanically loosened (rates -16 bps WoW, ~95.1% of mortgages still locked below current); nearest unlock at 6.25% would release ~5.4M owners and add ~1.5M SAAR — but with the path to 5.5% pushed out by the FOMC, this remains theoretical. No unlock-trigger threshold crossed.",
+    "whats_new": "Two opposing shocks: (1) RE/MAX agreed to be acquired by Real Brokerage on April 27, RMAX +63% — basket-blind reading would see thesis confirmation; data says pure idiosyncratic M&A. (2) LGIH reported all-time-high 45.6% cancellation rate vs every other Tier-1 builder's cancel rate falling — entry-level cohort fracturing."
   },
   "factor_scorecard": [
-    {"factor": 1, "name": "rate_lockin", "signal": "30yr -16 bps WoW; FOMC hold + Powell exit + 2026 cut odds collapse from 18% to 3%", "strength": "strong", "direction": "-"},
+    {"factor": 1, "name": "rate_lockin", "signal": "30yr -16 bps WoW spot, but FOMC hold + Powell exit + 2026 cut odds 18→3% + Warsh anti-forward-guidance posture", "strength": "strong", "direction": "-"},
     {"factor": 2, "name": "reit_absorption", "signal": "No new SFR REIT 10-Q this week; INVH/AMH last filings remain February 2026", "strength": "weak", "direction": "0"},
     {"factor": 3, "name": "second_home_turnover", "signal": "No event", "strength": "weak", "direction": "0"},
-    {"factor": 4, "name": "demographics_ceiling", "signal": "NAR pending sales -1.1% YoY despite spring; FHFA HPI Mountain -1.1% MoM", "strength": "moderate", "direction": "-"},
-    {"factor": 5, "name": "rent_own_spread", "signal": "No fresh CPI shelter print; FHFA HPI +1.7% YoY (slowing pace)", "strength": "weak", "direction": "+"},
-    {"factor": "policy", "name": "cross_cutting", "signal": "FHFA/HUD VantageScore 4.0 + FICO 10T approval (April 22)", "strength": "moderate", "direction": "+"}
+    {"factor": 4, "name": "demographics_ceiling", "signal": "NAR pending sales -1.1% YoY despite spring; FHFA HPI Mountain -1.1% MoM; LGIH 45.6% cancel = entry-level cohort breaking; FHA delinquency 5.23% (Jan, +166 bps from Sep)", "strength": "strong", "direction": "-"},
+    {"factor": 5, "name": "rent_own_spread", "signal": "FHFA HPI +1.7% YoY (slowest in cycle); no fresh CPI shelter print", "strength": "weak", "direction": "+"},
+    {"factor": "policy", "name": "cross_cutting", "signal": "FHFA/HUD VantageScore 4.0 + FICO 10T approval (Apr 22, +); FOMC hawkish hold (Apr 29, -); Iran war oil pass-through still elevated (-)", "strength": "moderate", "direction": "mixed"}
   ],
   "macro_deltas_material": [
-    {"metric": "mortgage_rate_30yr", "value": 6.30, "delta_4w": -0.16, "comment": "Largest 4w move; below 6.5% scenario boundary"},
-    {"metric": "mortgage_rate_15yr", "value": 5.64, "delta_4w": -0.13, "comment": "Moves in line with 30yr"},
-    {"metric": "existing_home_inventory", "value": 964477, "delta_4w": 49617, "comment": "Supply rising — Factor 5 ambiguous"},
-    {"metric": "housing_starts_total", "value": 1502, "delta_4w": 146, "comment": "Builder activity firming despite cancel pressure"},
-    {"metric": "building_permits", "value": 1372, "delta_4w": -166, "comment": "Forward supply weakening"}
+    {"metric": "mortgage_rate_30yr", "value": 6.30, "delta_4w": -0.16, "days_stale": 1, "comment": "Largest 4w drop; near 6.5% scenario boundary"},
+    {"metric": "mortgage_rate_15yr", "value": 5.64, "delta_4w": -0.13, "days_stale": 1, "comment": "In line with 30yr"},
+    {"metric": "existing_home_inventory", "value": 964477, "delta_4w": 49617, "days_stale": 61, "comment": "Supply rising"},
+    {"metric": "housing_starts_total", "value": 1502, "delta_4w": 146, "days_stale": 61, "comment": "Builder activity firming"},
+    {"metric": "building_permits", "value": 1372, "delta_4w": -166, "days_stale": 61, "comment": "Forward supply weakening — divergence with starts notable"},
+    {"metric": "case_shiller_national", "value": 332.10, "delta_4w": 0.30, "days_stale": 89, "comment": "Flat"},
+    {"metric": "homeownership_rate", "value": 65.3, "delta_4w": -0.4, "days_stale": 120, "comment": "Q4 print, declining"}
   ],
   "coiled_spring": {
     "current_30yr": 6.30,
@@ -31,19 +33,27 @@
     "pct_locked_below": 0.951,
     "locked_below_millions": 48.31,
     "nearest_scenario": {"rate": 6.25, "unlocked_millions": 5.44, "saar_uplift_k": 1521.97},
-    "crossed_threshold": null
+    "scenarios_to_unlock_thresholds": {
+      "to_5.5_threshold": {"rate": 5.5, "unlocked_millions": 12.60, "saar_uplift_k": 3527.55, "bps_from_current": -80},
+      "to_5.0_threshold": {"rate": 5.0, "unlocked_millions": 21.34, "saar_uplift_k": 5974.08, "bps_from_current": -130}
+    },
+    "crossed_threshold": null,
+    "mbs_treasury_spread_bps_recent": 200,
+    "mbs_treasury_spread_bps_historical_avg": 170
   },
   "stock_signals": [
     {
       "ticker": "RMAX",
       "move_1w_pct": 62.96,
       "subsector_basket_1w_pct": 1.51,
+      "basket_stripped_1w_pct": 61.45,
       "tier": 1,
       "subsector": "Title Insurance",
       "directional": "Long",
       "factor_exposure": [1],
-      "cause": "Real Brokerage acquisition announced April 27; Zelman upgrade same day",
-      "thesis_read": "Idiosyncratic M&A; no thesis read-across. Insider Adam Peterson sold ~$11.6M into the spike on April 29.",
+      "cause": "Real Brokerage acquisition announced April 27; Zelman upgrade Underperform→Neutral $6.50 PT same day",
+      "thesis_read": "Idiosyncratic M&A; no thesis read-across. The 1.5% Title Insurance basket median ex-RMAX is the better thesis tape — flat. RMAX is now an M&A spread name.",
+      "insider_flag": "Adam Peterson (10%-owner) sold $11.6M across two trades on April 29; same-day execution into M&A spike at separate prices ($9.84, $10.97) suggests routed exit.",
       "source": "https://www.investors.com/news/remax-stock-real-estate-merger-real-brokerage-rocket-compass/"
     },
     {
@@ -54,9 +64,21 @@
       "subsector": "Mortgage Originators",
       "directional": "Long",
       "factor_exposure": [1],
-      "cause": "8-K April 30 with Items 1.01, 1.02, 2.03 (debt agreement events); -8.7% on April 29",
-      "thesis_read": "Tier-1 long-thesis name showing balance-sheet stress is dissonant with thesis. Refi-volume share could shift to RKT/COOP/UWMC.",
+      "cause": "8-K April 30 with Items 1.01 (new agreement) + 1.02 (terminated agreement) + 2.03 (creation of direct financial obligation) = classic refinancing-under-duress pattern. Stock -8.7% April 29.",
+      "thesis_read": "Tier-1 long-thesis name showing balance-sheet stress is dissonant with thesis. LDI mcap $523M is smallest of T1 originators (vs RKT $41B, UWMC $5.4B, PFSI $4.7B); not basket-fatal. Refi share LDI cannot capture goes to RKT/COOP/UWMC/PFSI.",
       "source": "https://www.sec.gov/Archives/edgar/data/1831631/000183163126000052/ldi-20260427.htm"
+    },
+    {
+      "ticker": "UWMC",
+      "move_1w_pct": null,
+      "subsector_basket_1w_pct": -0.14,
+      "tier": 1,
+      "subsector": "Mortgage Originators",
+      "directional": "Long",
+      "factor_exposure": [1],
+      "cause": "CEO Mat Ishbia sold $38M+ across 10 transactions in April (every 1-2 days; price range $3.71-$3.94). Likely 10b5-1 program — but cadence is heavy enough to suppress UWMC even when Factor 1 turns.",
+      "thesis_read": "If rotating long-flow names within Mortgage Originators basket, RKT and PFSI carry less insider-supply overhang than UWMC.",
+      "source": "https://betsyalter.github.io/housing-monitor/housing_context.json"
     },
     {
       "ticker": "LGIH",
@@ -65,60 +87,104 @@
       "tier": 1,
       "subsector": "Homebuilders",
       "directional": "Long",
-      "factor_exposure": [5],
-      "cause": "Q1 2026 cancellation rate 45.6% (vs peer median ~10-14%)",
-      "thesis_read": "Stress signal at affordability ceiling. First-time-buyer / FHA cohort fracturing at contract-to-close stage.",
-      "source": "https://betsyalter.github.io/housing-monitor/housing_context.json"
+      "factor_exposure": [4, 5],
+      "cause": "Q1 2026 cancellation rate 45.6% — all-time high in dataset. Up from 28.1% Q3 2025, 16.3% Q1 2025 (~3x YoY). Every other T1 builder's cancel rate is FALLING QoQ.",
+      "management_explanation": "Cancels driven by buyers 'unable to qualify for financing'; LGIH deliberately extending pipeline times so customers can save for down payments / improve credit",
+      "thesis_read": "Cleanest entry-level affordability-ceiling signal in the dataset. LGIH skews to FTHB/FHA cohort. Corroborated by Redfin's 13.4% market-wide March cancel rate and FHA delinquency rising from 3.57% (Sep) to 5.23% (Jan). Modestly thesis-disconfirming on Factor 4 ceiling: even if rates fall to 5.5%, FHA-leveraged cohort has taken income hits that the rate move alone may not heal.",
+      "counter_read": "Backlog 1,699 units (+63% YoY, highest since Q1 2022). If half converts at 5.5% rates that's a real volume tailwind. Backlog quality is the question.",
+      "source": "https://www.marketbeat.com/instant-alerts/lgi-homes-q1-earnings-call-highlights-2026-04-28/"
     }
   ],
-  "homebuilder_update": {
-    "ticker": "LGIH",
-    "fiscal_period": "Q1 2026",
-    "highlight": "Cancellation rate 45.6% — far above Tier-1 peer cohort median (BZH 13.5%, NVR 14.0%, MHO 8.0%, TMHC 10.0%, DFH 7.5%). Suggests rate-sensitive entry-level cohort fracturing at contract-to-close stage.",
-    "cohort_pattern": "Across nine Tier-1 builders that printed in trailing 2 weeks: net orders +14% to +37% QoQ, closings -17% to -34% QoQ. Backlog +20% to +60%.",
-    "source": "https://betsyalter.github.io/housing-monitor/housing_context.json"
+  "homebuilder_cohort_pattern": {
+    "tickers_reported_trailing_2w": ["BZH","DFH","DHI","LGIH","MHO","MTH","NVR","PHM","TMHC","CCS"],
+    "qoq_net_orders_range_pct": "+14% to +37% (CCS -12% outlier)",
+    "qoq_closings_range_pct": "-17% to -34%",
+    "qoq_backlog_range_pct": "+20% to +60%",
+    "cancellation_rate_pattern": "Every Tier-1 builder QoQ FALLING except LGIH (16.3 → 45.6) and CCS (n/a)",
+    "thesis_read": "Diagonal gap between order intake and closing throughput is affordability ceiling biting at conversion stage. Builders' Q2-Q3 results entirely at mercy of where mortgage rates and FHA-cohort credit go. Move-up cohort (PHM, TMHC with ASP $542k/$578k) healthier than entry-level (LGIH, CCS)."
+  },
+  "subsector_basket_dispersion": [
+    {"basket": "Homebuilders T1", "median_1w": -5.23, "median_1m": 4.49, "read": "Builders sold off despite strong order prints — FOMC overpowering operational beat"},
+    {"basket": "Apartment REITs (Short-on-unlock)", "median_1w": 2.98, "median_1m": 8.74, "read": "Moved against thesis; 'rates higher for longer = renters stay renters'"},
+    {"basket": "SFR REITs (Short-on-unlock)", "median_1w": 0.59, "median_1m": 9.54, "read": "Also up over month, against thesis"},
+    {"basket": "Title Insurance T1", "median_1w": 1.51, "median_1m": 13.75, "read": "RMAX +63 distorts; ex-RMAX likely flat"},
+    {"basket": "Mortgage Originators T1", "median_1w": -0.14, "median_1m": 3.33, "read": "Mostly flat; LDI drag offset by RKT/PFSI stability"},
+    {"basket": "Building Products T2", "median_1w": -5.01, "median_1m": 7.61, "read": "Cohort discount-rate repricing on FOMC; BLDR -12.3%, SITE -12.7% standouts"}
+  ],
+  "correlation_thesis_validation": {
+    "most_negative_to_30yr": ["STC (-0.65)", "RKT (-0.64)", "FAF (-0.63)", "PFSI (-0.60)", "MTH (-0.58)", "NVR (-0.58)"],
+    "expected_behavior_this_week": "Rate down 16 bps → these names should outperform",
+    "actual_behavior": "Mostly underperformed (homebuilder basket -5%); thesis-disconfirming. The forward-path / discount-rate channel dominated the spot-rate channel."
   },
   "policy_events": [
     {"event": "FHFA + HUD authorize VantageScore 4.0 and FICO 10T", "date": "2026-04-22", "factor": "policy", "direction": "+", "source": "https://www.fhfa.gov/news/news-release/homebuying-advances-into-new-era-of-credit-score-competition"},
     {"event": "FOMC held 3.50-3.75% (vote 11-1, Miran dissent for cut); 2026 cut probability fell to ~3%", "date": "2026-04-29", "factor": 1, "direction": "-", "source": "https://www.morningstar.com/economy/powell-closes-out-term-fed-chair-odds-rate-cut-2026-vanish"},
+    {"event": "Warsh confirmation hearing — signals abandoning forward guidance and the dot plot, reverting to strict 2% inflation target", "date": "2026-04-21", "factor": 1, "direction": "-", "source": "https://www.cfr.org/articles/what-kevin-warshs-confirmation-hearing-revealed-about-the-future-of-the-fed"},
     {"event": "NAR Pending Home Sales March +1.5% MoM, -1.1% YoY", "date": "2026-04-21", "factor": 4, "direction": "0", "source": "https://www.nar.realtor/newsroom/nar-pending-home-sales-report-shows-1-5-increase-in-march"},
-    {"event": "FHFA HPI February +1.7% YoY (slowest pace in cycle); Mountain -1.1% MoM", "date": "2026-04-28", "factor": 5, "direction": "+", "source": "https://www.fhfa.gov/reports/house-price-index/2026/4"}
+    {"event": "FHFA HPI February +1.7% YoY (slowest in cycle); Mountain -1.1% MoM, South Atlantic +0.6% MoM", "date": "2026-04-28", "factor": 5, "direction": "+", "source": "https://www.fhfa.gov/reports/house-price-index/2026/4"},
+    {"event": "Iran war oil pass-through: WTI peaked ~$94/bbl April; modeled >$80 throughout 2026 in 15% supply-shortfall base case", "date": "2026-04-17", "factor": "policy", "direction": "-", "source": "https://www.dallasfed.org/research/economics/2026/0417"},
+    {"event": "Eurozone CPI 3.0% in April from 2.6% in March on energy pass-through", "date": "2026-04-30", "factor": "policy", "direction": "-", "source": "https://www.usnews.com/news/business/articles/2026-04-30/inflation-hits-3-in-europe-as-iran-war-spreads-oil-price-shock"}
   ],
   "key_risk": {
-    "summary": "FOMC's collapsing 2026 cut path (probability now ~3% vs 18% prior week) extends the path-to-5.5% trigger from late-2026 baseline to mid-2027 or later, materially lengthening the duration of capital tied up before unlock realizes. Powell exits in June, Warsh succeeds. If oil sustains above $80, timing slips another 6-12 months.",
+    "summary": "Structural change in how rate expectations get priced, not the rate level itself. With Powell's last meeting on April 29 and Warsh succeeding in June: (a) realized cut path collapsed (CME 2026-cut probability ~3%), and (b) Warsh's stated intent to abandon forward guidance and the dot plot will likely WIDEN MBS-Treasury spread by removing a key channel for path compression. Mortgage spreads already 200-220 bps vs 160-180 bps historical. If oil sustains >$80 through Q2-Q3, every ingredient for the 30yr to retrace toward 5.5% moves the wrong direction.",
+    "thesis_falsification": "If this week's data is the new normal — operating names selling off on rate-down moves because the discount-rate channel dominates the spot-rate channel — then the thesis is right about the lockup but wrong about the unlock catalyst. Locked-low owners stay locked, but long-side beneficiaries don't re-rate when rates eventually fall, because the affordability-ceiling cohort has been hollowed out for so long that absorbed pent-up demand is smaller than thesis assumes.",
     "specific_metric": "cme_fedwatch_2026_cut_probability",
-    "threshold": "If May/June FOMC speakers reaffirm hold-through-year-end stance, downgrade thesis time horizon by 6 months in next quarterly review."
+    "threshold": "If <10% sustained through May, downgrade thesis time horizon by 6 months in next quarterly review. If oil >$80 through July, downgrade further."
   },
   "underappreciated_catalyst": {
-    "summary": "FHFA/HUD VantageScore 4.0 + FICO 10T approval is being framed as a credit-scoring story, but the second-order effect is on Factor 4 (demographics ceiling). Rent-payment-history scoring expands qualified-borrower pool by an estimated 4-7M consumers — not priced into JCHS's already-reduced 8.6M household-growth forecast.",
-    "evidence": "FHFA reaffirmed tri-merge requirement; Pulte stated 'stay tuned' on LLPA adjustments. Watch summer 2026 historical FICO 10T data for loss-rate parity, which would be the trigger for material pricing change.",
+    "summary": "FHFA/HUD VantageScore 4.0 + FICO 10T approval is being framed by mainstream coverage as a credit-scoring story. The second-order effect consensus is missing is on Factor 4 (demographics ceiling). Three pieces of evidence consensus is not connecting: (1) VantageScore 4.0 incorporates rent-payment history → expands qualifiable-borrower pool by ~4-7M consumers; (2) Pulte's 'stay tuned' on LLPAs = GSEs reserving option to price new-cohort loans differently; (3) Historical FICO 10T data publishes summer 2026 — if loss-rate distributions show parity, lenders adopt because LLPA pricing is accretive.",
+    "consensus_missing": "JCHS 2025 forecast of 8.6M household formation 2025-2035 does not appear to incorporate credit-eligibility expansion. If 30% of newly-qualifiable cohort converts to FTHB over 3-5 years, JCHS number too low by ~1-2M households.",
+    "contrarian_read": "While Factor 1 weakening for 6-12 months on FOMC + Warsh transition, Factor 4 structurally improving on credit-policy side — multi-year tailwind, not a quarter tailwind. Long-side names with high Factor 4 sensitivity (entry-level builders LGIH/CCS once cancel pulse stabilizes; FHA-cohort originators; manufactured housing/MH lots) are cheaper now than they would be if consensus correctly priced this.",
+    "specific_catalyst": "Summer 2026 FICO 10T historical-data publication. If GSE pricing grids (LLPAs) for VantageScore 4.0 print at parity or below equivalent Classic FICO, T1 originators with FHA exposure (LDI if it survives, RKT, UWMC) re-rate within a quarter on share-shift mechanics alone.",
     "source": "https://www.bhfs.com/insight/fhfa-and-hud-greenlight-credit-scoring-changes/"
   },
   "what_would_change_my_mind": [
-    "April CPI shelter print (May 14) <0.25% MoM would strengthen Factor 5 enough to offset this week's Factor 1 weakening",
-    "MBA applications May 7 print >+5% would suggest the +7.9% on April 22 was a trend, not noise — Factor 1 leading indicator turning despite spot rates",
-    "Any SFR REIT (INVH/AMH) 10-Q with >5% net dispositions when filings land mid-May would give Factor 2 its first directional signal in 10+ weeks"
+    "April CPI shelter print (May 14) <0.25% MoM (consensus ~0.30%) — strengthens Factor 5 enough to offset this week's Factor 1 weakening. >0.40% extends Factor 5 stagnation; downgrade thesis-timing by another quarter.",
+    "MBA applications May 7 print >+5% after this week's -1.6% (April 22 was +7.9%). Two consecutive +5% prints would suggest the rate-sensitive cohort is moving despite the FOMC; Factor 1 leading indicator turning.",
+    "Any SFR REIT (INVH/AMH) 10-Q with >5% net dispositions when filings land mid-May — Factor 2 finally gets directional signal. Last filings were Feb; Q1 10-Qs due ~May 12-15.",
+    "First Warsh public statement on housing — whether he frames market as Fed-policy concern or tariff/fiscal concern sets tone for Sept FOMC.",
+    "April existing-home sales (May 11, NAR) — if SAAR <4.0M, confirms 2026 on track to undershoot 2024's 30-year low. Thesis-confirming on lockup; thesis-disconfirming on near-term unlock.",
+    "Oil sustained >$85/bbl through May — independent of Hormuz status, takes Sept cut off the table entirely."
   ],
   "data_integrity_flags": [
-    {"section": "macro.existing_home_sales_saar", "flag": "stale_suspect", "note": "value 3,980 SAAR with days_stale=61; spec threshold is days_stale>31. Display-only this run."},
+    {"section": "macro.existing_home_sales_saar", "flag": "stale_suspect", "note": "value 3,980 SAAR with days_stale=61 (as of 2026-03-01); spec threshold is days_stale>31. Display-only this run. April release May 11."},
     {"section": "macro.new_home_sales", "flag": "stale", "note": "days_stale=120 (as of 2026-01-01); outside 60-day window."},
-    {"section": "macro.median_home_price", "flag": "stale", "note": "days_stale=212; citing FHFA HPI instead."},
-    {"section": "reits", "flag": "schema_gap", "note": "period_end_date is null for all REITs; only filing_date populated. Cannot compute QoQ home-count deltas without prior-period reference."}
+    {"section": "macro.median_home_price", "flag": "stale", "note": "days_stale=212; substituting FHFA HPI as price reference."},
+    {"section": "macro.homeownership_rate", "flag": "stale", "note": "days_stale=120; Q1 2026 print due late April per Census schedule."},
+    {"section": "reits", "flag": "schema_gap", "note": "period_end_date is null for all REITs; only filing_date populated. Cannot compute QoQ home-count deltas. sec_reit_homes.csv may have it but not flowing into JSON."},
+    {"section": "homebuilder_ops", "flag": "unit_scale", "note": "MHO ASP shows 459, MTH ASP shows 373 — clearly truncated thousands. QoQ '-100%' is artifact, not real."},
+    {"section": "correlations.mortgage_rate_30yr", "flag": "transform_quality", "note": "quality_flags=rate_bps_diff on every entry; differencing transform may inflate near-zero r values relative to true levels-correlation."}
   ],
   "sources": [
     "https://betsyalter.github.io/housing-monitor/housing_context.json",
+    "https://github.com/betsyalter/housing-monitor/blob/main/analyst/five_factor_framework.md",
     "https://www.fhfa.gov/news/news-release/homebuying-advances-into-new-era-of-credit-score-competition",
     "https://www.bhfs.com/insight/fhfa-and-hud-greenlight-credit-scoring-changes/",
     "https://www.fhfa.gov/reports/house-price-index/2026/4",
     "https://www.cnbc.com/2026/04/29/fed-meeting-today-live-updates-warsh-powell.html",
     "https://www.morningstar.com/economy/powell-closes-out-term-fed-chair-odds-rate-cut-2026-vanish",
     "https://www.foxbusiness.com/economy/federal-reserve-interest-rate-decision-april-29-2026",
+    "https://www.cfr.org/articles/what-kevin-warshs-confirmation-hearing-revealed-about-the-future-of-the-fed",
+    "https://fortune.com/2026/04/22/kevin-warsh-forward-guidance-dot-plot-wall-street-guidance/",
+    "https://www.realtor.com/news/real-estate-news/kevin-warsh-federal-reserve-chair-confirmation-hearing-mortgage-rates/",
+    "https://www.dallasfed.org/research/economics/2026/0417",
+    "https://www.usnews.com/news/business/articles/2026-04-30/inflation-hits-3-in-europe-as-iran-war-spreads-oil-price-shock",
+    "https://wolfstreet.com/2026/03/20/treasury-yields-spike-10-year-to-4-39-30-year-to-4-96-mortgage-rates-to-6-5-as-the-bond-market-gets-antsy/",
+    "https://newslink.mba.org/mba-newslinks/2026/january/1-mba-newslink-wednesday-jan-21-2026/chart-of-the-week-mortgage-rates-10-year-treasury-and-30-10-spread/",
     "https://www.nar.realtor/newsroom/nar-pending-home-sales-report-shows-1-5-increase-in-march",
     "https://www.mba.org/news-and-research/newsroom/news/2026/04/29/mortgage-applications-decrease-in-latest-mba-weekly-survey",
     "https://www.mba.org/news-and-research/newsroom/news/2026/04/22/mortgage-applications-increase-in-latest-mba-weekly-survey",
     "https://www.investors.com/news/remax-stock-real-estate-merger-real-brokerage-rocket-compass/",
+    "https://www.quiverquant.com/news/RE%2FMAX+Holdings+jumps+as+it+agrees+to+be+acquired+by+The+Real+Brokerage",
+    "https://www.timothysykes.com/news/re-max-holdings-inc-rmax-news-2026_04_27/",
     "https://www.sec.gov/Archives/edgar/data/1831631/000183163126000052/ldi-20260427.htm",
     "https://www.marketbeat.com/instant-alerts/loandepot-nyseldi-trading-down-87-heres-what-happened-2026-04-29/",
-    "https://www.sec.gov/Archives/edgar/data/915840/000091584026000040/bzh-20260430.htm"
+    "https://www.sec.gov/Archives/edgar/data/915840/000091584026000040/bzh-20260430.htm",
+    "https://www.marketbeat.com/instant-alerts/lgi-homes-q1-earnings-call-highlights-2026-04-28/",
+    "https://finance.yahoo.com/markets/stocks/articles/lgi-homes-inc-q1-2026-205019741.html",
+    "https://www.stocktitan.net/sec-filings/LGIH/10-q-lgi-homes-inc-quarterly-earnings-report-bf7c19267a97.html",
+    "https://www.redfin.com/news/contract-cancellations-march-2026/",
+    "https://www.responsiblelending.org/research-publication/policy-related-reporting-change-not-increasing-financial-distress-drove-late",
+    "https://www.scotsmanguide.com/news/fha-distress-drives-spiking-delinquency-rates/"
   ]
 }
