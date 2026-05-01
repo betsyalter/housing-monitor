@@ -54,6 +54,7 @@ a:hover { text-decoration: underline; }
 .scenario .stat { background: rgba(0,0,0,0.2); padding: 10px; border-radius: 6px; }
 .scenario .stat .num { font-size: 20px; font-weight: 600; }
 .scenario .stat .l { font-size: 11px; color: var(--muted); text-transform: uppercase; }
+.scenario .stat .sub { font-size: 11px; color: var(--muted); margin-top: 4px; opacity: 0.85; }
 .basket-bars { display: flex; flex-direction: column; gap: 4px; }
 .basket-row { display: grid; grid-template-columns: 220px 1fr 60px 60px; gap: 8px;
   align-items: center; font-size: 13px; }
@@ -593,16 +594,21 @@ function renderMacro(s) {
 
 // ── coiled spring ──────────────────────────────────────────────────
 let springScenarios = [];
+let springTotals = null;
 function renderSpring(s) {
   if (!s || !s.scenarios) {
     el("card-spring").innerHTML = `<div class="section-missing">Coiled-spring data unavailable.</div>`;
     return;
   }
   springScenarios = s.scenarios;
+  springTotals = s.totals || null;
   const cur = s.current_30yr_rate;
   if (cur != null) {
-    el("spring-current").innerHTML =
-      `Current 30yr: <strong>${cur.toFixed(2)}%</strong> &middot; ${(s.pct_locked_below_current*100).toFixed(1)}% locked below &middot; ~${s.locked_below_millions.toFixed(1)}M homeowners`;
+    let frame = `Current 30yr: <strong>${cur.toFixed(2)}%</strong> &middot; ${(s.pct_locked_below_current*100).toFixed(1)}% locked below &middot; ~${s.locked_below_millions.toFixed(1)}M homeowners`;
+    if (springTotals) {
+      frame += `<br><span style="opacity:0.7">Total stock: ${springTotals.mortgage_stock_millions.toFixed(1)}M &middot; Current SAAR: ${(springTotals.current_saar_k/1000).toFixed(1)}M vs ${(springTotals.pre_2022_normalized_saar_k/1000).toFixed(1)}M normalized (${springTotals.transaction_deficit_k}k deficit)</span>`;
+    }
+    el("spring-current").innerHTML = frame;
   }
   el("spring-slider").addEventListener("input", e => updateSpring(parseFloat(e.target.value) / 100));
   // Default to current rate
@@ -623,10 +629,17 @@ function updateSpring(rate) {
     if (d < bestDiff) { bestDiff = d; best = sc; }
   }
   if (!best) { el("spring-scenario").innerHTML = ""; return; }
+  // Build percentage subtitles when totals are available.
+  const lockedPctOfStock = best.locked_pct_of_total != null
+    ? `<div class="sub">${(best.locked_pct_of_total*100).toFixed(0)}% of total stock</div>` : "";
+  const unlockedPctOfLocked = best.unlocked_pct_of_locked != null
+    ? `<div class="sub">${(best.unlocked_pct_of_locked*100).toFixed(0)}% of currently-locked</div>` : "";
+  const saarXDeficit = best.saar_uplift_x_deficit != null
+    ? `<div class="sub">${best.saar_uplift_x_deficit.toFixed(1)}× current deficit</div>` : "";
   el("spring-scenario").innerHTML = `
-    <div class="stat"><div class="num">${best.locked_millions.toFixed(1)}M</div><div class="l">homes still locked</div></div>
-    <div class="stat"><div class="num">+${best.unlocked_vs_today_millions.toFixed(1)}M</div><div class="l">newly unlocked vs current</div></div>
-    <div class="stat"><div class="num">+${fmt(best.estimated_saar_uplift_k)}k</div><div class="l">est SAAR uplift</div></div>
+    <div class="stat"><div class="num">${best.locked_millions.toFixed(1)}M</div><div class="l">homes still locked</div>${lockedPctOfStock}</div>
+    <div class="stat"><div class="num">+${best.unlocked_vs_today_millions.toFixed(1)}M</div><div class="l">newly unlocked vs current</div>${unlockedPctOfLocked}</div>
+    <div class="stat"><div class="num">+${fmt(best.estimated_saar_uplift_k)}k</div><div class="l">est SAAR uplift</div>${saarXDeficit}</div>
   `;
 }
 

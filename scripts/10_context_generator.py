@@ -465,24 +465,58 @@ def section_coiled_spring():
 
     locked_below_pct = float(fhfa[fhfa['approx_midpoint_rate'] < current_rate]['pct_of_outstanding'].sum())
     locked_below_m = float(fhfa[fhfa['approx_midpoint_rate'] < current_rate]['est_homes_millions'].sum())
+    total_stock_m = float(fhfa['est_homes_millions'].sum())
+
+    # Frame-of-reference constants for the coiled-spring widget.
+    # Pre-2022 normalized SAAR ≈ 5.3M/yr (NAR existing-home sales 2015-2019 average);
+    # current SAAR ≈ 4.0M/yr (NAR 2024 was 4.06M, the 30-year low). Hardcoded
+    # because the FRED EHS series (EXHOSLUSM495S) currently has known data
+    # quality issues — see scripts/debug_ehs.py.
+    pre_2022_normalized_saar_k = 5300
+    current_saar_k = 4000
+    transaction_deficit_k = pre_2022_normalized_saar_k - current_saar_k  # 1300
+
+    # Augment each scenario with computed percentage fields for the dashboard
+    # widget's % subtitles.
+    scenarios_records = scenarios.to_dict(orient="records")
+    for row in scenarios_records:
+        if total_stock_m > 0:
+            row['locked_pct_of_total'] = float(row['locked_millions']) / total_stock_m
+        if locked_below_m > 0:
+            row['unlocked_pct_of_locked'] = float(row['unlocked_vs_today_millions']) / locked_below_m
+        if transaction_deficit_k > 0:
+            row['saar_uplift_x_deficit'] = float(row['estimated_saar_uplift_k']) / transaction_deficit_k
 
     state.update({
         "current_30yr_rate": float(current_rate),
         "pct_locked_below_current": locked_below_pct,
         "locked_below_millions": locked_below_m,
-        "scenarios": scenarios.to_dict(orient="records"),
+        "totals": {
+            "mortgage_stock_millions": total_stock_m,
+            "current_locked_millions": locked_below_m,
+            "current_locked_pct": locked_below_pct,
+            "pre_2022_normalized_saar_k": pre_2022_normalized_saar_k,
+            "current_saar_k": current_saar_k,
+            "transaction_deficit_k": transaction_deficit_k,
+        },
+        "scenarios": scenarios_records,
     })
 
     body = "## Coiled Spring Status\n\n"
     body += f"**Current 30yr rate:** {current_rate:.2f}%  \n"
-    body += f"**% of mortgages locked below current rate:** {locked_below_pct*100:.1f}%  \n"
-    body += f"**Total locked-low homeowners:** ~{locked_below_m:.1f}M\n\n"
+    body += f"**Total mortgage stock tracked:** {total_stock_m:.1f}M  \n"
+    body += f"**Currently locked-low (rate <{current_rate:.2f}%):** {locked_below_m:.1f}M ({locked_below_pct*100:.1f}% of stock)  \n"
+    body += f"**EHS deficit vs pre-2022 normalized:** ~{transaction_deficit_k:,}k SAAR/yr\n\n"
     body += "**Unlock scenarios:**\n\n"
-    body += "| Scenario Rate | Locked (M) | Newly Unlocked (M) | Est. SAAR Uplift (k units) |\n"
-    body += "|--------------:|-----------:|-------------------:|---------------------------:|\n"
-    for _, row in scenarios.iterrows():
-        body += (f"| {row['scenario_rate']:.2f}% | {row['locked_millions']:.1f} | "
-                 f"{row['unlocked_vs_today_millions']:.1f} | {row['estimated_saar_uplift_k']:,.0f} |\n")
+    body += "| Scenario Rate | Locked (M) | % of Stock | Newly Unlocked (M) | % of Locked | SAAR Uplift (k) | × Deficit |\n"
+    body += "|--------------:|-----------:|-----------:|-------------------:|------------:|----------------:|----------:|\n"
+    for row in scenarios_records:
+        pct_total = row.get('locked_pct_of_total', 0) * 100
+        pct_locked = row.get('unlocked_pct_of_locked', 0) * 100
+        x_deficit = row.get('saar_uplift_x_deficit', 0)
+        body += (f"| {row['scenario_rate']:.2f}% | {row['locked_millions']:.1f} | {pct_total:.0f}% | "
+                 f"{row['unlocked_vs_today_millions']:.1f} | {pct_locked:.0f}% | "
+                 f"{row['estimated_saar_uplift_k']:,.0f} | {x_deficit:.1f}× |\n")
     return body, state
 
 
