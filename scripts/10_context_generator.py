@@ -487,6 +487,22 @@ def section_coiled_spring():
         if transaction_deficit_k > 0:
             row['saar_uplift_x_deficit'] = float(row['estimated_saar_uplift_k']) / transaction_deficit_k
 
+    # Expose the FHFA distribution + lock-in threshold + SAAR multiplier
+    # so the dashboard widget can compute live scenarios at ANY rate
+    # (not just the 0.25% grid in scenarios_records). Resolves slider-
+    # gap issues — e.g., today's 6.30% market rate falls between the
+    # 6.25% and 6.50% grid points but produces a different locked count
+    # than either (the 4.5-5% bucket flips between 6.25 and 6.30 because
+    # market_rate > 4.75 + 1.5 = 6.25 is the threshold).
+    distribution_records = []
+    for _, row in fhfa.iterrows():
+        distribution_records.append({
+            "rate_bucket": str(row["rate_bucket"]),
+            "approx_midpoint_rate": float(row["approx_midpoint_rate"]),
+            "est_homes_millions": float(row["est_homes_millions"]),
+            "pct_of_outstanding": float(row["pct_of_outstanding"]),
+        })
+
     state.update({
         "current_30yr_rate": float(current_rate),
         "pct_locked_below_current": locked_below_pct,
@@ -499,6 +515,9 @@ def section_coiled_spring():
             "current_saar_k": current_saar_k,
             "transaction_deficit_k": transaction_deficit_k,
         },
+        "lockin_threshold_pct": 1.5,
+        "saar_per_million_k": 280.0,
+        "distribution": distribution_records,
         "scenarios": scenarios_records,
     })
 

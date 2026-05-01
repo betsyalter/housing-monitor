@@ -74,7 +74,12 @@ def calculate_coiled_spring(current_30yr_rate, distribution_df, threshold_bps=15
     print(f"Total locked homeowners at {current_30yr_rate:.2f}%: {total_locked:.1f}M")
     print(f"  ({total_locked/50.8*100:.0f}% of all mortgaged homeowners)")
 
-    scenarios = [6.5, 6.25, 6.0, 5.75, 5.5, 5.25, 5.0, 4.75, 4.5]
+    # Extended down to 4.0% so the largest cohort (sub-3% midpoint 2.5)
+    # actually appears as unlocked at the math floor (market > 2.5 + 1.5
+    # threshold = 4.0; at 4.0% the strict-inequality fails and that bucket
+    # finally releases). Without these rows the largest single bucket
+    # (~22% of stock) never showed as unlocked anywhere.
+    scenarios = [6.5, 6.25, 6.0, 5.75, 5.5, 5.25, 5.0, 4.75, 4.5, 4.25, 4.0]
     print(f"\nUnlock scenarios (threshold={threshold_bps}bps):")
     print(f"{'Rate':>8} | {'Still Locked':>14} | {'Unlocked vs Today':>18} | {'Est SAAR Uplift':>16}")
     print("-" * 65)

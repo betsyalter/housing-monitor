@@ -55,6 +55,10 @@ a:hover { text-decoration: underline; }
 .scenario .stat .num { font-size: 20px; font-weight: 600; }
 .scenario .stat .l { font-size: 11px; color: var(--muted); text-transform: uppercase; }
 .scenario .stat .sub { font-size: 11px; color: var(--muted); margin-top: 4px; opacity: 0.85; }
+.spring-controls { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 6px; }
+.spring-controls input[type="number"] { width: 80px; padding: 4px 6px; background: rgba(0,0,0,0.3); color: inherit; border: 1px solid rgba(255,255,255,0.15); border-radius: 4px; font-size: 13px; }
+.spring-controls button { padding: 4px 10px; background: rgba(255,255,255,0.08); color: inherit; border: 1px solid rgba(255,255,255,0.15); border-radius: 4px; font-size: 12px; cursor: pointer; }
+.spring-controls button:hover { background: rgba(255,255,255,0.15); }
 .basket-bars { display: flex; flex-direction: column; gap: 4px; }
 .basket-row { display: grid; grid-template-columns: 220px 1fr 60px 60px; gap: 8px;
   align-items: center; font-size: 13px; }
@@ -203,10 +207,12 @@ footer { margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border
   <div class="card" id="card-spring">
     <h3>Coiled spring</h3>
     <div class="spring">
-      <div>
+      <div class="spring-controls">
         <span id="spring-rate-label">Scenario rate: 6.50%</span>
+        <input type="number" id="spring-rate-input" min="0" max="15" step="0.01" placeholder="e.g. 6.30" />
+        <button id="spring-snap-current" type="button">Snap to current</button>
       </div>
-      <input type="range" id="spring-slider" min="450" max="700" value="650" step="25">
+      <input type="range" id="spring-slider" min="400" max="700" value="650" step="5">
       <div class="scenario" id="spring-scenario"></div>
       <div class="muted" id="spring-current"></div>
     </div>
@@ -598,53 +604,146 @@ function renderMacro(s) {
 }
 
 // ── coiled spring ──────────────────────────────────────────────────
-let springScenarios = [];
-let springTotals = null;
+let springParams = null;  // { distribution, threshold, saarPerM, currentLockedM, totals, currentRate }
+
+// Live compute scenario at ANY rate from the FHFA distribution.
+// Drops dependency on the precomputed 0.25%-grid CSV so the slider can
+// land on arbitrary values (e.g. today's 6.30%, between grid points).
+//
+// "unlocked vs today" baselines against locked_at(currentRate) — the
+// count of mortgages locked by the mechanism at today's market rate,
+// not the wider locked_below_millions count (which represents
+// "homeowners with rates below current market", a different concept).
+function lockedAt(rate, distribution, threshold) {
+  let total = 0;
+  for (const b of distribution) {
+    if (rate > b.approx_midpoint_rate + threshold) {
+      total += b.est_homes_millions;
+    }
+  }
+  return total;
+}
+
+function computeSpringAt(rate) {
+  if (!springParams || !springParams.distribution) return null;
+  const { distribution, threshold, saarPerM, currentRate, totals } = springParams;
+  const lockedAtScenario = lockedAt(rate, distribution, threshold);
+  const lockedAtToday = currentRate != null ? lockedAt(currentRate, distribution, threshold) : lockedAtScenario;
+  const unlocked = lockedAtToday - lockedAtScenario;  // signed: positive at lower rates, negative if user slides above today
+  const saarK = unlocked * saarPerM;
+  const totalStockM = totals ? totals.mortgage_stock_millions : null;
+  const deficitK = totals ? totals.transaction_deficit_k : null;
+  return {
+    locked_millions: lockedAtScenario,
+    unlocked_vs_today_millions: unlocked,
+    estimated_saar_uplift_k: saarK,
+    locked_pct_of_total: totalStockM ? lockedAtScenario / totalStockM : null,
+    unlocked_pct_of_locked: lockedAtToday > 0 ? unlocked / lockedAtToday : null,
+    saar_uplift_x_deficit: deficitK ? saarK / deficitK : null,
+  };
+}
+
 function renderSpring(s) {
-  if (!s || !s.scenarios) {
+  if (!s || (!s.distribution && !s.scenarios)) {
     el("card-spring").innerHTML = `<div class="section-missing">Coiled-spring data unavailable.</div>`;
     return;
   }
-  springScenarios = s.scenarios;
-  springTotals = s.totals || null;
+  // Backwards-compat: if distribution isn't in the JSON yet, derive a
+  // workable distribution from the scenarios grid (older Script 10
+  // outputs). Best-effort; subtitles still render via stored fields.
+  if (s.distribution && s.lockin_threshold_pct != null && s.saar_per_million_k != null) {
+    springParams = {
+      distribution: s.distribution,
+      threshold: s.lockin_threshold_pct,
+      saarPerM: s.saar_per_million_k,
+      currentLockedM: s.locked_below_millions,
+      totals: s.totals || null,
+      currentRate: s.current_30yr_rate,
+    };
+  } else {
+    springParams = null;  // fall back to nearest-scenario-row lookup below
+  }
   const cur = s.current_30yr_rate;
   if (cur != null) {
     let frame = `Current 30yr: <strong>${cur.toFixed(2)}%</strong> &middot; ${(s.pct_locked_below_current*100).toFixed(1)}% locked below &middot; ~${s.locked_below_millions.toFixed(1)}M homeowners`;
-    if (springTotals) {
-      frame += `<br><span style="opacity:0.7">Total stock: ${springTotals.mortgage_stock_millions.toFixed(1)}M &middot; Current SAAR: ${(springTotals.current_saar_k/1000).toFixed(1)}M vs ${(springTotals.pre_2022_normalized_saar_k/1000).toFixed(1)}M normalized (${springTotals.transaction_deficit_k}k deficit)</span>`;
+    if (s.totals) {
+      frame += `<br><span style="opacity:0.7">Total stock: ${s.totals.mortgage_stock_millions.toFixed(1)}M &middot; Current SAAR: ${(s.totals.current_saar_k/1000).toFixed(1)}M vs ${(s.totals.pre_2022_normalized_saar_k/1000).toFixed(1)}M normalized (${s.totals.transaction_deficit_k}k deficit)</span>`;
     }
     el("spring-current").innerHTML = frame;
+    el("spring-snap-current").textContent = `Snap to current (${cur.toFixed(2)}%)`;
   }
-  el("spring-slider").addEventListener("input", e => updateSpring(parseFloat(e.target.value) / 100));
-  // Default to current rate
+
+  // Synchronize three input controls (slider, numeric input, snap button).
+  el("spring-slider").addEventListener("input", e => {
+    const rate = parseFloat(e.target.value) / 100;
+    el("spring-rate-input").value = rate.toFixed(2);
+    updateSpring(rate);
+  });
+  el("spring-rate-input").addEventListener("input", e => {
+    const rate = parseFloat(e.target.value);
+    if (!isNaN(rate) && rate >= 0 && rate <= 15) {
+      // Clamp slider to its visible range; numeric input is unconstrained.
+      const sliderVal = Math.max(400, Math.min(700, Math.round(rate * 100)));
+      el("spring-slider").value = sliderVal;
+      updateSpring(rate);
+    }
+  });
+  el("spring-snap-current").addEventListener("click", () => {
+    if (cur == null) return;
+    el("spring-slider").value = Math.max(400, Math.min(700, Math.round(cur * 100)));
+    el("spring-rate-input").value = cur.toFixed(2);
+    updateSpring(cur);
+  });
+
+  // Initial: snap to current rate (so widget loads in the most useful state).
   if (cur != null) {
-    el("spring-slider").value = Math.round(cur * 100);
+    el("spring-slider").value = Math.max(400, Math.min(700, Math.round(cur * 100)));
+    el("spring-rate-input").value = cur.toFixed(2);
     updateSpring(cur);
   } else {
+    el("spring-slider").value = 650;
+    el("spring-rate-input").value = "6.50";
     updateSpring(6.5);
+  }
+
+  // Backwards-compat fallback: if no distribution, store scenarios for
+  // nearest-row lookup in updateSpring.
+  if (!springParams) {
+    window._fallbackSpringScenarios = s.scenarios || [];
   }
 }
 
 function updateSpring(rate) {
   el("spring-rate-label").textContent = `Scenario rate: ${rate.toFixed(2)}%`;
-  // Find closest scenario row (scenarios are at .25 increments)
-  let best = null, bestDiff = Infinity;
-  for (const sc of springScenarios) {
-    const d = Math.abs(sc.scenario_rate - rate);
-    if (d < bestDiff) { bestDiff = d; best = sc; }
+  let best;
+  if (springParams) {
+    // Live compute — works for any rate.
+    best = computeSpringAt(rate);
+  } else {
+    // Fallback: nearest precomputed scenario row.
+    const scenarios = window._fallbackSpringScenarios || [];
+    let bestDiff = Infinity;
+    for (const sc of scenarios) {
+      const d = Math.abs(sc.scenario_rate - rate);
+      if (d < bestDiff) { bestDiff = d; best = sc; }
+    }
   }
   if (!best) { el("spring-scenario").innerHTML = ""; return; }
-  // Build percentage subtitles when totals are available.
   const lockedPctOfStock = best.locked_pct_of_total != null
     ? `<div class="sub">${(best.locked_pct_of_total*100).toFixed(0)}% of total stock</div>` : "";
   const unlockedPctOfLocked = best.unlocked_pct_of_locked != null
     ? `<div class="sub">${(best.unlocked_pct_of_locked*100).toFixed(0)}% of currently-locked</div>` : "";
   const saarXDeficit = best.saar_uplift_x_deficit != null
     ? `<div class="sub">${best.saar_uplift_x_deficit.toFixed(1)}× current deficit</div>` : "";
+  // Sign-aware display: "+X.X M" when unlocking, "−X.X M" if user slides above current rate (more locked).
+  const unlockedSign = best.unlocked_vs_today_millions >= 0 ? "+" : "−";
+  const unlockedAbs = Math.abs(best.unlocked_vs_today_millions);
+  const saarSign = best.estimated_saar_uplift_k >= 0 ? "+" : "−";
+  const saarAbs = Math.abs(best.estimated_saar_uplift_k);
   el("spring-scenario").innerHTML = `
     <div class="stat"><div class="num">${best.locked_millions.toFixed(1)}M</div><div class="l">homes still locked</div>${lockedPctOfStock}</div>
-    <div class="stat"><div class="num">+${best.unlocked_vs_today_millions.toFixed(1)}M</div><div class="l">newly unlocked vs current</div>${unlockedPctOfLocked}</div>
-    <div class="stat"><div class="num">+${fmt(best.estimated_saar_uplift_k)}k</div><div class="l">est SAAR uplift</div>${saarXDeficit}</div>
+    <div class="stat"><div class="num">${unlockedSign}${unlockedAbs.toFixed(1)}M</div><div class="l">unlocked vs current</div>${unlockedPctOfLocked}</div>
+    <div class="stat"><div class="num">${saarSign}${fmt(saarAbs)}k</div><div class="l">est SAAR uplift</div>${saarXDeficit}</div>
   `;
 }
 
