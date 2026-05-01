@@ -19,4 +19,6 @@ data/last_run.json
 data/alert_state.json
 data/news_state.json
 data/news_stream_log.csv
+data/congress_bill_log.csv
+data/congress_bill_state.json
 get-pip.py

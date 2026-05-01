@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.housing-monitor.legislative</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/bin/bash</string>
+        <string>/Users/macmini3/housing_monitor/scripts/run_legislative.sh</string>
+    </array>
+
+    <key>WorkingDirectory</key>
+    <string>/Users/macmini3/housing_monitor</string>
+
+    <!-- 6:15 PM ET = 3:15 PM Mac mini local (PT during DST).
+         Same-day detection of bills introduced or marked-up that day. -->
+    <key>StartCalendarInterval</key>
+    <dict>
+        <key>Hour</key>
+        <integer>15</integer>
+        <key>Minute</key>
+        <integer>15</integer>
+    </dict>
+
+    <key>RunAtLoad</key>
+    <false/>
+
+    <key>StandardOutPath</key>
+    <string>/Users/macmini3/housing_monitor/logs/legislative.stdout.log</string>
+
+    <key>StandardErrorPath</key>
+    <string>/Users/macmini3/housing_monitor/logs/legislative.stderr.log</string>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>HOME</key>
+        <string>/Users/macmini3</string>
+        <key>PATH</key>
+        <string>/opt/homebrew/Caskroom/miniforge/base/envs/housing/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin</string>
+    </dict>
+</dict>
+</plist>
