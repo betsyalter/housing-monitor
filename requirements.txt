@@ -6,4 +6,5 @@ python-dotenv>=1.0
 PyYAML>=6.0
 openpyxl>=3.1
 anthropic>=0.40
+markdown>=3.5
 pytest>=7.4

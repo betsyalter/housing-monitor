@@ -23,6 +23,7 @@ OUT_JSON = os.path.join(REPO_ROOT, "housing_context.json")
 PRICES_DIR = os.path.join(DATA_DIR, "fmp_prices")
 INSIDER_DIR = os.path.join(DATA_DIR, "fmp_insider")
 PERPLEXITY_WEEKLY_DIR = os.path.join(REPO_ROOT, "output", "perplexity", "weekly")
+PERPLEXITY_DIR = os.path.join(REPO_ROOT, "output", "perplexity")
 
 
 # ── helpers ────────────────────────────────────────────────────────────────
@@ -180,6 +181,55 @@ def section_weekly_synthesis():
         "underappreciated_catalyst": catalyst,
     })
     return body, state
+
+
+def section_perplexity_report():
+    """Render the latest weekly Perplexity Computer report (full prose) as HTML
+    so the dashboard can show it inline. The synthesis card above renders the
+    structured JSON sidecar; this section renders the full markdown body."""
+    state = {"name": "perplexity_report"}
+    try:
+        import markdown as md_lib
+    except ImportError:
+        state["status"] = "missing_dep"
+        return ("", state)
+
+    md_files = sorted(glob.glob(os.path.join(PERPLEXITY_WEEKLY_DIR, "*.md")))
+    if not md_files:
+        state["status"] = "empty"
+        return ("", state)
+
+    latest_md_path = md_files[-1]
+    report_date = os.path.splitext(os.path.basename(latest_md_path))[0]
+    try:
+        with open(latest_md_path, encoding="utf-8") as f:
+            md_text = f.read()
+    except Exception as e:
+        state["status"] = f"error:{type(e).__name__}"
+        return ("", state)
+
+    # Strip the H1 (we render the title in the dashboard card header)
+    body_text = md_text.lstrip()
+    if body_text.startswith("# "):
+        body_text = body_text.split("\n", 1)[1] if "\n" in body_text else ""
+
+    html = md_lib.markdown(
+        body_text,
+        extensions=["tables", "fenced_code", "sane_lists", "attr_list"],
+        output_format="html5",
+    )
+
+    state["status"] = "ok"
+    state["report_date"] = report_date
+    state["report_path_md"] = os.path.relpath(latest_md_path, REPO_ROOT).replace(os.sep, "/")
+    state["html"] = html
+    state["github_url"] = (
+        f"https://github.com/betsyalter/housing-monitor/blob/main/"
+        f"{state['report_path_md']}"
+    )
+    # Don't duplicate the prose into housing_context.md — that file already
+    # links to the source. The HTML lives in JSON for dashboard rendering only.
+    return ("", state)
 
 
 def section_macro():
@@ -728,7 +778,7 @@ def main():
     states = []
 
     # Weekly synthesis at the top — sets the analytical frame before raw data
-    for fn in [section_weekly_synthesis,
+    for fn in [section_weekly_synthesis, section_perplexity_report,
                section_macro, section_coiled_spring, section_homebuilders,
                section_reits, section_price_action, section_correlations,
                section_news, section_recent_8ks, section_insider]:

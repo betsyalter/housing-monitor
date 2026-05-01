@@ -92,6 +92,48 @@ a:hover { text-decoration: underline; }
 footer { margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border);
   color: var(--muted); font-size: 12px; }
 .sources li { margin: 2px 0; }
+
+/* ── deep-dive Perplexity report (full markdown rendered inline) ── */
+.report-card { background: var(--card); border: 1px solid var(--border);
+  border-radius: 8px; padding: 24px; margin-bottom: 24px; }
+.report-card .report-meta { color: var(--muted); font-size: 13px; margin: 4px 0 16px 0; }
+.report-card .report-toolbar { display: flex; gap: 12px; align-items: center;
+  margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+.report-card .report-toolbar button { background: transparent; color: var(--muted);
+  border: 1px solid var(--border); border-radius: 4px; padding: 4px 10px;
+  font-size: 12px; cursor: pointer; font-family: inherit; }
+.report-card .report-toolbar button:hover { color: var(--fg); border-color: var(--accent); }
+.report-card .report-content { max-height: 70vh; overflow-y: auto; padding-right: 12px;
+  font-size: 14px; line-height: 1.6; }
+.report-card .report-content.expanded { max-height: none; }
+.report-card .report-content::-webkit-scrollbar { width: 8px; }
+.report-card .report-content::-webkit-scrollbar-track { background: transparent; }
+.report-card .report-content::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+.report-content h1 { font-size: 22px; margin: 24px 0 12px 0; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+.report-content h2 { font-size: 18px; margin: 24px 0 10px 0; border-bottom: 1px solid var(--border); padding-bottom: 6px; text-transform: none; letter-spacing: 0; color: var(--fg); }
+.report-content h3 { font-size: 15px; margin: 18px 0 8px 0; color: var(--fg); text-transform: none; letter-spacing: 0; }
+.report-content h4 { font-size: 14px; margin: 14px 0 6px 0; color: var(--accent); }
+.report-content p { margin: 8px 0; }
+.report-content ul, .report-content ol { margin: 8px 0; padding-left: 24px; }
+.report-content li { margin: 4px 0; }
+.report-content blockquote { border-left: 3px solid var(--accent); margin: 12px 0;
+  padding: 8px 14px; background: rgba(0,0,0,0.2); color: var(--muted); }
+.report-content blockquote p { margin: 4px 0; }
+.report-content code { background: rgba(0,0,0,0.35); padding: 1px 6px; border-radius: 3px;
+  font-size: 12.5px; color: #ffa657; }
+.report-content pre { background: rgba(0,0,0,0.35); padding: 12px; border-radius: 6px;
+  overflow-x: auto; border: 1px solid var(--border); }
+.report-content pre code { background: transparent; color: var(--fg); padding: 0; }
+.report-content table { width: 100%; border-collapse: collapse; margin: 12px 0;
+  font-size: 13px; }
+.report-content th, .report-content td { border: 1px solid var(--border);
+  padding: 6px 10px; text-align: left; vertical-align: top; }
+.report-content th { background: rgba(88,166,255,0.08); font-weight: 600; }
+.report-content tr:nth-child(even) td { background: rgba(0,0,0,0.15); }
+.report-content a { color: var(--accent); }
+.report-content hr { border: 0; border-top: 1px solid var(--border); margin: 24px 0; }
+.report-content strong { color: var(--fg); font-weight: 600; }
+.report-content em { color: var(--muted); }
 </style>
 </head>
 <body>
@@ -109,6 +151,9 @@ footer { margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border
 
 <!-- Weekly synthesis card — shows up first if a Perplexity output exists -->
 <div id="synthesis-card"></div>
+
+<!-- Full deep-dive Perplexity report rendered inline (below the synthesis summary) -->
+<div id="perplexity-report-card"></div>
 
 <!-- Hero: macro + coiled spring above the fold -->
 <div class="hero">
@@ -223,6 +268,7 @@ function render(d) {
 
   const sec = d.sections || {};
   renderSynthesis(sec.weekly_synthesis);
+  renderPerplexityReport(sec.perplexity_report);
   renderMacro(sec.macro);
   renderSpring(sec.coiled_spring);
   renderCorrelations(sec.correlations);
@@ -313,6 +359,36 @@ function renderSynthesis(s) {
 
   html += `</div>`;
   card.innerHTML = html;
+}
+
+// ── full Perplexity report (markdown rendered server-side to HTML) ──
+function renderPerplexityReport(s) {
+  if (!s || s.status !== "ok" || !s.html) return;
+  const card = el("perplexity-report-card");
+  const date = s.report_date || "latest";
+  const html = `
+    <div class="report-card">
+      <h2 style="margin-top:0">📄 Weekly Deep-Dive Report — ${date}</h2>
+      <div class="report-meta">
+        Full Perplexity Computer output.
+        <a href="${s.report_path_md || '#'}">Raw markdown</a> ·
+        <a href="${s.github_url || '#'}" target="_blank">View on GitHub</a>
+      </div>
+      <div class="report-toolbar">
+        <button id="report-toggle-expand">Expand to full height</button>
+        <button id="report-toggle-collapse">Collapse to 70vh</button>
+        <span class="muted" style="font-size:12px;">Tip: Ctrl/Cmd-F to search within the report.</span>
+      </div>
+      <div class="report-content" id="report-content">${s.html}</div>
+    </div>
+  `;
+  card.innerHTML = html;
+  const content = el("report-content");
+  el("report-toggle-expand").addEventListener("click", () => content.classList.add("expanded"));
+  el("report-toggle-collapse").addEventListener("click", () => {
+    content.classList.remove("expanded");
+    content.scrollTop = 0;
+  });
 }
 
 // ── macro snapshot ─────────────────────────────────────────────────
