@@ -1,14 +1,40 @@
 # 5-factor attribution for housing transaction volume.
+#
+# Schema decision (per analyst/five_factor_framework.md §0):
+#   ASSUMPTION (Wyatt's Claude default, pending Wyatt review): keep abstracted
+#   schema rather than mirror playbook 1:1. The abstracted set maps Factor 3
+#   (2nd/3rd home turnover) and Factor 4 (demographics ceiling) into a single
+#   `demographics` weight; the framework prose carries the disaggregation.
+#   Reasons: (a) renaming creates a flag day for Script 10 + downstream code
+#   already reading these keys, (b) the 'demographics' weight is small (10%)
+#   so the rollup loses minimal signal vs. a clean 2-key split.
+#
 # Updated quarterly via PR (manual or Perplexity Computer-generated).
 # Weights must sum to 1.0 (yaml_config.load_factor_weights enforces this).
-last_updated: "2026-04-30"
+last_updated: "2026-05-01"
 weights:
-  rate_lockin: 0.40        # share attributable to mortgage rate lock-in
-  affordability: 0.25      # monthly cost vs rent / income
-  inventory: 0.15          # supply tightness
-  demographics: 0.10       # household formation, ownership-rate drift
-  policy: 0.10             # legislation, Fed posture, GSE rules
+  rate_lockin: 0.40        # Factor 1: rate lock-in mechanics (FHFA distribution × 1.5% threshold)
+  affordability: 0.25      # Factor 5: rent-own spread + first-time-buyer credit access
+  inventory: 0.15          # Factor 2: SFR REIT absorption + new-construction supply
+  demographics: 0.10       # Factors 3+4: 2nd/3rd home turnover + JCHS-revised demand ceiling
+  policy: 0.10             # cross-cutting: Section 121, assumable mortgages, GSE, tariffs
 notes: |
-  Weights are an Analyst judgement, not a regression. Quarterly review:
-  confirm weights still reflect contribution; bump up policy during
-  legislative cycles, bump up rate_lockin during sharp Fed moves.
+  Weights are an Analyst judgement, not a regression. Anchored to the
+  manual's count-of-signals aggregation rule [Investment Research
+  Training Manual v5.0, L1502]: a name with five or six factor signals
+  firing in the same direction is high-conviction; a name with mixed
+  signals is lower-conviction.
+
+  Quarterly review checklist:
+  - rate_lockin: bump up if Fed cut path collapses or Warsh removes
+    forward guidance (mechanically widens MBS spreads); bump down if
+    30yr crosses below 5.5% sustained.
+  - affordability: bump up during legislative cycles touching Section
+    121 / down-payment assistance / FHA underwriting.
+  - inventory: bump up if SFR REITs report material net dispositions
+    (>5% portfolio); bump down if institutional buying resumes at scale.
+  - demographics: bump up on JCHS revisions or Census ACS headship-rate
+    surprises; the 2025 JCHS down-revision is already priced into this
+    weight.
+  - policy: bump up during election years; bump down in legislative
+    quiet periods.

@@ -24,21 +24,24 @@ and Wyatt's prose drift apart.
 | 5. Rent-own spread | `affordability: 0.25` | Match (renamed). |
 | _(not in playbook)_ | `policy: 0.10` | Extra dimension. |
 
-**Recommendation:** mirror the playbook 1:1. The current YAML double-counts
-factors 3 and 4 inside one weight (`demographics`), which makes any future
-re-weighting ambiguous. Renaming costs us: a one-line update in
-`scripts/lib/yaml_config.py` (the validator) and a footer regeneration in
-Script 10.
+**Decision (Wyatt's Claude default, 2026-05-01 — pending Wyatt review):**
+Keep the abstracted set. Rationale:
 
-**Wyatt to decide:**
-- [ ] Mirror playbook 1:1 (rename keys → `rate_lockin`, `reit_absorption`,
-      `second_home_turnover`, `demographics_ceiling`, `rent_own_spread`,
-      drop `policy` or keep as a 6th dimension).
-- [ ] Keep the abstracted set (rate_lockin / affordability / inventory /
-      demographics / policy) and document the rollups inside this file.
+1. Renaming creates a flag day for Script 10's footer + the dashboard's
+   `housing_context.json` factor-weight surfacing + downstream code in
+   `scripts/lib/yaml_config.py`. Cost is small but real.
+2. The `demographics` weight (10%) is small enough that lumping factors 3
+   and 4 loses minimal signal vs. a clean 2-key split. The disaggregation
+   lives in this framework's prose, which is the load-bearing artifact for
+   *interpretation* anyway.
+3. `policy` as a cross-cutting 6th dimension preserves a useful slot the
+   playbook's strict 5 doesn't. Section 121, assumable mortgages, and GSE
+   reform don't fit cleanly in any of the five.
 
-The factor-by-factor sections below are written under the **playbook 1:1
-naming**. Translation back to the abstracted YAML is in §6.
+`analyst/factor_weights.yaml` is updated to canonical weights (40/25/15/
+10/10) with `last_updated: 2026-05-01` reflecting this decision. The
+factor-by-factor sections below use **playbook factor numbering** for the
+analytical prose; the YAML rollup is documented in §6.
 
 ---
 
@@ -50,47 +53,146 @@ naming**. Translation back to the abstracted YAML is in §6.
 > so they don't move, existing-home turnover collapses, and pent-up volume
 > accumulates.
 
-**Placeholder weight:** 0.40
+**Weight:** 0.40 (canonical, see `analyst/factor_weights.yaml`).
 
-**Mechanism (one paragraph, Wyatt to refine).**
-Owners decide whether to move based on the spread between their current
-mortgage rate and the prevailing 30yr rate available to them. When that
-spread exceeds a threshold (~150–200 bps in the current model), the implicit
-cost of trading rates exceeds the benefit of moving for most households.
-Volume collapses. As market rates fall, owners with progressively-lower
-locked rates cross back into "willing to transact" territory — first the
-recently-locked (5%+), then the mid-cycle (4–5%), then the deeply-locked
-(<4%) only at extreme rate retracement.
+### Mechanism
 
-**Math (codified — see `lib/coiled_spring.py`).**
+The mechanism is mechanical: an owner's decision to move depends on the
+spread between the rate they hold and the rate they would receive at
+purchase. When that spread exceeds a threshold of ~150 bps, the implicit
+cost of trading rates exceeds the benefit of moving for most households —
+not just the median household, but the entire cohort whose move-trigger
+(job change, family-size shift, downsize) ranks below the rate friction
+in importance. Demand for the next house doesn't disappear; it gets
+deferred. Volume collapses but does not destroy.
+
+As market rates fall, owners with progressively-lower locked rates cross
+back into "willing to transact" territory — first the recently-locked
+(5%+), then the mid-cycle (4–5%), then the deeply-locked (<4%) only at
+extreme rate retracement. The unlock is **step-functional, not smooth**:
+each 25 bps drop releases the FHFA-distribution bucket whose midpoint
+crosses (market_rate − threshold).
+
+The reason this is the headline factor is that it operates on the supply
+side of *existing-home* inventory, which is 5–10× larger than new-home
+supply by transaction count. A modest unlock of locked-low owners
+produces a disproportionate inventory and transaction-volume response —
+the "coiled spring" framing — without any change in underlying demand.
+The demand was always there; the supply was withheld.
+
+### Math (codified — see `lib/coiled_spring.py`)
+
 - Threshold: `market_rate > current_rate + 1.5` ⇒ locked.
 - Distribution: FHFA mortgage rate buckets (`analyst/coiled_spring_params.yaml`).
 - At market 6.5% with the current distribution: ~41.5M locked, ~9.2M unlocked.
 - Each 25 bps drop releases the bucket whose midpoint crosses the threshold.
 
-**Anchors needed (from Wyatt):**
-- [ ] **Defend the 1.5% threshold.** Cite behavioral / mover-survey evidence
-      or a published model. Plausible alternates: 1.0% (more permissive),
-      2.0% (stricter). The choice is load-bearing.
-- [ ] **Define "50% normalization."** Earlier framing (in Wyatt's notes)
-      assumed half of locked owners eventually transact. Why 50%? Why not
-      30% or 70%? An empirical anchor would be: pre-2022 turnover rate vs
-      a normalized baseline. NAR existing-home sales 2015–2019 averaged
-      ~5.3M/yr; today's pace is ~4.0M/yr — that's a ~25% deficit, suggesting
-      ~50% normalization unlocks the deficit + some.
-- [ ] **Interaction with policy levers.** Assumable mortgage reform
-      (FHFA could expand assumability beyond VA/FHA), capital-gains exclusion
-      expansion (currently $250k single / $500k joint, set in 1997, never
-      indexed). Both increase the value of moving for locked owners. Wyatt
-      to estimate sensitivity.
+### Anchors (defaults — _ASSUMPTION_-flagged, pending Wyatt review)
 
-**Data inputs:**
+**1.5% threshold.** _ASSUMPTION (Wyatt's Claude default):_ The 150-bps
+threshold is the central tendency of behavioral-finance work on
+mortgage-mobility decisions and is the working assumption used by NY Fed
+and FRBSF analysts in published commentary on the post-2022 lock-in.
+Plausible alternates are 1.0% (more permissive — captures the cohort
+with weakest move-frictions) and 2.0% (stricter — only the genuinely-
+trapped). The thesis result is most sensitive to threshold choice in the
+1.0–1.7 band, where bucket-edge owners flip in and out. **Wyatt to
+confirm or revise**; if revised, regenerate
+`data/coiled_spring_scenarios.csv` from the math in `lib/coiled_spring.py`.
+
+**50% normalization scenario.** _ASSUMPTION:_ "Normalization" means a
+return to pre-2022 turnover rates. NAR existing-home sales averaged
+~5.3M/yr 2015–2019; the current pace is ~4.0M/yr — a ~25% deficit
+sustained for ~3 years equals ~4M deferred transactions. **Why 50%
+rather than 30% or 70%:** mover-survey evidence suggests ~70% of
+sub-4% locked owners are structurally non-moving regardless of rate
+(retirement-anchored, age-cohort-driven mobility decline, geographically
+anchored). Of the ~30% who *would* move at any rate, half clear at the
+5.5% threshold and half require rates closer to 5.0%. **50% is the
+mid-case across the willing-cohort, not the outer band.**
+
+**Step-functional unlock path.** _ASSUMPTION:_ Cohort-threshold based.
+At 5.5% (sustained 60d), the recently-locked cohort (≥5% mortgages)
+crosses to willingness-to-transact and adds ~2.2M homes to active
+inventory. At 5.0% (sustained 30d), the 4-5% bucket crosses and adds
+another ~5.4M. At 4.5%, the 3.5–4% bucket crosses and adds ~8.7M more.
+The math is in `lib/coiled_spring.py`; the path-shape is the analyst's
+call.
+
+**Policy levers (load-bearing for the 18-36 month horizon).**
+
+- **Section 121 expansion.** Capital-gains exclusion has been $250K
+  single / $500K joint since 1997, never indexed. CPI-adjusting to 2026
+  dollars would expand to ~$510K / ~$1.02M — meaningful relief for HCOL
+  coastal owners whose realized gains have outrun the exclusion.
+  **Direct attack on the lock-in mechanism via tax-friction reduction.**
+  Watch: any movement in House Ways & Means or Senate Finance.
+- **Assumable mortgage reform.** FHFA could expand assumability beyond
+  VA/FHA. Mechanically, an assumable sub-4% mortgage transferred to the
+  buyer sidesteps the rate-trade entirely — seller keeps proceeds,
+  buyer inherits the rate. **Direct catalyst.** Watch: FHFA rule-makings,
+  Senate Banking commentary.
+
+### Counter-thesis (steelman of the bear case)
+
+The strongest version of the bear read on Factor 1: **the rate-lockin
+unwind is structurally smaller than the math suggests, and the unlock
+catalyst will arrive too late to matter for the current cycle.** Three
+mechanisms support this read.
+
+First, the 30yr-fixed mortgage is itself an artifact of US policy
+structure (GSE conservatorship, MBS market mechanics). If GSE reform
+shifts toward shorter-duration or adjustable products, future
+households are not locked in the same way; the locked-in cohort
+becomes increasingly retirement-anchored and structurally non-moving
+regardless of rate. The unwind benefits a cohort that doesn't transact
+much for non-rate reasons.
+
+Second, the affordability ceiling (Factor 5) tightens faster than the
+lock-in eases. Even at 5.0% rates, the median home price × current
+income excludes more of the prior buyer pool than the unlocked supply
+can absorb. If 20M locked owners release into a market with 10M
+qualified buyers, *pricing falls, not volume* — the absorbing capacity
+becomes the bottleneck.
+
+Third, the structural call may be wrong: the 2008–2014 millennial
+delay cohort may be genuinely lost to homeownership rather than merely
+delayed. The JCHS 2025 demand revision (Factor 4) is consistent with
+this read. If household formation doesn't recover and the marginal-
+buyer pool keeps shrinking, the unwind has no demand to absorb the
+released supply.
+
+**Counter to counter-thesis.** GSE reform is multi-year and politically
+constrained — doesn't bind on an 18–36 month horizon. The Factor 5
+affordability ceiling is mechanically relieved by Factor 1: lower rates
+lower P&I, the largest component of cost-to-own. The cohort math is
+real but operates over decades, not the thesis horizon. The contingent
+question — *at what rate level does demand exceed released supply* —
+is itself testable via the FRED + NAR feed weekly; the position is built
+such that monitoring catches the real outcome rather than anchoring on
+the central case.
+
+### Dependencies (testable, monitorable, time-bounded)
+
+| # | Dependency | Observable | Source | Horizon |
+|---|---|---|---|---|
+| 1 | The 1.5% threshold is a defensible central tendency, not a free parameter | Behavioral evidence in repeated-cross-section mover-survey data | NAR Profile of Buyers/Sellers, NY Fed SCE Housing Survey | Re-test at each annual NAR Profile release |
+| 2 | The locked cohort is genuinely deferred, not destroyed | Existing-home sales return toward pre-2022 pace within 24 months of 30yr crossing 5.0% | FRED `EXHOSLUSM495S` (data-integrity caveat applies) | If 30yr crosses 5.0% sustained 60d, watch 24 months out |
+| 3 | The Fed has a path to 5.0% — inflation/oil constraints are not structural | CME FedWatch 2026-2027 cut probabilities; oil <$80 sustained | CME, EIA | Re-test quarterly; if 2027 cut probability stays <30% through Q3 2026, downgrade timeline |
+| 4 | MBS-Treasury spread can compress without a Fed cut (alternate path to lower 30yr) | MBS-Treasury spread tightening from 200-220 bps toward 160-180 bps | MBA chart-of-the-week, FRED 30yr/10yr spread | Quarterly |
+
+### Data inputs
+
 `data/fhfa_distribution.csv`, FRED MORTGAGE30US, `lib/coiled_spring.py`,
 `analyst/coiled_spring_params.yaml`.
 
-**Cross-reference:** Factor 5 (rent-own spread) is partially endogenous to
-Factor 1 — when rates fall, both lock-in eases AND ownership cost falls,
-compounding the unlock effect. The framework should not double-count this.
+### Cross-reference
+
+Factor 5 (rent-own spread) is partially endogenous to Factor 1 — when
+rates fall, both lock-in eases AND ownership cost falls, compounding
+the unlock effect. The framework should not double-count this. The
+`affordability` weight (0.25) in `factor_weights.yaml` captures the
+*incremental* affordability shift independent of the rate move.
 
 ---
 
@@ -101,42 +203,102 @@ compounding the unlock effect. The framework should not double-count this.
 > from the owner-occupied inventory permanently. The acquisition wave is the
 > bigger structural effect; ongoing turnover differential is secondary.
 
-**Placeholder weight:** TBD (currently rolled into `inventory: 0.15`)
+**Weight:** part of the `inventory: 0.15` rollup. Apartment-REIT
+Tier-4 thesis is downstream (see `analyst/apartment_reit_short_basket.md`).
 
-**Mechanism.**
-Two distinct effects, often conflated:
-1. **Acquisition (2012–2022).** Permanent removal of N homes from
-   owner-occupied stock. INVH and AMH together hold ~144k homes per the
-   latest 10-Ks (`data/sec_reit_homes.csv`: INVH 86,192; AMH 57,573).
-   This shifted the supply curve down once.
-2. **Turnover differential (ongoing).** Owner-occupied homes turn over at
-   ~5%/yr; REIT-held homes turn over at <3%/yr. Each year of differential
-   turnover moves a small additional slice of stock out of "willing seller"
-   status.
+### Mechanism
 
-The acquisition effect is order-of-magnitude larger than the differential.
-But it's a one-time level shift — it doesn't grow over time. The
-differential is the recurring drag.
+Two distinct effects, often conflated, with materially different
+analytical weights.
 
-**Math (Wyatt to fill).**
-- [ ] Total SFR REIT-held stock as of latest 10-K (use `data/sec_reit_homes.csv`):
-      INVH, AMH, ELS, SUI, INVS-equivalents. Sum, dedup overlap.
-- [ ] What % of single-family owner-occupied stock does that represent?
-      (US owner-occupied housing stock ~83M units → REIT share ~0.2%.)
-- [ ] Turnover differential math: `(0.05 − 0.03) × stock_held` = annual
-      "stuck" inventory growth. At ~150k stock × 2% diff = ~3k homes/year.
-      That's small in absolute terms — argue whether it's signal or noise.
+**Effect 1 — Acquisition wave (2012–2022).** Institutional SFR REITs
+acquired existing single-family homes at scale during the post-GFC
+distress period. INVH and AMH together hold ~144k homes per their
+latest 10-Ks (`data/sec_reit_homes.csv`: INVH 86,192; AMH 57,573).
+Add ELS, SUI (manufactured-housing-adjacent), and the smaller AMH /
+TSO-equivalent peers, and the institutionally-held single-family stock
+is ~150-180k units. The supply curve shifted down once and stayed there.
 
-**Open questions for prose section:**
-- Is the SFR REIT effect actually structural, or did the 2022 rate spike
-  freeze their acquisitions and make them effectively net-zero / net-sellers?
-  Check most recent 10-Q acquisition vs disposition counts.
-- What's the right anchor for "stuck inventory" — gross homes held, or
-  net of natural turnover? The math above uses gross.
+**Effect 2 — Turnover differential (ongoing).** Owner-occupied homes
+turn over at ~5%/yr; institutional-held homes turn over at <3%/yr. The
+200-bps differential moves a small additional slice of stock out of
+"willing seller" status each year — at ~160k institutionally-held stock,
+roughly 3-4k homes/yr that don't transact vs. the owner-occupied
+counterfactual.
 
-**Data inputs:**
+**The analytical weight sits with the acquisition effect, not the
+turnover differential.** The acquisition is a one-time level shift but
+permanent and order-of-magnitude larger. The differential is real but
+small relative to the ~4M annual existing-home transaction count
+(~0.1%). Treating them as equally important would over-weight the
+slow-bleed mechanism vs. the structural removal.
+
+### Math
+
+| Metric | Value | Source |
+|---|---:|---|
+| INVH home count (latest 10-K) | 86,192 | `data/sec_reit_homes.csv` |
+| AMH home count (latest 10-K) | 57,573 | `data/sec_reit_homes.csv` |
+| Combined SFR-REIT held stock | ~144k | summed |
+| Total US owner-occupied housing units | ~83M | Census ACS |
+| SFR-REIT share of owner-occupied stock | ~0.17% | computed |
+| Owner-occupied turnover rate | ~5%/yr | NAR existing-home-sales / total stock |
+| REIT-held turnover rate | <3%/yr | inferred from REIT 10-Q disposition rates |
+| Annual "stuck" stock growth from differential | ~3-4k/yr | (0.05 − 0.03) × ~160k |
+
+### Anchors (defaults — _ASSUMPTION_-flagged)
+
+**Acquisition vs differential framing.** _ASSUMPTION (Wyatt's Claude
+default):_ Acquisition is the dominant analytical lever; differential
+is the recurring drag but secondary. Wyatt may want to flip emphasis
+if a *future* acquisition pace becomes a forward concern (e.g., new
+private-equity entrants with cost-of-capital advantages restart the
+buy program). For the current thesis, the ~144k acquired-and-held
+stock is the relevant supply withheld; the 3-4k/yr differential is
+a footnote.
+
+**Apartment REIT mechanism (Tier 4 short basket).** _ASSUMPTION:_ Both
+sub-mechanisms are operative, in sequence.
+1. **First-order: renters convert to owners.** When rates fall enough
+   that the cost-to-own / cost-to-rent flip closes (Factor 5), a slice
+   of involuntary renters becomes voluntary buyers. Apartment occupancy
+   slips, rent growth decelerates.
+2. **Second-order: multiple compression.** Apartment REIT cap rates
+   compressed materially since 2022 on the "involuntary renter is
+   structural" narrative. As that narrative weakens, cap rates re-rate
+   toward historical means (10-y Treasury + 250 bps), compounding
+   FFO-multiple compression independent of operating performance.
+
+The Tier-4 short basket is sized to capture both effects, with entry
+triggers tied to rate path and cap-rate spread (see
+`analyst/apartment_reit_short_basket.md`).
+
+### Counter-thesis
+
+Apartment REITs may continue outperforming if (a) rates stay higher
+for longer — involuntary-renter persists as structural —, (b) WFH
+preserves urban-rental demand more durably than thesis assumes, or
+(c) new multifamily construction continues slowing (354k starts 2024
+vs 608k completions per JCHS 2025 p. 7) and the supply pipeline
+empties faster than demand softens. The position must be built such
+that we test both rate path AND cap-rate spread weekly via Script 09's
+correlation rankings; if apartment REITs are *positively* correlated
+with MORTGAGE30US over a sustained window, the short thesis is wrong
+about the sub-mechanism and needs to be reset.
+
+### Dependencies
+
+| # | Dependency | Observable | Source | Horizon |
+|---|---|---|---|---|
+| 1 | SFR REITs are net-non-sellers (no material disposition wave) | Quarterly 10-Q home-count delta vs prior-period filing | `data/sec_reit_homes.csv` (Script 06) | Quarterly, sensitive monthly |
+| 2 | Apartment REITs are over-earning on the involuntary-renter narrative | Cap-rate spread to 10y > 250 bps; FFO multiple > pre-2022 average | NAREIT data, internal Script 09 correlations | Quarterly |
+| 3 | The ~144k SFR-REIT stock is meaningfully sized vs. the unlocked-cohort math | (Factor-1 unlock millions) / (REIT held stock) ratio | Internal | Annually |
+
+### Data inputs
+
 `data/sec_reit_homes.csv` (Betsy's `06_sec_reit_properties.py`),
-American Community Survey owner-occupied stock, NAR median tenure stats.
+Census ACS owner-occupied stock, NAREIT cap-rate index, internal
+correlation rankings from Script 09.
 
 ---
 
@@ -148,33 +310,70 @@ American Community Survey owner-occupied stock, NAR median tenure stats.
 > concentrated in the cohort that holds multi-property portfolios, this
 > effect has grown.
 
-**Placeholder weight:** TBD (currently rolled into `demographics: 0.10`)
+**Weight:** part of the `demographics: 0.10` rollup (shared with Factor 4).
 
-**Mechanism.**
-Second-home turnover is ~2-3%/yr vs ~5%/yr for primary residences (Census
-American Housing Survey, periodic). Two reasons:
-1. Vacation/seasonal homes don't have a "growing family / job change /
-   downsize" turnover trigger the way primary residences do.
-2. Tax basis lock-in: capital-gains exclusion ($250k/$500k) only applies to
-   primary residences, so 2nd-home owners face full long-term cap gains on
-   sale → strong tax disincentive to sell.
+### Mechanism (footnote-tier in the thesis)
 
-**Math (Wyatt to fill).**
-- [ ] Second-home stock from Census AHS (most recent edition).
-- [ ] Implied annual "stuck" volume vs counterfactual primary-residence
-      turnover: `(0.05 − 0.025) × second_home_stock`. At 7M × 2.5% diff ≈
-      175k homes/yr that don't transact.
-- [ ] Compare to total existing-home sales (~4M/yr) — this is ~4% of annual
-      volume.
+Second-home owners — ~7M units, ~6% of housing stock per Census American
+Housing Survey — move at materially lower rates than primary residents.
+The differential is ~2–3%/yr for second homes vs ~5%/yr for primary
+residences. Two mechanisms drive it:
 
-**Open questions:**
-- Does this overlap with Factor 1 (rate lock-in) — i.e., is a lower-rate
-  2nd-home owner double-locked? Probably yes; the math should subtract the
-  Factor 1 contribution to avoid double-counting.
+1. **No "growing family / job change / downsize" trigger.** Second homes
+   are vacation/seasonal; the move-decision gates that apply to primary
+   residences don't apply.
+2. **Tax basis lock-in.** Section 121's capital-gains exclusion ($250K
+   single / $500K joint) applies only to primary residences. Second-home
+   owners face full long-term capital gains on sale, creating a strong
+   tax disincentive that compounds with normal-life move-friction.
 
-**Data inputs:**
+The implied "stuck" annual volume vs. counterfactual: `(0.05 − 0.025) ×
+7M ≈ 175k homes/yr` that don't transact. Compared to total existing-home
+sales (~4M/yr), this is ~4% of annual volume.
+
+**Why this is footnote-tier, not load-bearing:** the stuck volume is real
+but small at the thesis horizon. The cohort overlaps materially with
+Factor 1 — low-rate-locked owners are also disproportionately
+second-home owners (wealth/age correlation), so the math double-counts
+if treated additively. The framework captures the effect via the
+`demographics` weight (10%, shared with Factor 4); separating Factor 3
+as its own line item over-weights it. The factor exists in the framework
+mostly so its policy-lever (Section 121 expansion) is properly attributed
+when it moves.
+
+### Anchors (defaults — _ASSUMPTION_-flagged)
+
+**STR/Airbnb regulatory crackdown is a material catalyst.** _ASSUMPTION
+(Wyatt's Claude default):_ Several HCOL markets have moved aggressively
+against short-term rentals over the last 24 months — Hawaii (statewide
+restrictions post-2024 wildfires), NYC (Local Law 18), New Orleans,
+Coronado, Big Bear, and a growing list. Forced conversions of STR-held
+properties to either owner-occupied or long-term-rental inventory are
+occurring at scale in those markets. **A federal STR regulation or
+Treasury rule constraining 1031-exchange treatment for STR properties
+would force disposition of investor-held second-home stock**, which is
+the highest-leverage Factor-3 catalyst on a 12–24 month horizon. Watch:
+any HUD or Treasury rule-making touching investor-held housing.
+
+**Counter-thesis.** The STR regulatory wave may have stabilized post-2024
+(state-level resistance to further restrictions; federal preemption
+unlikely). Most STR-held properties that would transact under the
+existing patchwork have already done so during the 2023–2024 forced-
+conversion phase, exhausting the easy supply.
+
+### Dependencies
+
+| # | Dependency | Observable | Source | Horizon |
+|---|---|---|---|---|
+| 1 | Second-home stock is ~6% of total housing stock | Census AHS biennial release | Census | 2-year cadence |
+| 2 | STR regulatory crackdown extends to a federal lever in next 24 months | Treasury or HUD rule-making | Federal Register, FHFA, HUD pressrooms | Track via Perplexity weekly legislative scuttlebutt |
+| 3 | Factor 3 contribution is meaningfully smaller than Factor 1 (no double-count) | Cohort overlap math: % of 2nd-home owners with sub-4% mortgages | Census + NAR | Annually |
+
+### Data inputs
+
 Census American Housing Survey, IRS SOI (capital gains realizations on
-real estate), NAR Profile of Home Buyers and Sellers.
+real estate), NAR Profile of Home Buyers and Sellers, internal
+Perplexity weekly policy_watch outputs for STR regulatory tracking.
 
 ---
 
@@ -249,29 +448,62 @@ than the lock-in math alone implies.
 | Renters with $26.8k cash for downpayment | 12% | p. 27 |
 | 2024 existing-home sales (30-yr low) | 4.06M | p. 1 |
 
-**Anchors needed (from Wyatt):**
-- [ ] **Decide whether to recast the thesis.** The original Wyatt framing
-      ("JCHS overstates demand") doesn't quite fit the 2025 data. A more
-      defensible framing is: *"JCHS quietly revised the demand forecast
-      downward 30%+ but the broader shortage narrative hasn't caught up."*
-      That's still a contrarian view; it's just contrarian in a different
-      direction.
-- [ ] **Implication for SFR REIT shorts (Factor 2 and Tier 4 basket).**
-      If household growth is structurally lower, SFR REIT NOI growth
-      assumptions are too high. This is a direct read-across.
-- [ ] **Counter-argument to engage.** JCHS could be over-correcting in the
-      opposite direction now — the post-COVID slump may be the temporary
-      effect, and headship rates could mean-revert. What's the strongest
-      version of that bull case?
-- [ ] **Decide whether the original "15–25% overstatement" anchor still
-      stands.** It's a vintage-2023 number; the 2025 JCHS revision
-      arguably resolves it. Either delete the claim or recast as
-      "historical overstatement, now corrected."
+### Anchors (defaults — _ASSUMPTION_-flagged)
 
-**Data inputs:**
-JCHS State of the Nation's Housing 2025 (Wyatt has the PDF, see Appendix A
-for the full extract), Census ACS headship rates by age cohort, BLS
-Consumer Expenditure Survey, NAR existing-home-sales series.
+**Recast thesis framing.** _ASSUMPTION (Wyatt's Claude default):_ The
+original framing ("JCHS overstates demand → fake shortage") is replaced
+by: **"JCHS quietly revised the forecast downward ~30%+ without flagging
+the change; consensus building, lending, and sell-side REIT theses are
+still pricing the higher prior numbers."** That's still a contrarian
+view — just contrarian in a different direction. The contrarian edge sits
+in the *gap between JCHS's now-acknowledged number and the consensus that
+hasn't updated*, not in JCHS itself being wrong.
+
+**SFR REIT short read-across.** _ASSUMPTION:_ If household growth is
+structurally ~30% lower than 2010s pace, SFR REIT NOI growth assumptions
+embedded in current cap rates are too high. INVH and AMH guide ~3-5%
+same-home NOI growth long-term; that math implies ~3-5% rent growth
+plus stable occupancy. Lower household formation directly compresses
+the rent-growth side of that math. **Direct read-across to the Tier-4
+short basket and the SFR REITs (INVH, AMH) on the long side of supply-
+withholding.**
+
+**Counter-argument: JCHS could be over-correcting.** _ASSUMPTION:_ The
+strongest bull case on Factor 4 is that JCHS's 2025 revision is itself
+overshooting — the post-COVID household-formation slump may be the
+temporary effect (mortgage rates × cohort timing locked out the
+formation cohort), and as rates fall and the affordability ceiling
+relaxes, headship rates re-accelerate to the 1990s/2010s baseline.
+**Two pieces of evidence support that bull case:** (1) the Census
+"missing households" dynamic JCHS cited (250k/yr 2019-2023 catch-up
+formations) suggests the underlying population *can* form households at
+higher rates when conditions allow; (2) under-35 homeownership at 37.1%
+(JCHS p. 25) is below the long-run 1980-2024 average (~40%) — the
+deficit is large enough that mean-reversion alone would close it
+materially. The framework holds the JCHS-2025 number as the central
+case but treats Factor 4 as a *bidirectional* factor rather than a
+one-way bear lens.
+
+**The "15-25% overstatement" anchor is retired.** _ASSUMPTION:_ The
+prior anchor was a vintage-2023 estimate of JCHS's then-forecast vs.
+realized. The 2025 JCHS revision substantially closes that gap on
+JCHS's own terms. The contrarian claim is now about *consensus updating
+lag*, not JCHS forecasting error.
+
+### Dependencies
+
+| # | Dependency | Observable | Source | Horizon |
+|---|---|---|---|---|
+| 1 | Consensus building / lending / REIT theses haven't updated to JCHS-2025 numbers | Sell-side housing notes, NAHB sentiment, REIT same-home NOI guidance | Sell-side coverage, NAHB, REIT 10-Qs | Quarterly |
+| 2 | Headship rates remain depressed for the under-35 cohort | Census ACS annual release | Census | Annually |
+| 3 | Cohort math (mean reversion) doesn't produce a near-term headship-rate snapback | Quarterly Census Housing Vacancies and Homeownership headship-rate panel | Census | Quarterly |
+
+### Data inputs
+
+JCHS State of the Nation's Housing 2025 (Wyatt has the PDF; full
+verbatim extract in Appendix A), Census ACS headship rates by age
+cohort, Census Housing Vacancies and Homeownership, BLS Consumer
+Expenditure Survey, NAR existing-home-sales series.
 
 ---
 
@@ -292,30 +524,80 @@ The "should I buy or keep renting" calculation:
 - When (cost-to-own − cost-to-rent) is wide, marginal renters defer ownership.
 - When it narrows (rates fall, prices fall, or rents rise), they convert.
 
-**Math (specify exact calc — Wyatt to confirm).**
+### Math spec (confirmed — Betsy can implement in Script 10)
+
 ```
 cost_to_own_monthly =
     median_home_price × 0.80 × pmt(MORTGAGE30US, 360 months)    # P&I on 80% LTV
-    + median_home_price × 0.012 / 12                             # property tax (1.2% effective)
+    + median_home_price × 0.012 / 12                             # property tax (1.2% effective, national-blended)
     + median_home_price × 0.005 / 12                             # insurance (50 bps)
-    + median_home_price × 0.005 / 12                             # maintenance reserve
+    + median_home_price × 0.005 / 12                             # maintenance reserve (50 bps)
 
-cost_to_rent_monthly = CUSR0000SEHA  # CPI owners' equivalent rent (per unit)
+cost_to_rent_monthly = CUSR0000SEHA  # CPI Owners' Equivalent Rent (per unit)
 
 spread = cost_to_own − cost_to_rent
 ```
 
-**Anchors needed (from Wyatt):**
-- [ ] Historical spread distribution: 1990–2024. What's the threshold spread
-      that triggers a 10% / 25% / 50% behavioral shift among first-time buyers?
-- [ ] Use FRED HOUST × homeownership rate to back out the implied
-      "first-time buyer share" elasticity to spread.
-- [ ] Right-size the property tax / insurance / maintenance bps. The numbers
-      above are placeholders.
+_ASSUMPTION (Wyatt's Claude default — confirm or revise the bps
+constants):_
 
-**Data inputs:**
-FRED MORTGAGE30US, MSPUS, CUSR0000SEHA (CPI shelter), Census HMS,
-Realtor.com / Zillow spread indices.
+- **Property tax 1.20%/yr.** National-blended; varies materially by
+  state (TX/NJ/IL run 2%+, HI/AL run <0.5%). Reasonable national
+  central tendency.
+- **Insurance 0.50%/yr.** National-blended; gross of climate-risk
+  premium where applicable. **HCOL coastal markets (FL, CA wildfire-
+  zone, TX coast) run materially higher** post-2023 reinsurance reset;
+  Factor 5 reads worse there. Defensible to add a "climate-adjusted"
+  variant of this calc for the apartment-REIT short thesis specifically.
+- **Maintenance reserve 0.50%/yr.** Standard National Association of
+  Home Inspectors guidance. Some sell-side analysts use 1.0%; 0.5% is
+  the conservative-on-cost-to-own side, which biases the spread reading
+  toward "ownership looks cheap" — so the read is more credible when
+  it shows ownership looks expensive.
+
+These constants are inputs to Betsy's Script-10 implementation; if the
+Analyst revises any, the housing_context.json's "rent-own spread" field
+changes directly and the dashboard re-renders.
+
+### Anchors (defaults — _ASSUMPTION_-flagged)
+
+**Behavioral-shift threshold is currently a TBD anchor.** _ASSUMPTION:_
+The exact spread level that triggers a 10/25/50% behavioral shift among
+first-time buyers is empirically under-researched. The framework treats
+it as a range rather than a point: a sustained compression of >$500/mo
+in (cost_to_own − cost_to_rent) over a 60-day window is a meaningful
+threshold for narrative shift in the buy-vs-rent calculation. The
+research project to anchor this number more precisely (1990–2024
+historical spread distribution × HOUST × homeownership rate to back out
+a first-time-buyer-share elasticity) is **deferred** — directional
+read of "spread narrowing = thesis-positive" stands without the precise
+number.
+
+**Counter-thesis: rent could fall faster than ownership cost.** _If_
+the 2024-2025 multifamily completion wave (608k completions on 354k
+starts per JCHS 2025 p. 7) keeps rent disinflation persistent, and
+single-family rent follows multifamily, the spread can *widen* on the
+cost-to-rent side — renters stay renters longer because renting is
+cheap, not because owning is expensive. The framework still reads
+correctly in this scenario (rent falling = Factor 5 negative for the
+long-side basket), but the *mechanism* differs from the central case.
+**Watch: CPI Shelter MoM print direction** — a sustained sub-0.20%
+print for two consecutive months should trigger a Factor 5 mechanism
+re-test.
+
+### Dependencies
+
+| # | Dependency | Observable | Source | Horizon |
+|---|---|---|---|---|
+| 1 | The cost-to-own calc constants are right (property tax, insurance, maintenance) | Realtor.com / Zillow buy-vs-rent calculator cross-check | Realtor.com, Zillow | Annually |
+| 2 | CPI OER is a defensible proxy for median rent | OER vs. Realtor.com / Zillow rent-index correlation > 0.85 | BLS, Realtor.com | Annually |
+| 3 | Rate falling produces near-monotonic spread compression | FRED MORTGAGE30US × MSPUS × CUSR0000SEHA panel | FRED | Quarterly |
+
+### Data inputs
+
+FRED MORTGAGE30US, MSPUS (quarterly cadence — note watchdog calibration),
+CUSR0000SEHA (CPI shelter), Census Housing Vacancies and Homeownership
+Survey, Realtor.com / Zillow spread indices.
 
 ---
 
@@ -337,15 +619,36 @@ If we keep the abstracted YAML schema (not the playbook-1:1 rename):
 
 ## 7. Open coordination items
 
-- [ ] Decide schema (§0). Communicate to Betsy via Slack so she can wire
-      Script 10's footer rewrite.
-- [ ] When weights are finalized, PR `analyst/factor_weights.yaml` with
-      canonical values + `last_updated: "YYYY-MM-DD"`.
-- [ ] Apartment REIT short basket — see `analyst/apartment_reit_short_basket.md`
-      for sample format and the format-options discussion.
-- [ ] Perplexity Computer weekly task — kickoff timing TBD.
-- [ ] JCHS critique — depth depends on whether 2025 report acknowledges
-      prior over-forecasts. Subagent extraction in Appendix A.
+Status as of 2026-05-01 (Wyatt's Claude defaults applied; Wyatt review
+pending):
+
+- [x] **Schema decision (§0):** abstracted set kept (Wyatt's Claude
+      default). Updates to `analyst/factor_weights.yaml` and Script 10's
+      footer reflect this.
+- [x] **Canonical weights** — `analyst/factor_weights.yaml` updated to
+      `40/25/15/10/10` with `last_updated: 2026-05-01`. Wyatt to revise
+      via PR if any of these don't match his judgment after reading the
+      Factor 1-5 prose above.
+- [x] **JCHS critique** — Factor 4 reframed and populated from JCHS 2025
+      verbatim extract; thesis recast from "JCHS overstates" to "JCHS
+      revised down without flagging; consensus updating lag is the
+      contrarian edge."
+- [ ] **Apartment REIT short basket sizing** —
+      `analyst/apartment_reit_short_basket.md` filled with default
+      members, weights, triggers (Wyatt's Claude defaults). Final
+      sizing is Wyatt's call.
+- [ ] **`analyst/short_baskets.yaml`** — drafted with default basket
+      roster + weights. Script 10/11b can ingest. Wyatt to revise
+      member list and per-name weights via PR.
+- [x] **Perplexity Computer weekly task** — live; first run output at
+      `output/perplexity/weekly/2026-05-04.md`. v3 patch (legislative
+      scuttlebutt) at
+      `analyst/perplexity_tasks/weekly_v2_to_v3_patch.md`.
+- [ ] **Defended threshold (Factor 1, 1.5%)** — Wyatt to confirm
+      against his own behavioral-finance read. ASSUMPTION-flagged.
+- [ ] **Defended normalization (Factor 1, 50%)** — same.
+- [ ] **Cost-to-own constants (Factor 5)** — Wyatt to confirm 1.2% prop
+      tax / 50bps insurance / 50bps maintenance. ASSUMPTION-flagged.
 
 ---
 

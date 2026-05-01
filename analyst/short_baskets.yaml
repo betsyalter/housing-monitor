@@ -1,0 +1,91 @@
+# Short-thesis basket definitions for Script 10 / 11b dashboard ingestion.
+#
+# Each basket has:
+#   - thesis: one-line narrative
+#   - members: list of {ticker, weight, rationale}
+#   - triggers: scaling rules (conditions for entry / sizing-up / trim / stop)
+#   - risk_caps: portfolio-level risk bounds
+#
+# Wyatt updates this file via PR; engineering reads it.
+# Schema validated minimally on load (sum of weights ≈ 1.0 within 0.01).
+
+last_updated: "2026-05-01"
+
+baskets:
+
+  apartment_reit_short:
+    thesis: |
+      Apartment REITs over-earn on the involuntary-renter narrative.
+      As mortgage rate lock-in eases (Factor 1) and rent-own spread
+      compresses (Factor 5), marginal renters convert to owners,
+      decelerating apartment REIT rent growth and compressing the
+      cap-rate / FFO multiple back toward historical means.
+
+    rationale_doc: "analyst/apartment_reit_short_basket.md"
+
+    members:
+      - ticker: EQR
+        weight: 0.20
+        rationale: "Coastal urban concentration; highest exposure to HCOL markets that lose marginal renters first."
+        conviction_tier: high
+      - ticker: AVB
+        weight: 0.18
+        rationale: "NEMA/coastal urban; balance-sheet defensive, equally exposed on conversion leg."
+        conviction_tier: high
+      - ticker: MAA
+        weight: 0.15
+        rationale: "Sun Belt; partial conversion already begun via 2024-2025 negative rent growth."
+        conviction_tier: medium
+      - ticker: CPT
+        weight: 0.15
+        rationale: "Sun Belt + DC; defensive federal-tenant overlay limits upside but caps downside."
+        conviction_tier: medium
+      - ticker: UDR
+        weight: 0.12
+        rationale: "Diversified; thesis dilution but reasonable hedge."
+        conviction_tier: medium
+      - ticker: ESS
+        weight: 0.10
+        rationale: "California-coastal pure play; CA regulatory risk is asymmetric on long side."
+        conviction_tier: low
+      - ticker: IRT
+        weight: 0.10
+        rationale: "Sun Belt small-cap; convexity name on directional read; revisit Q1 2026 if rents stabilize."
+        conviction_tier: low
+
+    triggers:
+      entry_25_pct:
+        condition: "30yr falls below 5.5% sustained 60 days"
+        rationale: "Recently-locked (5%+) cohort begins crossing willingness threshold."
+      entry_50_pct:
+        condition: "30yr below 5.25% sustained 30 days OR CME FedWatch 2026 cut probability > 50%"
+        rationale: "Conviction strengthens on path; deserves more capital."
+      entry_100_pct:
+        condition: "30yr falls below 5.0% sustained 30 days"
+        rationale: "4-5% bucket releases; ~5.4M new transaction inventory; renter conversion math decisively shifts."
+      trim_to_25_pct:
+        condition: "Cap-rate spread to 10y Treasury > 250 bps"
+        rationale: "Multiple compression already largely priced; thesis return diminishing."
+      stop:
+        any_of:
+          - condition: "30yr above 6.5% for 30 days AND apartment REIT sector outperforms S&P by 10% over 60 days"
+            rationale: "Thesis broken on rate-path side."
+          - condition: "Trailing 3-month rolling MAA/CPT/IRT same-store rent growth > +3% YoY"
+            rationale: "Sun Belt rent re-acceleration; supply-side reset trumps demand-side conversion."
+          - condition: "Federal RTO mandate or material WFH reversal at Tier-1 employers"
+            rationale: "Urban renter demand structurally re-strengthens."
+
+    risk_caps:
+      basket_gross_pct: 0.05      # 5% of portfolio
+      max_single_name_pct: 0.015  # 1.5% gross per name (binding on EQR at 20% × 5% = 1.0% + buffer)
+
+    factor_exposure:
+      - factor: 1
+        sign: negative   # rate falls → renters convert → REITs underperform
+        weight: 0.40
+      - factor: 5
+        sign: negative   # rent-own spread narrows → conversion accelerates
+        weight: 0.25
+      - factor: 4
+        sign: neutral    # JCHS 2025 cuts both ways (less owner demand AND less renter demand)
+        weight: 0.10
