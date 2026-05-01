@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>US Housing Monitor — Dashboard</title>
+<link href="assets/tabulator.min.css" rel="stylesheet">
+<style>
+:root {
+  --bg: #0d1117;
+  --fg: #c9d1d9;
+  --muted: #8b949e;
+  --accent: #58a6ff;
+  --good: #3fb950;
+  --bad: #f85149;
+  --warn: #d29922;
+  --card: #161b22;
+  --border: #30363d;
+}
+* { box-sizing: border-box; }
+html, body { background: var(--bg); color: var(--fg); margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 14px; line-height: 1.5; }
+.container { max-width: 1400px; margin: 0 auto; padding: 24px; }
+h1 { margin: 0 0 4px 0; font-size: 24px; font-weight: 600; }
+h2 { margin: 32px 0 12px 0; font-size: 18px; font-weight: 600;
+  border-bottom: 1px solid var(--border); padding-bottom: 6px; }
+h3 { margin: 16px 0 8px 0; font-size: 14px; font-weight: 600; color: var(--muted);
+  text-transform: uppercase; letter-spacing: 0.04em; }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+.muted { color: var(--muted); font-size: 13px; }
+.warn-badge { display: inline-block; padding: 2px 8px; border-radius: 4px;
+  background: var(--warn); color: #000; font-size: 12px; font-weight: 600;
+  margin-left: 8px; }
+.status-bar { display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+.hero { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 8px; }
+@media (max-width: 800px) { .hero { grid-template-columns: 1fr; } }
+.card { background: var(--card); border: 1px solid var(--border); border-radius: 8px;
+  padding: 16px; }
+.metric-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px; }
+.metric { padding: 8px 0; }
+.metric .label { color: var(--muted); font-size: 12px; text-transform: uppercase;
+  letter-spacing: 0.04em; }
+.metric .value { font-size: 22px; font-weight: 600; margin-top: 2px; }
+.metric .delta { font-size: 13px; margin-top: 2px; }
+.delta.up { color: var(--good); } .delta.down { color: var(--bad); }
+.spring { display: flex; flex-direction: column; gap: 8px; }
+.spring input[type=range] { width: 100%; accent-color: var(--accent); }
+.spring .scenario { display: grid; grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px; margin-top: 8px; }
+.scenario .stat { background: rgba(0,0,0,0.2); padding: 10px; border-radius: 6px; }
+.scenario .stat .num { font-size: 20px; font-weight: 600; }
+.scenario .stat .l { font-size: 11px; color: var(--muted); text-transform: uppercase; }
+.basket-bars { display: flex; flex-direction: column; gap: 4px; }
+.basket-row { display: grid; grid-template-columns: 220px 1fr 60px 60px; gap: 8px;
+  align-items: center; font-size: 13px; }
+.basket-row .bar { height: 14px; border-radius: 3px; background: var(--card); }
+.basket-row .bar-fill { height: 100%; border-radius: 3px; }
+.basket-row .v { text-align: right; font-variant-numeric: tabular-nums; }
+.tabulator { background: var(--card) !important; border: 1px solid var(--border) !important;
+  border-radius: 8px; }
+.section-missing { padding: 24px; text-align: center; color: var(--muted);
+  background: var(--card); border: 1px dashed var(--border); border-radius: 8px; }
+.tag { display: inline-block; padding: 1px 6px; border-radius: 3px; font-size: 11px;
+  background: rgba(88,166,255,0.15); color: var(--accent); }
+.r-cell { font-variant-numeric: tabular-nums; padding: 4px 8px; border-radius: 3px; }
+footer { margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border);
+  color: var(--muted); font-size: 12px; }
+.sources li { margin: 2px 0; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="status-bar">
+  <div>
+    <h1>US Housing Monitor</h1>
+    <div class="muted" id="generated-at">Loading…</div>
+  </div>
+  <div>
+    <a href="housing_context.md">View raw markdown →</a>
+  </div>
+</div>
+
+<!-- Hero: macro + coiled spring above the fold -->
+<div class="hero">
+  <div class="card" id="card-macro">
+    <h3>Macro snapshot</h3>
+    <div class="metric-grid" id="macro-metrics"></div>
+  </div>
+  <div class="card" id="card-spring">
+    <h3>Coiled spring</h3>
+    <div class="spring">
+      <div>
+        <span id="spring-rate-label">Scenario rate: 6.50%</span>
+      </div>
+      <input type="range" id="spring-slider" min="450" max="700" value="650" step="25">
+      <div class="scenario" id="spring-scenario"></div>
+      <div class="muted" id="spring-current"></div>
+    </div>
+  </div>
+</div>
+
+<h2>Rate Sensitivity (5y trailing, monthly log-returns vs Δ30yr)</h2>
+<div id="corr-table-wrap"></div>
+
+<h2>Thesis Basket Performance</h2>
+<div class="card" id="card-baskets">
+  <div class="basket-bars" id="basket-bars"></div>
+</div>
+
+<h2>Homebuilder Pulse</h2>
+<div id="builders-table-wrap"></div>
+
+<h2>REIT Supply Snapshot</h2>
+<p class="muted">⚠ home_count is best-effort regex parsing of 10-K Item 2/7.
+  Geographic breakdown is not yet parsed (Script 06c TODO).</p>
+<div id="reits-table-wrap"></div>
+
+<h2>Recent Material 8-K Filings</h2>
+<div id="filings-table-wrap"></div>
+
+<h2>Tier 1 Insider Activity (last 30 days)</h2>
+<div id="insider-table-wrap"></div>
+
+<footer>
+  <h3>Data sources</h3>
+  <ul class="sources">
+    <li>FRED — mortgage rates, sales, inventory, starts, permits</li>
+    <li>FMP — prices, financials, transcripts, insider trades for 262-ticker universe</li>
+    <li>sec-api.io — 10-K Item 1+2+7 for REITs, 8-K stream</li>
+    <li>FHFA — mortgage rate distribution</li>
+    <li>Anthropic Claude Haiku — homebuilder operational KPIs from 8-K Item 2.02 press releases</li>
+  </ul>
+  <div class="muted" style="margin-top:16px">
+    Generated by scripts/10_context_generator.py from data on disk. Auto-refreshes daily at 6 AM
+    Mac mini local time. Source: <a href="https://github.com/betsyalter/housing-monitor">github.com/betsyalter/housing-monitor</a>
+  </div>
+</footer>
+
+</div>
+
+<script src="assets/tabulator.min.js"></script>
+<script>
+// ── helpers ─────────────────────────────────────────────────────────
+const el = id => document.getElementById(id);
+const fmt = (n, d=0) => n == null || isNaN(n) ? "—" :
+  Number(n).toLocaleString(undefined, {minimumFractionDigits: d, maximumFractionDigits: d});
+const fmtPct = (n, d=2) => n == null || isNaN(n) ? "—" :
+  (n >= 0 ? "+" : "") + Number(n).toFixed(d) + "%";
+const fmtDollar = (n, d=0) => n == null || isNaN(n) ? "—" :
+  "$" + Number(n).toLocaleString(undefined, {minimumFractionDigits: d, maximumFractionDigits: d});
+
+// Color cell red→green by Pearson r ∈ [-1, 1]
+function rColor(r) {
+  if (r == null || isNaN(r)) return "transparent";
+  const t = Math.max(-1, Math.min(1, r));
+  // Negative → red; positive → green; zero → neutral
+  if (t < 0) {
+    const a = Math.min(0.7, Math.abs(t) * 0.9);
+    return `rgba(248, 81, 73, ${a})`;
+  } else {
+    const a = Math.min(0.7, t * 0.9);
+    return `rgba(63, 185, 80, ${a})`;
+  }
+}
+
+function missingBlock(target, msg) {
+  el(target).innerHTML = `<div class="section-missing">${msg}</div>`;
+}
+
+// ── load + render ──────────────────────────────────────────────────
+fetch("housing_context.json", {cache: "no-store"})
+  .then(r => r.json())
+  .then(render)
+  .catch(err => {
+    document.body.innerHTML =
+      `<div class="container"><h1>Failed to load housing_context.json</h1>
+       <pre>${err}</pre>
+       <p>Run <code>python3 scripts/10_context_generator.py</code> on the Mac mini.</p></div>`;
+  });
+
+function render(d) {
+  // Header — generated_at + stale warning
+  const gen = d.generated_at || "unknown";
+  el("generated-at").textContent = `Last updated: ${gen}`;
+  const genDate = new Date(gen.replace(" UTC", "Z"));
+  if (!isNaN(genDate)) {
+    const hoursOld = (Date.now() - genDate.getTime()) / 3600000;
+    if (hoursOld > 36) {
+      el("generated-at").innerHTML +=
+        ` <span class="warn-badge">Stale: ${Math.round(hoursOld)}h old</span>`;
+    }
+  }
+
+  const sec = d.sections || {};
+  renderMacro(sec.macro);
+  renderSpring(sec.coiled_spring);
+  renderCorrelations(sec.correlations);
+  renderBaskets(sec.price_action);
+  renderBuilders(sec.homebuilders);
+  renderReits(sec.reits);
+  renderFilings(sec.recent_8ks);
+  renderInsider(sec.insider);
+}
+
+// ── macro snapshot ─────────────────────────────────────────────────
+function renderMacro(s) {
+  if (!s || !s.metrics) {
+    el("macro-metrics").innerHTML =
+      `<div class="muted">Macro data unavailable. Run scripts/01_fred_pull.py.</div>`;
+    return;
+  }
+  // Show 6 most-relevant metrics in the hero
+  const featured = ["mortgage_rate_30yr", "existing_home_sales_saar",
+                    "housing_starts_total", "median_home_price",
+                    "case_shiller_national", "homeownership_rate"];
+  const rows = featured
+    .map(m => s.metrics.find(x => x.metric === m))
+    .filter(Boolean);
+  el("macro-metrics").innerHTML = rows.map(m => {
+    const isPct = m.metric.includes("rate");
+    const isDollar = m.metric === "median_home_price";
+    const valStr = isPct ? Number(m.value).toFixed(2) + "%"
+      : isDollar ? fmtDollar(m.value)
+      : fmt(m.value);
+    let deltaStr = "";
+    let deltaClass = "";
+    if (m.delta_4w != null && !isNaN(m.delta_4w)) {
+      const sign = m.delta_4w >= 0 ? "+" : "−";
+      deltaClass = m.delta_4w >= 0 ? "up" : "down";
+      const absD = Math.abs(m.delta_4w);
+      deltaStr = isPct ? `${sign}${absD.toFixed(2)}%`
+        : isDollar ? `${sign}$${fmt(absD)}`
+        : `${sign}${fmt(absD)}`;
+    }
+    return `<div class="metric">
+      <div class="label">${m.label}</div>
+      <div class="value">${valStr}</div>
+      <div class="delta ${deltaClass}">${deltaStr} <span class="muted">(${m.days_stale}d)</span></div>
+    </div>`;
+  }).join("");
+}
+
+// ── coiled spring ──────────────────────────────────────────────────
+let springScenarios = [];
+function renderSpring(s) {
+  if (!s || !s.scenarios) {
+    el("card-spring").innerHTML = `<div class="section-missing">Coiled-spring data unavailable.</div>`;
+    return;
+  }
+  springScenarios = s.scenarios;
+  const cur = s.current_30yr_rate;
+  if (cur != null) {
+    el("spring-current").innerHTML =
+      `Current 30yr: <strong>${cur.toFixed(2)}%</strong> &middot; ${(s.pct_locked_below_current*100).toFixed(1)}% locked below &middot; ~${s.locked_below_millions.toFixed(1)}M homeowners`;
+  }
+  el("spring-slider").addEventListener("input", e => updateSpring(parseFloat(e.target.value) / 100));
+  // Default to current rate
+  if (cur != null) {
+    el("spring-slider").value = Math.round(cur * 100);
+    updateSpring(cur);
+  } else {
+    updateSpring(6.5);
+  }
+}
+
+function updateSpring(rate) {
+  el("spring-rate-label").textContent = `Scenario rate: ${rate.toFixed(2)}%`;
+  // Find closest scenario row (scenarios are at .25 increments)
+  let best = null, bestDiff = Infinity;
+  for (const sc of springScenarios) {
+    const d = Math.abs(sc.scenario_rate - rate);
+    if (d < bestDiff) { bestDiff = d; best = sc; }
+  }
+  if (!best) { el("spring-scenario").innerHTML = ""; return; }
+  el("spring-scenario").innerHTML = `
+    <div class="stat"><div class="num">${best.locked_millions.toFixed(1)}M</div><div class="l">homes still locked</div></div>
+    <div class="stat"><div class="num">+${best.unlocked_vs_today_millions.toFixed(1)}M</div><div class="l">newly unlocked vs current</div></div>
+    <div class="stat"><div class="num">+${fmt(best.estimated_saar_uplift_k)}k</div><div class="l">est SAAR uplift</div></div>
+  `;
+}
+
+// ── correlations heatmap table ─────────────────────────────────────
+function renderCorrelations(s) {
+  if (!s || !s.rankings_by_indicator || !s.rankings_by_indicator.mortgage_rate_30yr) {
+    missingBlock("corr-table-wrap", "Correlation rankings unavailable. Run scripts/09_correlation_engine.py.");
+    return;
+  }
+  // Combine top + bottom for mortgage_rate_30yr into one ranked table
+  const rows = s.rankings_by_indicator.mortgage_rate_30yr.map(r => ({
+    ticker: r.ticker, r: r.pearson_r,
+    side: r.rank_side, rank: r.rank, n: r.n_obs,
+    tier: r.tier, subsector: r.subsector, directional: r.directional,
+    flags: r.quality_flags || ""
+  }));
+
+  new Tabulator("#corr-table-wrap", {
+    data: rows,
+    height: "500px",
+    layout: "fitColumns",
+    pagination: false,
+    initialSort: [{column: "r", dir: "asc"}],
+    columns: [
+      {title: "Ticker", field: "ticker", width: 90,
+        formatter: c => `<a href="https://finance.yahoo.com/quote/${c.getValue()}" target="_blank">${c.getValue()}</a>`},
+      {title: "Subsector", field: "subsector", width: 200},
+      {title: "Tier", field: "tier", width: 70, hozAlign: "center"},
+      {title: "Directional", field: "directional", width: 150},
+      {title: "Pearson r", field: "r", width: 110, hozAlign: "right",
+        formatter: c => {
+          const v = c.getValue();
+          c.getElement().style.background = rColor(v);
+          return (v >= 0 ? "+" : "") + v.toFixed(3);
+        }},
+      {title: "n", field: "n", width: 60, hozAlign: "right"},
+      {title: "Flags", field: "flags", widthGrow: 1,
+        formatter: c => (c.getValue() || "").split("|")
+          .filter(Boolean).map(t => `<span class="tag">${t}</span>`).join(" ")},
+    ],
+  });
+}
+
+// ── basket performance bar chart ───────────────────────────────────
+function renderBaskets(s) {
+  if (!s || !s.subsector_baskets) {
+    el("card-baskets").innerHTML = `<div class="section-missing">Basket data unavailable.</div>`;
+    return;
+  }
+  // Find max abs return for scaling
+  const max1m = Math.max(...s.subsector_baskets.map(b => Math.abs(b.median_1m_pct || 0)));
+  const scale = max1m > 0 ? 100 / max1m : 1;
+  el("basket-bars").innerHTML = s.subsector_baskets.map(b => {
+    const v = b.median_1m_pct || 0;
+    const widthPct = Math.abs(v) * scale * 0.5;
+    const color = v >= 0 ? "var(--good)" : "var(--bad)";
+    const align = v >= 0 ? "left: 50%" : `right: 50%`;
+    return `<div class="basket-row">
+      <div>${b.basket} <span class="muted">(n=${b.n})</span></div>
+      <div class="bar" style="position:relative">
+        <div class="bar-fill" style="position:absolute; ${align}; width:${widthPct}%; background:${color}"></div>
+        <div style="position:absolute; left:50%; top:0; bottom:0; width:1px; background:var(--border)"></div>
+      </div>
+      <div class="v" style="color:${color}">${fmtPct(v)}</div>
+      <div class="v muted">${fmtPct(b.median_1w_pct)}</div>
+    </div>`;
+  }).join("") + `<div class="muted" style="margin-top:8px">Bar = median 1-month return; right of center text = 1-month, left = 1-week</div>`;
+}
+
+// ── homebuilders pulse ─────────────────────────────────────────────
+function renderBuilders(s) {
+  if (!s || !s.builders) {
+    missingBlock("builders-table-wrap", "Homebuilder ops not yet collected. Run scripts/07_homebuilder_ops.py.");
+    return;
+  }
+  const rows = s.builders.map(b => ({
+    ticker: b.ticker,
+    period: b.fiscal_period,
+    period_end: b.period_end_date,
+    net_orders: b.metrics.net_orders_units,
+    backlog: b.metrics.backlog_units,
+    cancel: b.metrics.cancellation_rate_pct,
+    closings: b.metrics.closings_units,
+    asp: b.metrics.asp_dollars,
+    comms: b.metrics.community_count,
+    qq_orders: b.qoq_pct.net_orders_units,
+    qq_backlog: b.qoq_pct.backlog_units,
+  }));
+  new Tabulator("#builders-table-wrap", {
+    data: rows, height: "440px", layout: "fitColumns", pagination: false,
+    initialSort: [{column: "ticker", dir: "asc"}],
+    columns: [
+      {title: "Ticker", field: "ticker", width: 80,
+        formatter: c => `<a href="https://finance.yahoo.com/quote/${c.getValue()}" target="_blank">${c.getValue()}</a>`},
+      {title: "Period", field: "period", width: 100},
+      {title: "Net Orders", field: "net_orders", hozAlign: "right",
+        formatter: c => fmt(c.getValue())},
+      {title: "ΔQ orders", field: "qq_orders", width: 90, hozAlign: "right",
+        formatter: c => c.getValue() || ""},
+      {title: "Backlog", field: "backlog", hozAlign: "right",
+        formatter: c => fmt(c.getValue())},
+      {title: "ΔQ backlog", field: "qq_backlog", width: 90, hozAlign: "right",
+        formatter: c => c.getValue() || ""},
+      {title: "Cancel %", field: "cancel", hozAlign: "right",
+        formatter: c => c.getValue() == null ? "—" : c.getValue().toFixed(1) + "%"},
+      {title: "Closings", field: "closings", hozAlign: "right",
+        formatter: c => fmt(c.getValue())},
+      {title: "ASP", field: "asp", hozAlign: "right",
+        formatter: c => c.getValue() == null ? "—" : fmtDollar(c.getValue())},
+      {title: "Communities", field: "comms", hozAlign: "right",
+        formatter: c => fmt(c.getValue())},
+    ],
+  });
+}
+
+// ── REITs ──────────────────────────────────────────────────────────
+function renderReits(s) {
+  if (!s || !s.reits) {
+    missingBlock("reits-table-wrap", "REIT data unavailable. Run scripts/06_sec_reit_properties.py.");
+    return;
+  }
+  new Tabulator("#reits-table-wrap", {
+    data: s.reits, height: "420px", layout: "fitColumns", pagination: false,
+    initialSort: [{column: "home_count", dir: "desc"}],
+    columns: [
+      {title: "Ticker", field: "ticker", width: 80,
+        formatter: c => `<a href="https://finance.yahoo.com/quote/${c.getValue()}" target="_blank">${c.getValue()}</a>`},
+      {title: "Filing date", field: "filing_date", width: 130},
+      {title: "Home count", field: "home_count", hozAlign: "right",
+        formatter: c => fmt(c.getValue())},
+      {title: "Avg rent", field: "avg_monthly_rent", hozAlign: "right",
+        formatter: c => c.getValue() == null ? "—" : fmtDollar(c.getValue())},
+      {title: "Occupancy %", field: "occupancy_pct", hozAlign: "right",
+        formatter: c => c.getValue() == null ? "—" : c.getValue().toFixed(1) + "%"},
+    ],
+  });
+}
+
+// ── 8-K filings ────────────────────────────────────────────────────
+function renderFilings(s) {
+  if (!s || !s.filings) {
+    missingBlock("filings-table-wrap", "8-K stream log unavailable.");
+    return;
+  }
+  if (s.filings.length === 0) {
+    missingBlock("filings-table-wrap", `No material 8-Ks in the universe in the last 7 days.`);
+    return;
+  }
+  new Tabulator("#filings-table-wrap", {
+    data: s.filings, height: "420px", layout: "fitColumns", pagination: false,
+    initialSort: [{column: "date", dir: "desc"}],
+    columns: [
+      {title: "Date", field: "date", width: 110},
+      {title: "Ticker", field: "ticker", width: 80,
+        formatter: c => `<a href="https://finance.yahoo.com/quote/${c.getValue()}" target="_blank">${c.getValue()}</a>`},
+      {title: "Items", field: "items", width: 140,
+        formatter: c => (c.getValue() || "").split("|").map(i => `<span class="tag">${i}</span>`).join(" ")},
+      {title: "Title", field: "title", widthGrow: 2,
+        formatter: c => `<a href="${c.getData().url}" target="_blank">${c.getValue()}</a>`},
+    ],
+  });
+}
+
+// ── insider activity ───────────────────────────────────────────────
+function renderInsider(s) {
+  if (!s || !s.transactions) {
+    missingBlock("insider-table-wrap", "Insider data unavailable. Run scripts/05c_fmp_insider.py.");
+    return;
+  }
+  if (s.transactions.length === 0) {
+    missingBlock("insider-table-wrap", "No Tier 1 insider activity in the last 30 days.");
+    return;
+  }
+  new Tabulator("#insider-table-wrap", {
+    data: s.transactions, height: "420px", layout: "fitColumns", pagination: false,
+    initialSort: [{column: "value", dir: "desc"}],
+    columns: [
+      {title: "Date", field: "date", width: 110},
+      {title: "Ticker", field: "ticker", width: 80,
+        formatter: c => `<a href="https://finance.yahoo.com/quote/${c.getValue()}" target="_blank">${c.getValue()}</a>`},
+      {title: "Insider", field: "name", widthGrow: 2},
+      {title: "Role", field: "type", widthGrow: 2},
+      {title: "A/D", field: "txn", width: 60, hozAlign: "center",
+        formatter: c => c.getValue() === "A"
+          ? `<span style="color:var(--good); font-weight:600">BUY</span>`
+          : `<span style="color:var(--bad); font-weight:600">SELL</span>`},
+      {title: "Shares", field: "shares", hozAlign: "right",
+        formatter: c => fmt(c.getValue())},
+      {title: "Price", field: "price", hozAlign: "right",
+        formatter: c => fmtDollar(c.getValue(), 2)},
+      {title: "Value", field: "value", hozAlign: "right",
+        formatter: c => fmtDollar(c.getValue())},
+    ],
+  });
+}
+</script>
+</body>
+</html>
