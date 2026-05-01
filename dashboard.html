@@ -55,8 +55,10 @@ a:hover { text-decoration: underline; }
 .scenario .stat .num { font-size: 20px; font-weight: 600; }
 .scenario .stat .l { font-size: 11px; color: var(--muted); text-transform: uppercase; }
 .scenario .stat .sub { font-size: 11px; color: var(--muted); margin-top: 4px; opacity: 0.85; }
-.spring-controls { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 6px; }
-.spring-controls input[type="number"] { width: 80px; padding: 4px 6px; background: rgba(0,0,0,0.3); color: inherit; border: 1px solid rgba(255,255,255,0.15); border-radius: 4px; font-size: 13px; }
+.spring-controls { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 6px; }
+.spring-controls .spring-label { color: var(--muted); font-size: 13px; }
+.spring-controls .spring-pct { color: var(--muted); font-size: 13px; margin-left: -4px; margin-right: 4px; }
+.spring-controls input[type="number"] { width: 70px; padding: 4px 6px; background: rgba(0,0,0,0.3); color: inherit; border: 1px solid rgba(255,255,255,0.15); border-radius: 4px; font-size: 13px; font-variant-numeric: tabular-nums; }
 .spring-controls button { padding: 4px 10px; background: rgba(255,255,255,0.08); color: inherit; border: 1px solid rgba(255,255,255,0.15); border-radius: 4px; font-size: 12px; cursor: pointer; }
 .spring-controls button:hover { background: rgba(255,255,255,0.15); }
 .basket-bars { display: flex; flex-direction: column; gap: 4px; }
@@ -208,8 +210,9 @@ footer { margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border
     <h3>Coiled spring</h3>
     <div class="spring">
       <div class="spring-controls">
-        <span id="spring-rate-label">Scenario rate: 6.50%</span>
+        <label for="spring-rate-input" class="spring-label">Scenario rate</label>
         <input type="number" id="spring-rate-input" min="0" max="15" step="0.01" placeholder="e.g. 6.30" />
+        <span class="spring-pct">%</span>
         <button id="spring-snap-current" type="button">Snap to current</button>
       </div>
       <input type="range" id="spring-slider" min="400" max="700" value="650" step="5">
@@ -719,7 +722,8 @@ function renderSpring(s) {
 }
 
 function updateSpring(rate) {
-  el("spring-rate-label").textContent = `Scenario rate: ${rate.toFixed(2)}%`;
+  // The numeric input is the single source of truth for the displayed rate;
+  // no separate "Scenario rate: X.XX%" span (would just duplicate the input value).
   let best;
   if (springParams) {
     // Live compute — works for any rate.
