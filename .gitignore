@@ -11,7 +11,22 @@ logs/
 data/housing.duckdb
 data/housing.duckdb.wal
 
-# Bootstrap installer accidentally committed previously
+# Betsy's CSV-output ingest artifacts (per-script subdirectories)
+data/fmp_prices/
+data/fmp_financials/
+data/fmp_transcripts/
+data/fmp_insider/
+data/sec_filings/
+data/sec_raw/
+data/sec_stream_log.csv
+data/homebuilder_press_releases/
+data/last_run.json
+
+# FTDR research — separate workstream, not part of housing-monitor pipeline
+build_*.py
+FTDR_*.xlsx
+
+# Bootstrap installer accidentally committed previously (deleted from tree on phase-0 branch)
 get-pip.py
 
 # Bundle/base64 transit artifacts

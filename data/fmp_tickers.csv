@@ -1,263 +1,263 @@
-ticker,tier,subsector,directional
-NVR,1,Homebuilders,Long
-DHI,1,Homebuilders,Long
-LEN,1,Homebuilders,Long
-PHM,1,Homebuilders,Long
-TOL,1,Homebuilders,Long
-KBH,1,Homebuilders,Long
-MTH,1,Homebuilders,Long
-TMHC,1,Homebuilders,Long
-GRBK,1,Homebuilders,Long
-MHO,1,Homebuilders,Long
-SKY,1,Homebuilders,Long
-CCS,1,Homebuilders,Long
-LGIH,1,Homebuilders,Long
-RKT,1,Mortgage Originators,Long
-UWMC,1,Mortgage Originators,Long
-PFSI,1,Mortgage Originators,Long
-LDI,1,Mortgage Originators,Long
-PFBC,1,Mortgage Originators,Long
-FNF,1,Title Insurance,Long
-FAF,1,Title Insurance,Long
-STC,1,Title Insurance,Long
-WD,1,Title Insurance,Long
-RMAX,1,Title Insurance,Long
-Z,1,RE Brokerages,Long
-ZG,1,RE Brokerages,Long
-OPEN,1,RE Brokerages,Long
-COMP,1,RE Brokerages,Long
-EXPI,1,RE Brokerages,Long
-DOUG,1,RE Brokerages,Long
-BEKE,1,RE Brokerages,Long
-NRDS,1,RE Brokerages,Long
-TREE,1,RE Brokerages,Long
-LMND,1,RE Brokerages,Long
-HCI,1,RE Brokerages,Long
-FPH,1,Land Developers,Long
-TPH,1,Land Developers,Long
-STRW,1,Land Developers,Long
-INVH,2,SFR REITs,Short on unlock
-AMH,2,SFR REITs,Short on unlock
-TRNO,2,SFR REITs,Short on unlock
-HD,2,Home Improvement,Long
-LOW,2,Home Improvement,Long
-FND,2,Home Improvement,Long
-TILE,2,Home Improvement,Long
-TCHI,2,Home Improvement,Long
-UHAL,2,Moving/Storage,Long
-EXR,2,Moving/Storage,Long
-CUBE,2,Moving/Storage,Long
-PSA,2,Moving/Storage,Long
-NSA,2,Moving/Storage,Long
-REXR,2,Moving/Storage,Long
-RH,2,Home Furnishings,Long
-WSM,2,Home Furnishings,Long
-ARHS,2,Home Furnishings,Long
-BBWI,2,Home Furnishings,Long
-LOVE,2,Home Furnishings,Long
-SNBR,2,Home Furnishings,Long
-LEG,2,Home Furnishings,Long
-HBB,2,Home Furnishings,Long
-BURL,2,Home Furnishings,Long
-ETSY,2,Home Furnishings,Long
-WHR,2,Appliances,Long
-MAS,2,Appliances,Long
-FBIN,2,Appliances,Long
-SWK,2,Appliances,Long
-ALLE,2,Appliances,Long
-AOS,2,Appliances,Long
-GNRC,2,Appliances,Long
-REZI,2,Appliances,Long
-BLDR,2,Building Products,Long
-IBP,2,Building Products,Long
-TREX,2,Building Products,Long
-OC,2,Building Products,Long
-AWI,2,Building Products,Long
-APOG,2,Building Products,Long
-SITE,2,Building Products,Long
-POOL,2,Building Products,Long
-PATK,2,Building Products,Long
-AAON,2,Building Products,Long
-ROCK,2,Building Products,Long
-NX,2,Building Products,Long
-AMWD,2,Building Products,Long
-IIIN,2,Building Products,Long
-HAYW,2,Building Products,Long
-WY,3,Lumber/Timber,Long
-RYN,3,Lumber/Timber,Long
-LPX,3,Lumber/Timber,Long
-UFPI,3,Lumber/Timber,Long
-WFG,3,Lumber/Timber,Long
-SHW,3,Paint/Coatings,Long
-RPM,3,Paint/Coatings,Long
-PPG,3,Paint/Coatings,Long
-AXTA,3,Paint/Coatings,Long
-LII,3,HVAC/Plumbing,Long
-CARR,3,HVAC/Plumbing,Long
-TT,3,HVAC/Plumbing,Long
-WMS,3,HVAC/Plumbing,Long
-ATKR,3,HVAC/Plumbing,Long
-XYL,3,HVAC/Plumbing,Long
-NWL,3,HVAC/Plumbing,Long
-IEX,3,HVAC/Plumbing,Long
-WTS,3,HVAC/Plumbing,Long
-ADT,3,Security/PropTech,Long
-CSGP,3,Security/PropTech,Long
-BKSY,3,Security/PropTech,Long
-REAL,3,Security/PropTech,Long
-APPF,3,Security/PropTech,Long
-RENT,3,Security/PropTech,Long
-WFC,3,Banks,Long
-JPM,3,Banks,Long
-BAC,3,Banks,Long
-USB,3,Banks,Long
-KEY,3,Banks,Long
-FITB,3,Banks,Long
-RF,3,Banks,Long
-CFG,3,Banks,Long
-HBAN,3,Banks,Long
-TFC,3,Banks,Long
-ZION,3,Banks,Long
-BOKF,3,Banks,Long
-FHN,3,Banks,Long
-IBCP,3,Banks,Long
-BANR,3,Banks,Long
-TRMK,3,Banks,Long
-WAFD,3,Banks,Long
-COLB,3,Banks,Long
-AX,3,Banks,Long
-NBTB,3,Banks,Long
-STBA,3,Banks,Long
-FBNC,3,Banks,Long
-ESNT,3,Private Mortgage Insurance,Complex
-MTG,3,Private Mortgage Insurance,Complex
-RDN,3,Private Mortgage Insurance,Complex
-NMIH,3,Private Mortgage Insurance,Complex
-ALL,3,P&C Insurance,Long
-TRV,3,P&C Insurance,Long
-HIG,3,P&C Insurance,Long
-CB,3,P&C Insurance,Long
-PGR,3,P&C Insurance,Long
-MKL,3,P&C Insurance,Long
-UVE,3,P&C Insurance,Long
-GLRE,3,P&C Insurance,Long
-CAT,3,Construction Equipment,Long
-DE,3,Construction Equipment,Long
-TEX,3,Construction Equipment,Long
-PCAR,3,Construction Equipment,Long
-MTW,3,Construction Equipment,Long
-AGCO,3,Construction Equipment,Long
-MHK,3,Flooring/Pool,Long
-LXU,3,Flooring/Pool,Long
-LESL,3,Flooring/Pool,Long
-BCC,3,Landscape/Pool,Long
-DNOW,3,Landscape/Pool,Long
-TPC,3,Landscape/Pool,Long
-NNN,3,REITs Co-Movement,Long
-O,3,REITs Co-Movement,Long
-STAG,3,REITs Co-Movement,Long
-FR,3,REITs Co-Movement,Long
-EGP,3,REITs Co-Movement,Long
-PLD,3,REITs Co-Movement,Long
-AHH,3,REITs Co-Movement,Long
-ITB,3,Housing ETFs,Monitor
-XHB,3,Housing ETFs,Monitor
-REZ,3,Housing ETFs,Monitor
-HOMZ,3,Housing ETFs,Monitor
-KBE,3,Housing ETFs,Monitor
-KRE,3,Housing ETFs,Monitor
-MORT,3,Housing ETFs,Monitor
-REM,3,Housing ETFs,Monitor
-PFFR,3,Housing ETFs,Monitor
-TMF,3,Housing ETFs,Monitor
-TBT,3,Housing ETFs,Monitor
-RIET,3,Housing ETFs,Monitor
-EQR,4,Apartment REITs,Short on unlock
-AVB,4,Apartment REITs,Short on unlock
-MAA,4,Apartment REITs,Short on unlock
-CPT,4,Apartment REITs,Short on unlock
-UDR,4,Apartment REITs,Short on unlock
-ESS,4,Apartment REITs,Short on unlock
-AIV,4,Apartment REITs,Short on unlock
-NXRT,4,Apartment REITs,Short on unlock
-CSR,4,Apartment REITs,Short on unlock
-IRT,4,Apartment REITs,Short on unlock
-BRT,4,Apartment REITs,Short on unlock
-VRE,4,Apartment REITs,Short on unlock
-ELME,4,Multifamily,Short on unlock
-NMR,4,Multifamily,Short on unlock
-UPBD,4,Rent-to-Own,Short on unlock
-SUI,4,Manufactured Housing REITs,Complex
-ELS,4,Manufactured Housing REITs,Complex
-MLM,5,Cement/Aggregates,Long
-VMC,5,Cement/Aggregates,Long
-EXP,5,Cement/Aggregates,Long
-CRH,5,Cement/Aggregates,Long
-CMPR,5,Cement/Aggregates,Long
-NUE,5,Steel/Rebar,Long
-STLD,5,Steel/Rebar,Long
-CMC,5,Steel/Rebar,Long
-RS,5,Steel/Rebar,Long
-WOR,5,Steel/Rebar,Long
-CLF,5,Steel/Rebar,Long
-SXT,5,Specialty Chemicals,Long
-HUN,5,Specialty Chemicals,Long
-IFF,5,Specialty Chemicals,Long
-AVY,5,Specialty Chemicals,Long
-FUL,5,Specialty Chemicals,Long
-JELD,5,Doors/Electrical,Long
-NVT,5,Doors/Electrical,Long
-ETN,5,Doors/Electrical,Long
-HUBB,5,Doors/Electrical,Long
-SYF,5,Consumer Finance,Long
-COF,5,Consumer Finance,Long
-ALLY,5,Consumer Finance,Long
-NAVI,5,Consumer Finance,Long
-GDOT,5,Consumer Finance,Long
-SOFI,5,Consumer Finance,Long
-LC,5,Consumer Finance,Long
-GXO,5,Logistics,Long
-XPO,5,Logistics,Long
-SAIA,5,Logistics,Long
-ODFL,5,Logistics,Long
-GOOGL,5,Internet/Platform,Long
-META,5,Internet/Platform,Long
-PINS,5,Internet/Platform,Long
-ANGI,5,Internet/Platform,Long
-IAC,5,Internet/Platform,Long
-FTDR,5,Home Warranty,Long
-HMN,5,Home Warranty,Long
-CTAS,5,Home Warranty,Long
-CVCO,1,Homebuilders,Long
-DFH,1,Homebuilders,Long
-BZH,1,Homebuilders,Long
-HOV,1,Homebuilders,Long
-LEGH,1,Homebuilders,Long
-MRP,2,SFR REITs,Complex
-UMH,2,SFR REITs,Complex
-FOR,1,Land Developers,Long
-HHH,1,Land Developers,Long
-JOE,1,Land Developers,Long
-W,2,Home Furnishings,Long
-BOBS,2,Home Furnishings,Long
-OPAD,1,RE Brokerages,Long
-CBRE,3,RE Services,Long
-JLL,3,RE Services,Long
-NMRK,3,RE Services,Long
-PNC,3,Banks,Long
-MTB,3,Banks,Long
-FCNCA,3,Banks,Long
-WBS,3,Banks,Long
-WTFC,3,Banks,Long
-BPOP,3,Banks,Long
-SSB,3,Banks,Long
-WAL,3,Banks,Long
-PNFP,3,Banks,Long
-FNB,3,Banks,Long
-HOMB,3,Banks,Long
-OZK,3,Banks,Long
-TCBI,3,Banks,Long
-UBSI,3,Banks,Long
-ABCB,3,Banks,Long
-FLG,3,Banks,Long
-HWC,3,Banks,Long
+ticker,tier,subsector,directional,companyName,marketCap,sector,industry,price,beta,averageVolume,country,exchange
+NVR,1,Homebuilders,Long,"NVR, Inc.",17554995842,Consumer Cyclical,Residential Construction,6319.02,1.072,25385,US,NYSE
+DHI,1,Homebuilders,Long,"D.R. Horton, Inc.",43645797800,Consumer Cyclical,Residential Construction,153.91,1.445,2821763,US,NYSE
+LEN,1,Homebuilders,Long,Lennar Corporation,22862674342,Consumer Cyclical,Residential Construction,90.305,1.487,2985916,US,NYSE
+PHM,1,Homebuilders,Long,"PulteGroup, Inc.",23306005290,Consumer Cyclical,Residential Construction,122.35,1.341,1988838,US,NYSE
+TOL,1,Homebuilders,Long,"Toll Brothers, Inc.",13453129350,Consumer Cyclical,Residential Construction,142.05,1.485,1253334,US,NYSE
+KBH,1,Homebuilders,Long,KB Home,3316861000,Consumer Cyclical,Residential Construction,52.985,1.502,1164714,US,NYSE
+MTH,1,Homebuilders,Long,Meritage Homes Corporation,4499692390,Consumer Cyclical,Residential Construction,67.36,1.507,1006995,US,NYSE
+TMHC,1,Homebuilders,Long,Taylor Morrison Home Corporation,5674798498,Consumer Cyclical,Residential Construction,60.74,1.581,1526515,US,NYSE
+GRBK,1,Homebuilders,Long,"Green Brick Partners, Inc.",2912686177,Consumer Cyclical,Residential Construction,67.49,1.992,217263,US,NYSE
+MHO,1,Homebuilders,Long,"M/I Homes, Inc.",3387938511,Consumer Cyclical,Residential Construction,131.48,1.767,288009,US,NYSE
+SKY,1,Homebuilders,Long,"Champion Homes, Inc.",4258356281,Consumer Cyclical,Residential Construction,76.235,1.114,651001,US,NYSE
+CCS,1,Homebuilders,Long,"Century Communities, Inc.",1611081136,Consumer Cyclical,Residential Construction,56.0,1.559,270903,US,NYSE
+LGIH,1,Homebuilders,Long,"LGI Homes, Inc.",1132827907,Consumer Cyclical,Residential Construction,48.97,1.857,490578,US,NASDAQ
+RKT,1,Mortgage Originators,Long,"Rocket Companies, Inc.",41272967299,Financial Services,Financial - Mortgages,14.615,2.357,28629372,US,NYSE
+UWMC,1,Mortgage Originators,Long,UWM Holdings Corporation,5366094482,Financial Services,Financial - Mortgages,3.54,1.975,17546791,US,NYSE
+PFSI,1,Mortgage Originators,Long,"PennyMac Financial Services, Inc.",4708665628,Financial Services,Financial - Mortgages,90.26,1.518,889375,US,NYSE
+LDI,1,Mortgage Originators,Long,"loanDepot, Inc.",522644841,Financial Services,Financial - Mortgages,1.56,3.22,2476570,US,NYSE
+PFBC,1,Mortgage Originators,Long,Preferred Bank,1123082571,Financial Services,Banks - Regional,94.84,0.568,103272,US,NASDAQ
+FNF,1,Title Insurance,Long,"Fidelity National Financial, Inc.",14185917872,Financial Services,Insurance - Specialty,52.32,1.062,1973419,US,NYSE
+FAF,1,Title Insurance,Long,First American Financial Corporation,7143190000,Financial Services,Insurance - Specialty,70.1,1.296,1061536,US,NYSE
+STC,1,Title Insurance,Long,Stewart Information Services Corporation,2136714135,Financial Services,Insurance - Property & Casualty,70.05,1.044,234245,US,NYSE
+WD,1,Title Insurance,Long,"Walker & Dunlop, Inc.",1729106221,Financial Services,Financial - Mortgages,50.395,1.522,364098,US,NYSE
+RMAX,1,Title Insurance,Long,"RE/MAX Holdings, Inc.",215323325,Real Estate,Real Estate - Services,10.69,1.272,580522,US,NYSE
+Z,1,RE Brokerages,Long,"Zillow Group, Inc. Class C",10734074437,Communication Services,Internet Content & Information,44.37,2.107,4558238,US,NASDAQ
+ZG,1,RE Brokerages,Long,"Zillow Group, Inc. Class A",10790926082,Communication Services,Internet Content & Information,44.605,2.107,1198483,US,NASDAQ
+OPEN,1,RE Brokerages,Long,Opendoor Technologies Inc.,4120330402,Real Estate,Real Estate - Services,5.375,3.763,41783255,US,NASDAQ
+COMP,1,RE Brokerages,Long,"Compass, Inc.",4255435394,Technology,Software - Application,7.57,2.63,16660427,US,NYSE
+EXPI,1,RE Brokerages,Long,"eXp World Holdings, Inc.",993038561,Real Estate,Real Estate - Services,6.235,2.21,1064624,US,NASDAQ
+DOUG,1,RE Brokerages,Long,Douglas Elliman Inc.,178199239,Real Estate,Real Estate - Services,2.02,1.908,775491,US,NYSE
+BEKE,1,RE Brokerages,Long,KE Holdings Inc.,19880026661,Real Estate,Real Estate - Services,17.115,-0.525,4290008,CN,NYSE
+NRDS,1,RE Brokerages,Long,"NerdWallet, Inc.",806137651,Financial Services,Financial - Credit Services,10.85,1.424,952239,US,NASDAQ
+TREE,1,RE Brokerages,Long,"LendingTree, Inc.",687109122,Financial Services,Financial - Conglomerates,49.59,2.147,363970,US,NASDAQ
+LMND,1,RE Brokerages,Long,"Lemonade, Inc.",4354044240,Financial Services,Insurance - Property & Casualty,56.68,2.043,2393608,US,NYSE
+HCI,1,RE Brokerages,Long,"HCI Group, Inc.",1994524932,Financial Services,Insurance - Property & Casualty,153.52,1.154,158149,US,NYSE
+FPH,1,Land Developers,Long,"Five Point Holdings, LLC",350996247,Real Estate,Real Estate - Development,4.98,1.393,194727,US,NYSE
+TPH,1,Land Developers,Long,"Tri Pointe Homes, Inc.",3991580871,Consumer Cyclical,Residential Construction,46.885,1.297,3090898,US,NYSE
+STRW,1,Land Developers,Long,Strawberry Fields REIT LLC,167086574,Real Estate,REIT - Healthcare Facilities,12.49,0.26,28611,US,AMEX
+INVH,2,SFR REITs,Short on unlock,Invitation Homes Inc.,17249059254,Real Estate,REIT - Residential,28.775,0.816,6522254,US,NYSE
+AMH,2,SFR REITs,Short on unlock,American Homes 4 Rent,11570300252,Real Estate,REIT - Residential,31.86,0.805,3783318,US,NYSE
+TRNO,2,SFR REITs,Short on unlock,Terreno Realty Corporation,6925766080,Real Estate,REIT - Industrial,65.18,1.138,666311,US,NYSE
+HD,2,Home Improvement,Long,"The Home Depot, Inc.",327553655610,Consumer Cyclical,Home Improvement,328.86,1.085,3977803,US,NYSE
+LOW,2,Home Improvement,Long,"Lowe's Companies, Inc.",133743046109,Consumer Cyclical,Home Improvement,238.8,0.965,2721295,US,NYSE
+FND,2,Home Improvement,Long,"Floor & Decor Holdings, Inc.",5233911480,Consumer Cyclical,Home Improvement,48.42,1.825,2681860,US,NYSE
+TILE,2,Home Improvement,Long,"Interface, Inc.",1629001329,Consumer Cyclical,"Furnishings, Fixtures & Appliances",27.88,1.96,573803,US,NASDAQ
+TCHI,2,Home Improvement,Long,iShares MSCI China Multisector Tech ETF,30154833,Financial Services,Asset Management,23.72,1.0,20639,US,NASDAQ
+UHAL,2,Moving/Storage,Long,U-Haul Holding Company,9742066507,Industrials,Rental & Leasing Services,51.28,1.109,232278,US,NYSE
+EXR,2,Moving/Storage,Long,Extra Space Storage Inc.,30277201920,Real Estate,REIT - Industrial,143.36,1.274,1305337,US,NYSE
+CUBE,2,Moving/Storage,Long,CubeSmart,9225654799,Real Estate,REIT - Industrial,40.47,1.134,2415924,US,NYSE
+PSA,2,Moving/Storage,Long,Public Storage,53097322398,Real Estate,REIT - Industrial,302.47,0.999,1224596,US,NYSE
+NSA,2,Moving/Storage,Long,National Storage Affiliates Trust,3281908000,Real Estate,REIT - Industrial,42.56,1.109,1854990,US,NYSE
+REXR,2,Moving/Storage,Long,"Rexford Industrial Realty, Inc.",8320881160,Real Estate,REIT - Industrial,35.89,1.276,2761275,US,NYSE
+RH,2,Home Furnishings,Long,Rh,2487105761,Consumer Cyclical,Specialty Retail,132.05,2.105,1300122,US,NYSE
+WSM,2,Home Furnishings,Long,"Williams-Sonoma, Inc.",21568088400,Consumer Cyclical,Specialty Retail,181.22,1.578,1192059,US,NYSE
+ARHS,2,Home Furnishings,Long,"Arhaus, Inc.",1044142020,Consumer Cyclical,Home Improvement,7.4,2.558,1331770,US,NASDAQ
+BBWI,2,Home Furnishings,Long,"Bath & Body Works, Inc.",3907033156,Consumer Cyclical,Specialty Retail,19.425,1.463,5789680,US,NYSE
+LOVE,2,Home Furnishings,Long,The Lovesac Company,230511667,Consumer Cyclical,"Furnishings, Fixtures & Appliances",15.77,2.218,300247,US,NASDAQ
+SNBR,2,Home Furnishings,Long,Sleep Number Corporation,69353410,Consumer Cyclical,"Furnishings, Fixtures & Appliances",3.01,2.238,2361078,US,NASDAQ
+LEG,2,Home Furnishings,Long,"Leggett & Platt, Incorporated",1484744990,Consumer Cyclical,"Furnishings, Fixtures & Appliances",10.885,0.763,2375409,US,NYSE
+HBB,2,Home Furnishings,Long,Hamilton Beach Brands Holding Company,289051941,Consumer Cyclical,"Furnishings, Fixtures & Appliances",21.53,0.186,22488,US,NYSE
+BURL,2,Home Furnishings,Long,"Burlington Stores, Inc.",20113226353,Consumer Cyclical,Apparel - Retail,320.12,1.621,784300,US,NYSE
+ETSY,2,Home Furnishings,Long,"Etsy, Inc.",6188213724,Consumer Cyclical,Specialty Retail,64.295,1.7679654,3625645,US,NYSE
+WHR,2,Appliances,Long,Whirlpool Corporation,3612111329,Consumer Cyclical,"Furnishings, Fixtures & Appliances",56.055,1.264,2752609,US,NYSE
+MAS,2,Appliances,Long,Masco Corporation,14490584610,Industrials,Construction,71.83,1.291,3024322,US,NYSE
+FBIN,2,Appliances,Long,"Fortune Brands Innovations, Inc.",4858494246,Industrials,Construction,40.54,1.567,3034450,US,NYSE
+SWK,2,Appliances,Long,"Stanley Black & Decker, Inc.",12134824470,Industrials,Manufacturing - Tools & Accessories,78.145,1.201,2129888,US,NYSE
+ALLE,2,Appliances,Long,Allegion plc,11813602812,Industrials,Security & Protection Services,137.47,1.03,956001,IE,NYSE
+AOS,2,Appliances,Long,A. O. Smith Corporation,8725449257,Industrials,Industrial - Machinery,61.87,1.346,1438177,US,NYSE
+GNRC,2,Appliances,Long,Generac Holdings Inc.,15212287908,Industrials,Industrial - Machinery,259.26,1.786,1097049,US,NYSE
+REZI,2,Appliances,Long,"Resideo Technologies, Inc.",6263529665,Industrials,Security & Protection Services,41.365,1.702,1378725,US,NYSE
+BLDR,2,Building Products,Long,"Builders FirstSource, Inc.",8746959720,Industrials,Construction,79.08,1.636,2357877,US,NYSE
+IBP,2,Building Products,Long,"Installed Building Products, Inc.",7769823387,Consumer Cyclical,Residential Construction,288.43,1.985,354163,US,NYSE
+TREX,2,Building Products,Long,"Trex Company, Inc.",4071411125,Industrials,Construction,39.19,1.609,1827512,US,NYSE
+OC,2,Building Products,Long,Owens Corning,9913660203,Industrials,Construction,123.33,1.341,1456334,US,NYSE
+AWI,2,Building Products,Long,"Armstrong World Industries, Inc.",7272473484,Industrials,Construction,170.4,1.322,544314,US,NYSE
+APOG,2,Building Products,Long,"Apogee Enterprises, Inc.",782968222,Industrials,Construction,36.4,1.107,248691,US,NASDAQ
+SITE,2,Building Products,Long,"SiteOne Landscape Supply, Inc.",5586583404,Industrials,Industrial - Distribution,126.07,1.573,692927,US,NYSE
+POOL,2,Building Products,Long,Pool Corporation,7828971992,Industrials,Industrial - Distribution,213.32,1.262,822042,US,NASDAQ
+PATK,2,Building Products,Long,"Patrick Industries, Inc.",3090828681,Consumer Cyclical,"Furnishings, Fixtures & Appliances",93.0,1.337,429970,US,NASDAQ
+AAON,2,Building Products,Long,"AAON, Inc.",7635198773,Industrials,Construction,93.29,1.201,891268,US,NASDAQ
+ROCK,2,Building Products,Long,"Gibraltar Industries, Inc.",1158258145,Industrials,Construction,39.05,1.356,324742,US,NASDAQ
+NX,2,Building Products,Long,Quanex Building Products Corporation,915092948,Industrials,Construction,19.92,0.94,541657,US,NYSE
+AMWD,2,Building Products,Long,American Woodmark Corporation,636108518,Consumer Cyclical,"Furnishings, Fixtures & Appliances",43.66,1.338,221370,US,NASDAQ
+IIIN,2,Building Products,Long,"Insteel Industries, Inc.",507790744,Industrials,Manufacturing - Metal Fabrication,26.13,0.824,189727,US,NYSE
+HAYW,2,Building Products,Long,"Hayward Holdings, Inc.",3266018310,Industrials,Electrical Equipment & Parts,15.005,1.1806467,2238995,US,NYSE
+WY,3,Lumber/Timber,Long,Weyerhaeuser Company,17690780412,Real Estate,REIT - Specialty,24.535,0.998,5568660,US,NYSE
+RYN,3,Lumber/Timber,Long,Rayonier Inc.,3284316173,Real Estate,REIT - Specialty,21.225,1.0,3194347,US,NYSE
+LPX,3,Lumber/Timber,Long,Louisiana-Pacific Corporation,5043752964,Basic Materials,"Paper, Lumber & Forest Products",72.21,1.773,1115277,US,NYSE
+UFPI,3,Lumber/Timber,Long,"UFP Industries, Inc.",5083022604,Basic Materials,"Paper, Lumber & Forest Products",89.49,1.442,372814,US,NASDAQ
+WFG,3,Lumber/Timber,Long,West Fraser Timber Co. Ltd.,4816522276,Basic Materials,"Paper, Lumber & Forest Products",63.36,1.122,208780,CA,NYSE
+SHW,3,Paint/Coatings,Long,The Sherwin-Williams Company,79337868480,Basic Materials,Chemicals - Specialty,321.68,1.269,1745886,US,NYSE
+RPM,3,Paint/Coatings,Long,RPM International Inc.,13052192855,Basic Materials,Chemicals - Specialty,101.91,1.093,1023785,US,NYSE
+PPG,3,Paint/Coatings,Long,"PPG Industries, Inc.",24297819431,Basic Materials,Chemicals - Specialty,108.57,1.155,2204013,US,NYSE
+AXTA,3,Paint/Coatings,Long,Axalta Coating Systems Ltd.,6068356560,Basic Materials,Chemicals - Specialty,28.44,1.33,2838383,US,NYSE
+LII,3,HVAC/Plumbing,Long,Lennox International Inc.,18608078561,Industrials,Construction,534.44,1.209885,484878,US,NYSE
+CARR,3,HVAC/Plumbing,Long,Carrier Global Corporation,56099348445,Industrials,Construction,67.15,1.319,7087168,US,NYSE
+TT,3,HVAC/Plumbing,Long,Trane Technologies plc,108966170240,Industrials,Construction,492.32,1.212,1326232,IE,NYSE
+WMS,3,HVAC/Plumbing,Long,"Advanced Drainage Systems, Inc.",11618126503,Industrials,Construction,149.15,1.375,911683,US,NYSE
+ATKR,3,HVAC/Plumbing,Long,Atkore Inc.,2637271884,Industrials,Electrical Equipment & Parts,78.14,1.538,383757,US,NYSE
+XYL,3,HVAC/Plumbing,Long,Xylem Inc.,28081169160,Industrials,Industrial - Machinery,118.14,1.174,2250142,US,NYSE
+NWL,3,HVAC/Plumbing,Long,Newell Brands Inc.,1729456032,Consumer Defensive,Household & Personal Products,4.07,0.961,5698334,US,NASDAQ
+IEX,3,HVAC/Plumbing,Long,IDEX Corporation,16190725197,Industrials,Industrial - Machinery,217.77,0.98,874249,US,NYSE
+WTS,3,HVAC/Plumbing,Long,"Watts Water Technologies, Inc.",10008975737,Industrials,Industrial - Machinery,300.22,1.266,226770,US,NYSE
+ADT,3,Security/PropTech,Long,ADT Inc.,5653602001,Industrials,Security & Protection Services,7.525,1.05,11671785,US,NYSE
+CSGP,3,Security/PropTech,Long,"CoStar Group, Inc.",14664267911,Real Estate,Real Estate - Services,34.6,0.92,6733660,US,NASDAQ
+BKSY,3,Security/PropTech,Long,BlackSky Technology Inc.,1314771870,Technology,"Hardware, Equipment & Parts",35.43,2.246,1733988,US,NYSE
+REAL,3,Security/PropTech,Long,"The RealReal, Inc.",3444926321,Consumer Cyclical,Luxury Goods,11.89,2.811,3395090,US,NASDAQ
+APPF,3,Security/PropTech,Long,"AppFolio, Inc.",5993378268,Technology,Software - Application,167.12,0.838,420814,US,NASDAQ
+RENT,3,Security/PropTech,Long,"Rent the Runway, Inc.",20199711,Consumer Cyclical,Apparel - Retail,4.66,1.342,83688,US,NASDAQ
+WFC,3,Banks,Long,Wells Fargo & Company,252118577861,Financial Services,Banks - Diversified,82.275,1.056,17204400,US,NYSE
+JPM,3,Banks,Long,JPMorgan Chase & Co.,845006469300,Financial Services,Banks - Diversified,313.31,1.043,10202403,US,NYSE
+BAC,3,Banks,Long,Bank of America Corporation,383737079600,Financial Services,Banks - Diversified,53.47,1.237,41129813,US,NYSE
+USB,3,Banks,Long,U.S. Bancorp,88145175000,Financial Services,Banks - Regional,56.685,1.034,10345434,US,NYSE
+KEY,3,Banks,Long,KeyCorp,24045484695,Financial Services,Banks - Regional,22.115,1.071,15958134,US,NYSE
+FITB,3,Banks,Long,Fifth Third Bancorp,35869972821,Financial Services,Banks - Regional,50.76,0.973,11613472,US,NASDAQ
+RF,3,Banks,Long,Regions Financial Corporation,24377914793,Financial Services,Banks - Regional,28.535,1.045,13618986,US,NYSE
+CFG,3,Banks,Long,"Citizens Financial Group, Inc.",27645859700,Financial Services,Banks - Regional,65.05,1.058,5163181,US,NYSE
+HBAN,3,Banks,Long,Huntington Bancshares Incorporated,26528412227,Financial Services,Banks - Regional,16.76,0.974,28033667,US,NASDAQ
+TFC,3,Banks,Long,Truist Financial Corporation,64144080315,Financial Services,Banks - Regional,51.485,0.869,9620129,US,NYSE
+ZION,3,Banks,Long,"Zions Bancorporation, National Association",9327623340,Financial Services,Banks - Regional,63.42,0.796,1827149,US,NASDAQ
+BOKF,3,Banks,Long,BOK Financial Corporation,8129227569,Financial Services,Banks - Regional,133.79,0.843,367262,US,NASDAQ
+FHN,3,Banks,Long,First Horizon Corporation,11916768700,Financial Services,Banks - Regional,24.95,0.629,6567481,US,NYSE
+IBCP,3,Banks,Long,Independent Bank Corporation,683654584,Financial Services,Banks - Regional,33.21,0.752,184218,US,NASDAQ
+BANR,3,Banks,Long,Banner Corporation,2266582807,Financial Services,Banks - Regional,66.91,0.843,321681,US,NASDAQ
+TRMK,3,Banks,Long,Trustmark Corporation,2612146203,Financial Services,Banks - Regional,44.37,0.639,418260,US,NASDAQ
+WAFD,3,Banks,Long,"WaFd, Inc.",2685562236,Financial Services,Banks - Regional,35.4,0.818,708480,US,NASDAQ
+COLB,3,Banks,Long,"Columbia Banking System, Inc.",7044245523,Financial Services,Banks - Regional,29.595,0.683,2959816,US,NASDAQ
+AX,3,Banks,Long,"Axos Financial, Inc.",5467183899,Financial Services,Banks - Regional,96.46,1.266,394486,US,NYSE
+NBTB,3,Banks,Long,NBT Bancorp Inc.,2279766716,Financial Services,Banks - Regional,43.67,0.471,241240,US,NASDAQ
+STBA,3,Banks,Long,"S&T Bancorp, Inc.",1617143850,Financial Services,Banks - Regional,44.13,0.851,257270,US,NASDAQ
+FBNC,3,Banks,Long,First Bancorp,2392145104,Financial Services,Banks - Regional,57.74,0.856,222645,US,NASDAQ
+ESNT,3,Private Mortgage Insurance,Complex,Essent Group Ltd.,5687581950,Financial Services,Insurance - Specialty,60.5,0.87,707413,BM,NYSE
+MTG,3,Private Mortgage Insurance,Complex,MGIC Investment Corporation,5739509095,Financial Services,Insurance - Specialty,26.49,0.785,2053850,US,NYSE
+RDN,3,Private Mortgage Insurance,Complex,Radian Group Inc.,4884003318,Financial Services,Insurance - Specialty,35.84,0.767,1352609,US,NYSE
+NMIH,3,Private Mortgage Insurance,Complex,"NMI Holdings, Inc.",2948013005,Financial Services,Insurance - Specialty,38.71,0.643,460852,US,NASDAQ
+ALL,3,P&C Insurance,Long,The Allstate Corporation,56169604906,Financial Services,Insurance - Property & Casualty,217.52,0.224,1503283,US,NYSE
+TRV,3,P&C Insurance,Long,"The Travelers Companies, Inc.",64903413197,Financial Services,Insurance - Property & Casualty,305.22,0.522,1558098,US,NYSE
+HIG,3,P&C Insurance,Long,"The Hartford Financial Services Group, Inc.",37506578792,Financial Services,Insurance - Diversified,136.82,0.528,1558840,US,NYSE
+CB,3,P&C Insurance,Long,Chubb Limited,127600980710,Financial Services,Insurance - Property & Casualty,326.99,0.503,1749657,CH,NYSE
+PGR,3,P&C Insurance,Long,The Progressive Corporation,117758901530,Financial Services,Insurance - Property & Casualty,201.31,0.327,3193859,US,NYSE
+MKL,3,P&C Insurance,Long,Markel Corporation,22180175564,Financial Services,Insurance - Property & Casualty,1772.47,0.79,54945,US,NYSE
+UVE,3,P&C Insurance,Long,"Universal Insurance Holdings, Inc.",1108564556,Financial Services,Insurance - Property & Casualty,39.58,0.701,188529,US,NYSE
+GLRE,3,P&C Insurance,Long,"Greenlight Capital Re, Ltd.",621899935,Financial Services,Insurance - Reinsurance,18.3,0.386,187386,KY,NASDAQ
+CAT,3,Construction Equipment,Long,Caterpillar Inc.,414454690979,Industrials,Agricultural - Machinery,890.75,1.519,2745559,US,NYSE
+DE,3,Construction Equipment,Long,Deere & Company,159368698526,Industrials,Agricultural - Machinery,590.02,0.992,1534537,US,NYSE
+TEX,3,Construction Equipment,Long,Terex Corporation,4092760995,Industrials,Agricultural - Machinery,62.2,1.638,1847503,US,NYSE
+PCAR,3,Construction Equipment,Long,PACCAR Inc,62514781770,Industrials,Agricultural - Machinery,118.79,1.064,3314863,US,NASDAQ
+MTW,3,Construction Equipment,Long,"The Manitowoc Company, Inc.",487634008,Industrials,Agricultural - Machinery,13.58,1.827,266624,US,NYSE
+AGCO,3,Construction Equipment,Long,AGCO Corporation,8757965341,Industrials,Agricultural - Machinery,120.96,1.156,768677,US,NYSE
+MHK,3,Flooring/Pool,Long,"Mohawk Industries, Inc.",6460641189,Consumer Cyclical,"Furnishings, Fixtures & Appliances",105.57,1.247,997568,US,NYSE
+LXU,3,Flooring/Pool,Long,"LSB Industries, Inc.",1070517946,Basic Materials,Chemicals,14.9,0.482,1506159,US,NYSE
+LESL,3,Flooring/Pool,Long,"Leslie's, Inc.",15791595,Consumer Cyclical,Home Improvement,1.695,1.219,148580,US,NASDAQ
+BCC,3,Landscape/Pool,Long,Boise Cascade Company,2844480596,Basic Materials,Construction Materials,79.33,1.196,425511,US,NYSE
+DNOW,3,Landscape/Pool,Long,Dnow Inc.,1590766201,Energy,Oil & Gas Equipment & Services,13.495,0.793,3367937,US,NYSE
+TPC,3,Landscape/Pool,Long,Tutor Perini Corporation,4909605315,Industrials,Engineering & Construction,93.0,2.114,623291,US,NYSE
+NNN,3,REITs Co-Movement,Long,"NNN REIT, Inc.",8333169000,Real Estate,REIT - Retail,43.8,0.834,1531470,US,NYSE
+O,3,REITs Co-Movement,Long,Realty Income Corporation,59891304222,Real Estate,REIT - Retail,64.23,0.796,6194693,US,NYSE
+STAG,3,REITs Co-Movement,Long,"STAG Industrial, Inc.",7376688900,Real Estate,REIT - Industrial,38.58,1.045,1346155,US,NYSE
+FR,3,REITs Co-Movement,Long,"First Industrial Realty Trust, Inc.",8219340000,Real Estate,REIT - Industrial,62.0,1.128,1063995,US,NYSE
+EGP,3,REITs Co-Movement,Long,"EastGroup Properties, Inc.",10819309104,Real Estate,REIT - Industrial,201.27,1.106,388481,US,NYSE
+PLD,3,REITs Co-Movement,Long,"Prologis, Inc.",132404722912,Real Estate,REIT - Industrial,142.03,1.412,3516688,US,NYSE
+AHH,3,REITs Co-Movement,Long,"Armada Hoffler Properties, Inc.",488534924,Real Estate,REIT - Diversified,6.095,1.065,1032050,US,NYSE
+ITB,3,Housing ETFs,Monitor,iShares U.S. Home Construction ETF,2554455680,Financial Services,Asset Management,96.39,1.94,2653368,US,CBOE
+XHB,3,Housing ETFs,Monitor,State Street SPDR S&P Homebuilders ETF,1552416202,Financial Services,Asset Management,105.9643,1.84,2289740,US,AMEX
+REZ,3,Housing ETFs,Monitor,iShares Residential and Multisector Real Estate ETF,797081045,Financial Services,Asset Management,90.32,0.94,57775,US,AMEX
+HOMZ,3,Housing ETFs,Monitor,Hoya Capital Housing ETF,32574123,Financial Services,Asset Management,45.05,1.35,2016,US,AMEX
+KBE,3,Housing ETFs,Monitor,State Street SPDR S&P Bank ETF,1473506716,Financial Services,Asset Management,64.2,1.37,2372883,US,AMEX
+KRE,3,Housing ETFs,Monitor,State Street SPDR S&P Regional Banking ETF,3753936811,Financial Services,Asset Management,69.86,1.44,19284140,US,AMEX
+MORT,3,Housing ETFs,Monitor,VanEck Mortgage REIT Income ETF,391736995,Financial Services,Asset Management - Income,10.58,1.17,1711522,US,AMEX
+REM,3,Housing ETFs,Monitor,iShares Mortgage Real Estate ETF,552816161,Financial Services,Asset Management,22.99,1.17,772863,US,CBOE
+PFFR,3,Housing ETFs,Monitor,InfraCap REIT Preferred ETF,111196128,Financial Services,Asset Management,17.86,1.04,46940,US,AMEX
+TMF,3,Housing ETFs,Monitor,Direxion Daily 20+ Year Treasury Bull 3X ETF,2913988339,Financial Services,Asset Management - Leveraged,34.82,7.14,5521503,US,AMEX
+TBT,3,Housing ETFs,Monitor,ProShares - UltraShort 20+ Year Treasury,267398358,Financial Services,Asset Management,35.99,-4.74,477580,US,AMEX
+RIET,3,Housing ETFs,Monitor,Hoya Capital High Dividend Yield ETF,97065814,Financial Services,Asset Management,9.53,1.08,74919,US,AMEX
+EQR,4,Apartment REITs,Short on unlock,Equity Residential,24496251500,Real Estate,REIT - Residential,65.38,0.744,2966840,US,NYSE
+AVB,4,Apartment REITs,Short on unlock,"AvalonBay Communities, Inc.",25471224100,Real Estate,REIT - Residential,183.1,0.763,1057806,US,NYSE
+MAA,4,Apartment REITs,Short on unlock,"Mid-America Apartment Communities, Inc.",15025762460,Real Estate,REIT - Residential,129.145,0.789,985672,US,NYSE
+CPT,4,Apartment REITs,Short on unlock,Camden Property Trust,10989004110,Real Estate,REIT - Residential,104.93,0.848,1178811,US,NYSE
+UDR,4,Apartment REITs,Short on unlock,"UDR, Inc.",11938662348,Real Estate,REIT - Residential,36.335,0.72,3732870,US,NYSE
+ESS,4,Apartment REITs,Short on unlock,"Essex Property Trust, Inc.",16973596312,Real Estate,REIT - Residential,263.25,0.725,513009,US,NYSE
+AIV,4,Apartment REITs,Short on unlock,Apartment Investment and Management Company,612166850,Real Estate,REIT - Residential,4.255,1.285,3115518,US,NYSE
+NXRT,4,Apartment REITs,Short on unlock,"NexPoint Residential Trust, Inc.",733177267,Real Estate,REIT - Residential,28.89,1.194,222591,US,NYSE
+CSR,4,Apartment REITs,Short on unlock,Centerspace,1146644761,Real Estate,REIT - Residential,68.31,0.83,127195,US,NYSE
+IRT,4,Apartment REITs,Short on unlock,"Independence Realty Trust, Inc.",3838694664,Real Estate,REIT - Residential,16.29,1.014,2793309,US,NYSE
+BRT,4,Apartment REITs,Short on unlock,BRT Apartments Corp.,273545030,Real Estate,REIT - Residential,14.41,0.626,50683,US,NYSE
+VRE,4,Apartment REITs,Short on unlock,"Veris Residential, Inc.",1779168480,Real Estate,REIT - Residential,18.96,1.159,1755536,US,NYSE
+ELME,4,Multifamily,Short on unlock,Elme Communities,193710222,Real Estate,REIT - Office,2.18,0.788,1389372,US,NYSE
+NMR,4,Multifamily,Short on unlock,"Nomura Holdings, Inc.",23413770408,Financial Services,Financial - Capital Markets,8.07,0.7707849,2079490,JP,NYSE
+UPBD,4,Rent-to-Own,Short on unlock,"Upbound Group, Inc.",1148403776,Technology,Software - Application,19.76,1.861,848014,US,NASDAQ
+SUI,4,Manufactured Housing REITs,Complex,"Sun Communities, Inc.",15756284590,Real Estate,REIT - Residential,127.86,0.894,862575,US,NYSE
+ELS,4,Manufactured Housing REITs,Complex,"Equity LifeStyle Properties, Inc.",12273703120,Real Estate,REIT - Residential,63.29,0.77,1833014,US,NYSE
+MLM,5,Cement/Aggregates,Long,"Martin Marietta Materials, Inc.",37330625225,Basic Materials,Construction Materials,618.958,1.188,538155,US,NYSE
+VMC,5,Cement/Aggregates,Long,Vulcan Materials Company,39367821432,Basic Materials,Construction Materials,301.757,1.095,1309867,US,NYSE
+EXP,5,Cement/Aggregates,Long,Eagle Materials Inc.,6602320587,Basic Materials,Construction Materials,210.05,1.392,470190,US,NYSE
+CRH,5,Cement/Aggregates,Long,CRH plc,79141645427,Basic Materials,Construction Materials,118.44,1.241,5165281,IE,NYSE
+CMPR,5,Cement/Aggregates,Long,Cimpress plc,2148268792,Communication Services,Advertising Agencies,88.46,1.712,124154,IE,NASDAQ
+NUE,5,Steel/Rebar,Long,Nucor Corporation,51335929500,Basic Materials,Steel,225.38,1.745,1617516,US,NYSE
+STLD,5,Steel/Rebar,Long,"Steel Dynamics, Inc.",32975744580,Basic Materials,Steel,228.66,1.4,1271221,US,NASDAQ
+CMC,5,Steel/Rebar,Long,Commercial Metals Company,7646794001,Basic Materials,Steel,68.96,1.468,1195949,US,NYSE
+RS,5,Steel/Rebar,Long,Reliance Steel & Aluminum Co.,18518287737,Basic Materials,Steel,362.33,0.874,377809,US,NYSE
+WOR,5,Steel/Rebar,Long,"Worthington Industries, Inc.",2690627136,Industrials,Manufacturing - Metal Fabrication,54.305,1.212,205481,US,NYSE
+CLF,5,Steel/Rebar,Long,Cleveland-Cliffs Inc.,5818229073,Basic Materials,Steel,10.2,1.919,18579293,US,NYSE
+SXT,5,Specialty Chemicals,Long,Sensient Technologies Corporation,4834253193,Basic Materials,Chemicals - Specialty,113.61,0.607,368675,US,NYSE
+HUN,5,Specialty Chemicals,Long,Huntsman Corporation,2502254309,Basic Materials,Chemicals,14.38,0.603,6764152,US,NYSE
+IFF,5,Specialty Chemicals,Long,International Flavors & Fragrances Inc.,17929193220,Basic Materials,Chemicals - Specialty,70.19,1.032,1749037,US,NYSE
+AVY,5,Specialty Chemicals,Long,Avery Dennison Corporation,12603619620,Industrials,Business Equipment & Supplies,163.86,1.003,681167,US,NYSE
+FUL,5,Specialty Chemicals,Long,H.B. Fuller Company,3297026160,Basic Materials,Chemicals - Specialty,60.51,1.044,568511,US,NYSE
+JELD,5,Doors/Electrical,Long,"JELD-WEN Holding, Inc.",116511887,Industrials,Construction,1.35,1.92,1940568,US,NYSE
+NVT,5,Doors/Electrical,Long,nVent Electric plc,23122856757,Industrials,Electrical Equipment & Parts,143.0,1.276,2405949,GB,NYSE
+ETN,5,Doors/Electrical,Long,Eaton Corporation plc,168078981850,Industrials,Industrial - Machinery,433.21,1.164,2700708,IE,NYSE
+HUBB,5,Doors/Electrical,Long,Hubbell Incorporated,27047027741,Industrials,Electrical Equipment & Parts,508.77,0.997,549805,US,NYSE
+SYF,5,Consumer Finance,Long,Synchrony Financial,25670637533,Financial Services,Financial - Credit Services,76.185,1.381,4355042,US,NYSE
+COF,5,Consumer Finance,Long,Capital One Financial Corporation,118430646810,Financial Services,Financial - Credit Services,191.31,1.144,5069277,US,NYSE
+ALLY,5,Consumer Finance,Long,Ally Financial Inc.,13668480020,Financial Services,Financial - Credit Services,44.39,1.122,3782227,US,NYSE
+NAVI,5,Consumer Finance,Long,Navient Corporation,868462213,Financial Services,Financial - Credit Services,9.24,1.2904634,1021326,US,NASDAQ
+GDOT,5,Consumer Finance,Long,Green Dot Corporation,697373229,Financial Services,Financial - Credit Services,12.55,0.816,592098,US,NYSE
+SOFI,5,Consumer Finance,Long,"SoFi Technologies, Inc.",20531686000,Financial Services,Financial - Credit Services,16.1,2.2508602,66681436,US,NASDAQ
+LC,5,Consumer Finance,Long,LendingClub Corporation,1968443308,Financial Services,Financial - Credit Services,17.09,1.954,2249508,US,NYSE
+GXO,5,Logistics,Long,"GXO Logistics, Inc.",6556478670,Industrials,Integrated Freight & Logistics,57.155,1.739,1342203,US,NYSE
+XPO,5,Logistics,Long,"XPO Logistics, Inc.",25845093041,Industrials,Integrated Freight & Logistics,220.13,1.717,1787127,US,NYSE
+SAIA,5,Logistics,Long,"Saia, Inc.",11969804990,Industrials,Trucking,448.82,2.04,572601,US,NASDAQ
+ODFL,5,Logistics,Long,"Old Dominion Freight Line, Inc.",44265430839,Industrials,Trucking,212.38,1.2058516,2377203,US,NASDAQ
+GOOGL,5,Internet/Platform,Long,Alphabet Inc.,4655096737106,Communication Services,Internet Content & Information,384.8,1.128,32330586,US,NASDAQ
+META,5,Internet/Platform,Long,"Meta Platforms, Inc.",1547882840815,Communication Services,Internet Content & Information,611.91,1.309,14646434,US,NASDAQ
+PINS,5,Internet/Platform,Long,"Pinterest, Inc.",13265133036,Communication Services,Internet Content & Information,19.66,0.876,19752900,US,NYSE
+ANGI,5,Internet/Platform,Long,Angi Inc.,293967803,Communication Services,Internet Content & Information,7.33,1.818,1179147,US,NASDAQ
+IAC,5,Internet/Platform,Long,IAC InterActive Corp.,3336190137,Technology,Internet Content & Information,44.555,1.099,1153763,US,NASDAQ
+FTDR,5,Home Warranty,Long,"Frontdoor, Inc.",4812788695,Consumer Cyclical,Personal Products & Services,68.63,1.408,670293,US,NASDAQ
+HMN,5,Home Warranty,Long,Horace Mann Educators Corporation,1835729315,Financial Services,Insurance - Property & Casualty,45.46,0.053,248727,US,NYSE
+CTAS,5,Home Warranty,Long,Cintas Corporation,69899199770,Industrials,Specialty Business Services,174.71,1.006,2247054,US,NASDAQ
+CVCO,1,Homebuilders,Long,"Cavco Industries, Inc.",3934909641,Consumer Cyclical,Residential Construction,507.0,1.332,184231,US,NASDAQ
+DFH,1,Homebuilders,Long,"Dream Finders Homes, Inc.",1359356798,Consumer Cyclical,Residential Construction,14.6,1.94,636322,US,NYSE
+BZH,1,Homebuilders,Long,"Beazer Homes USA, Inc.",638258602,Consumer Cyclical,Residential Construction,21.63,2.216,439244,US,NYSE
+HOV,1,Homebuilders,Long,"Hovnanian Enterprises, Inc.",579818046,Consumer Cyclical,Residential Construction,112.51,2.076,108716,US,NYSE
+LEGH,1,Homebuilders,Long,Legacy Housing Corporation,517918417,Consumer Cyclical,Residential Construction,21.75,0.765,105118,US,NASDAQ
+MRP,2,SFR REITs,Complex,"Millrose Properties, Inc.",4728813650,Real Estate,REIT - Residential,30.67,0.2931401,1373424,US,NYSE
+UMH,2,SFR REITs,Complex,"UMH Properties, Inc.",1326189303,Real Estate,REIT - Residential,15.56,1.02,554522,US,NYSE
+FOR,1,Land Developers,Long,Forestar Group Inc.,1440995775,Real Estate,Real Estate - Development,28.25,1.445,152690,US,NYSE
+HHH,1,Land Developers,Long,Howard Hughes Holdings Inc.,3713552401,Real Estate,Real Estate - Diversified,62.27,1.279,495308,US,NYSE
+JOE,1,Land Developers,Long,The St. Joe Company,3718518482,Real Estate,Real Estate - Diversified,64.62,1.393,224990,US,NYSE
+W,2,Home Furnishings,Long,Wayfair Inc.,8358492433,Consumer Cyclical,Specialty Retail,63.93,3.307,3840849,US,NYSE
+BOBS,2,Home Furnishings,Long,"Bob's Discount Furniture, Inc.",1401445895,Consumer Cyclical,Specialty Retail,10.75,0.0,1451853,US,NYSE
+OPAD,1,RE Brokerages,Long,Offerpad Solutions Inc.,24823956,Real Estate,Real Estate - Services,0.8011,2.423,988578,US,NYSE
+CBRE,3,RE Services,Long,"CBRE Group, Inc.",41828908450,Real Estate,Real Estate - Services,142.85,1.348,2489483,US,NYSE
+JLL,3,RE Services,Long,Jones Lang LaSalle Incorporated,14772031429,Real Estate,Real Estate - Services,318.41,1.414,553298,US,NYSE
+NMRK,3,RE Services,Long,"Newmark Group, Inc.",2973620726,Real Estate,Real Estate - Services,16.12,1.832,1716237,US,NASDAQ
+PNC,3,Banks,Long,"The PNC Financial Services Group, Inc.",89975912285,Financial Services,Banks - Regional,223.06,0.956,2568329,US,NYSE
+MTB,3,Banks,Long,M&T Bank Corporation,32560970000,Financial Services,Banks - Regional,218.53,0.598,1225240,US,NYSE
+FCNCA,3,Banks,Long,"First Citizens BancShares, Inc.",23071816230,Financial Services,Banks - Regional,1985.795,0.647,98747,US,NASDAQ
+WBS,3,Banks,Long,Webster Financial Corporation,11724563160,Financial Services,Banks - Regional,72.36,1.029,4829075,US,NYSE
+WTFC,3,Banks,Long,Wintrust Financial Corporation,10154034261,Financial Services,Banks - Regional,150.57,0.855,494827,US,NASDAQ
+BPOP,3,Banks,Long,"Popular, Inc.",9769766304,Financial Services,Banks - Regional,150.33,0.614,557480,US,NASDAQ
+SSB,3,Banks,Long,SouthState Corporation,9580331303,Financial Services,Banks - Regional,97.69,0.746,909224,US,NYSE
+WAL,3,Banks,Long,Western Alliance Bancorporation,8959533660,Financial Services,Banks - Regional,81.54,1.366,1436680,US,NYSE
+PNFP,3,Banks,Long,"Pinnacle Financial Partners, Inc.",7599345149,Financial Services,Banks - Regional,98.87,0.999,1553555,US,NASDAQ
+FNB,3,Banks,Long,F.N.B. Corporation,6346947300,Financial Services,Banks - Regional,17.845,0.896,7930491,US,NYSE
+HOMB,3,Banks,Long,"Home Bancshares, Inc.",5428658363,Financial Services,Banks - Regional,26.87,0.744,1523263,US,NYSE
+OZK,3,Banks,Long,Bank OZK,5266046810,Financial Services,Banks - Regional,48.15,0.92,1268572,US,NASDAQ
+TCBI,3,Banks,Long,"Texas Capital Bancshares, Inc.",4397663557,Financial Services,Banks - Regional,100.7,0.671,490352,US,NASDAQ
+UBSI,3,Banks,Long,"United Bankshares, Inc.",6118986510,Financial Services,Banks - Regional,43.81,0.749,940190,US,NASDAQ
+ABCB,3,Banks,Long,Ameris Bancorp,5816518800,Financial Services,Banks - Regional,85.2,0.936,591182,US,NYSE
+FLG,3,Banks,Long,"Flagstar Financial, Inc.",5807263201,Financial Services,Banks - Regional,13.96,1.022,5453144,US,NYSE
+HWC,3,Banks,Long,Hancock Whitney Corporation,5505206240,Financial Services,Banks - Regional,67.51,1.032,860468,US,NASDAQ
