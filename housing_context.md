@@ -1,5 +1,5 @@
 # US Housing Monitor — Daily Context
-_Last updated: 2026-05-01 13:56 UTC_
+_Last updated: 2026-05-01 14:54 UTC_
 
 
 ## Macro Snapshot
@@ -8,12 +8,12 @@ _Last updated: 2026-05-01 13:56 UTC_
 |--------|-------:|-------------:|-------|------:|
 | 30yr Mortgage Rate | 6.30% | -0.16% | 2026-04-30 | 1d |
 | 15yr Mortgage Rate | 5.64% | -0.13% | 2026-04-30 | 1d |
-| Existing Home Sales (SAAR) | 3,980,000k units | -150000k | 2026-03-01 | 61d |
-| Active Listing Inventory | 964,477 | +49617 | 2026-03-01 | 61d |
-| New Home Sales | 587k units | -125k | 2026-01-01 | 120d |
-| Median Home Price | 405,300 USD | -4800USD | 2025-10-01 | 212d |
-| Housing Starts | 1,502k units | +146k | 2026-03-01 | 61d |
-| Building Permits | 1,372k units | -166k | 2026-03-01 | 61d |
+| Existing Home Sales (SAAR) | 3,980 k units | -150 k units | 2026-03-01 | 61d |
+| Active Listing Inventory | 964,477 | +49,617 | 2026-03-01 | 61d |
+| New Home Sales | 587 k units | -125 k units | 2026-01-01 | 120d |
+| Median Home Price | $405,300 | -$4,800 | 2025-10-01 | 212d |
+| Housing Starts | 1,502 k units | +146 k units | 2026-03-01 | 61d |
+| Building Permits | 1,372 k units | -166 k units | 2026-03-01 | 61d |
 | Homeownership Rate | 65.3% | -0.4% | 2026-01-01 | 120d |
 | Case-Shiller National | 332.1 | +0.3 | 2026-02-01 | 89d |
 
@@ -137,6 +137,41 @@ _⚠ home_count is best-effort regex parsing of 10-K Item 2/7. Verify before rel
 | 3 | 109 | -0.32% | +6.13% |
 | 4 | 17 | +2.50% | +8.70% |
 | 5 | 39 | +0.87% | +11.32% |
+
+
+## Rate Sensitivity Rankings (5y trailing, monthly)
+
+_Pearson r between monthly log-returns and monthly bps change in 30yr mortgage rate. Negative = stock falls when rates rise. Per Script 09._
+
+**Most rate-sensitive longs (top 10 negative r):**
+
+| Rank | Ticker | Subsector | r | n |
+|-----:|--------|-----------|----:|---:|
+| 1 | TMF | Housing ETFs | -0.780 | 59 |
+| 2 | PFFR | Housing ETFs | -0.683 | 59 |
+| 3 | STC | Title Insurance | -0.646 | 59 |
+| 4 | RKT | Mortgage Originators | -0.637 | 59 |
+| 5 | FAF | Title Insurance | -0.627 | 59 |
+| 6 | HOMZ | Housing ETFs | -0.619 | 59 |
+| 7 | SUI | Manufactured Housing REITs | -0.616 | 59 |
+| 8 | MORT | Housing ETFs | -0.598 | 59 |
+| 9 | PFSI | Mortgage Originators | -0.596 | 59 |
+| 10 | NNN | REITs Co-Movement | -0.593 | 59 |
+
+**Rate-defensive (top 10 positive r):**
+
+| Rank | Ticker | Subsector | r | n |
+|-----:|--------|-----------|----:|---:|
+| 1 | TBT | Housing ETFs | +0.780 | 59 |
+| 2 | HMN | Home Warranty | +0.107 | 59 |
+| 3 | LXU | Flooring/Pool | +0.083 | 59 |
+| 4 | ALL | P&C Insurance | +0.019 | 59 |
+| 5 | APPF | Security/PropTech | +0.017 | 59 |
+| 6 | GLRE | P&C Insurance | -0.010 | 59 |
+| 7 | FHN | Banks | -0.013 | 59 |
+| 8 | STRW | Land Developers | -0.027 | 43 |
+| 9 | PGR | P&C Insurance | -0.030 | 59 |
+| 10 | LMND | RE Brokerages | -0.043 | 59 |
 
 
 ## Recent Material 8-K Filings (last 7 days)
