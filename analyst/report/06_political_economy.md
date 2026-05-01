@@ -225,7 +225,7 @@ sustained $80+ through 2026 in base case.
 0.3pp on core inflation, constraining Fed cut path. **This is the
 single most-binding constraint on Factor 1 currently.** Oil pass-
 through is the reason the FOMC's 2026 cut probability collapsed to
-~3% [housing_context.json + Perplexity weekly 2026-05-04].
+~3% [housing_context.json + Perplexity weekly output dated by Monday-of-week 2026-05-04 but generated 2026-05-01].
 
 **Watch:** Strait of Hormuz situation, OPEC+ supply decisions,
 inventory builds vs draws.
@@ -236,7 +236,10 @@ falls below $70 sustained).
 ---
 
 ### Headwind 3 — Warsh anti-forward-guidance posture
-**Status:** Fed Chair-confirmed; takes office June 2026.
+**Status:** Nomination advanced through Senate Banking Committee April
+2026; full Senate confirmation pending. _ASSUMPTION (Wyatt's Claude
+default):_ confirmation likely but not yet certain. Update on
+confirmation event.
 
 **Mechanism.** Warsh's stated intent to abandon forward guidance and
 the dot plot would mechanically widen MBS-Treasury spreads (forward

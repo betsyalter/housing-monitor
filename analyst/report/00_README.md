@@ -4,11 +4,16 @@
 > All judgment calls flagged inline as `_ASSUMPTION_`. Wyatt edits in
 > place; commits via PR override defaults._
 
-The deep-dive report that completes `docs/og_prompt.txt`. Reads as
-standard equity research; the analytical scaffolding (Factor framework,
-RBF v5 methodology) lives in supporting files and is not surfaced in
-the report's vocabulary [per Investment Research Training Manual v5.0,
-L40-48 "Output Discipline"].
+The deep-dive report that completes `docs/og_prompt.txt`. Voice
+intends standard equity research clinical/declarative tone; the
+analytical scaffolding (factor framework, training-manual methodology)
+lives in supporting files. **Note (per codex audit 2026-05-01):** the
+report does use internal labels like "Factor 1" and "Tier 4" in
+reader-facing prose because the document is treated as
+internal-research, not external sell-side-quality publication. If
+this is later distributed externally, those references should be
+translated to plain equity-research phrasing per the Output
+Discipline standard.
 
 ## Sections (read in order)
 

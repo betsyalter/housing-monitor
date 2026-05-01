@@ -53,8 +53,8 @@ Where the financing happens.
 | Subsector role | Representative tickers | Tier | Beta to existing-home volume |
 |---|---|---|---|
 | Mortgage origination (top 5) | RKT, UWMC, PFSI, COOP, LDI | 1 | Very high — gain-on-sale per loan + refi cycle leverage |
-| Servicing (rights / MSR) | NMRK, MR | 2 | Medium — counter-cyclical via MSR amortization |
-| Wholesale / GSE-adjacent | EFC, NLY, AGNC | 3-4 | Moderate; primarily MBS investment |
+| Servicing (rights / MSR) | COOP, PFSI (servicing-heavy book) | 2 | Medium — counter-cyclical via MSR amortization |
+| Wholesale / GSE-adjacent (mortgage REITs) | EFC, NLY, AGNC | 3-4 | Moderate; primarily MBS investment |
 
 **Mechanism.** Origination revenue is $2-8k per loan (~50-200 bps of
 loan amount). The 2024-2025 environment has been brutal on origination
@@ -85,7 +85,7 @@ Where new supply gets created.
 | Manufactured housing | CVCO, SKY, LGIH (entry-level) | 1-2 | High — entry-level cohort proxy |
 | Building products | BLDR, MAS, FBHS, AOS, OC, JELD | 2 | Medium — capital-intensive, high cyclical leverage |
 | Lumber and wood | WY, LPX, BCC, RYAM | 2-3 | Medium-high |
-| HVAC and mechanical | LII, WAT, TT (Trane) | 2 | Medium — split between new construction and replacement |
+| HVAC and mechanical | LII (Lennox), TT (Trane Technologies), WSO (Watsco distribution) | 2 | Medium — split between new construction and replacement |
 | Paint and coatings | SHW, PPG, RPM | 2-3 | Lower — replacement-heavy |
 
 **Mechanism.** New construction is *partial substitute* for existing
@@ -98,9 +98,11 @@ their pricing-power buffer, but absolute new-home volume can still
 grow if total transaction volume expands.
 
 The mid-2026 builder cohort signal (orders +14-37% QoQ, closings -17
-to -34% QoQ) [`output/perplexity/weekly/2026-05-04.md`] is consistent
-with the pre-recognition phase: order intake is forming around the
-unlock thesis, but conversion-to-closing is still gated by the
+to -34% QoQ; see the first weekly Perplexity output at
+`output/perplexity/weekly/2026-05-04.md` — Monday-of-week
+filename convention; generated 2026-05-01) is consistent with the
+pre-recognition phase: order intake is forming around the unlock
+thesis, but conversion-to-closing is still gated by the
 affordability ceiling. **The diagonal between order growth and
 closing throughput is the cleanest builder-cohort signal of the
 cycle's inflection point.**
@@ -112,24 +114,37 @@ cycle's inflection point.**
 Where ownership of the housing stock concentrates beyond the
 owner-occupied base.
 
-| Subsector role | Representative tickers | Tier | Beta to existing-home volume |
+| Subsector role | Representative tickers | Tier | Thesis position |
 |---|---|---|---|
-| Single-Family Rental REITs | INVH, AMH | 3 | Negative (short on unlock — supply re-emerges if dispositions accelerate) |
-| Apartment REITs (HCOL coastal) | EQR, AVB, ESS | 4 | Negative (Tier 4 short basket — see basket file) |
-| Apartment REITs (Sun Belt + diversified) | MAA, CPT, UDR, IRT | 4 | Negative |
-| Manufactured Housing REITs | ELS, SUI, UMH | 3 | Mixed — defensive on rate-down; thesis-complex |
-| Healthcare / Senior Housing | VTR, WELL | 5 | Demographic-wave-positive (boomer aging into 75+) |
+| Single-Family Rental REITs | INVH, AMH | 3 | **Long-side mechanism (supply withholding)** — these REITs hold acquired stock; thesis-positive contribution comes from the structural withhold itself, not from shorting them. Watch for material dispositions that would reverse the withhold. |
+| Apartment REITs (HCOL coastal) | EQR, AVB, ESS | 4 | **Short basket** — see `analyst/apartment_reit_short_basket.md` |
+| Apartment REITs (Sun Belt + diversified) | MAA, CPT, UDR, IRT | 4 | **Short basket** |
+| Manufactured Housing REITs | ELS, SUI, UMH | 3 | Mixed — defensive on rate-down; thesis-orthogonal |
+| Healthcare / Senior Housing | VTR, WELL | 5 | Demographic-wave-positive (boomer aging into 75+); thesis-orthogonal |
 
-**Mechanism.** SFR REITs withhold supply (Factor 2 acquisition wave;
-see framework). Apartment REITs over-earn on the involuntary-renter
-narrative (Factor 2 second-order; Factor 5 endogenous). Manufactured
-housing and senior housing operate on different demographic-wave
-mechanics and are thesis-orthogonal — they're in the universe for
-correlation-cross-check completeness, not for thesis-positioning.
+**Mechanism.** SFR REITs withhold supply (acquisition wave; see
+framework Factor 2). Apartment REITs over-earn on the involuntary-
+renter narrative (second-order to Factor 2; endogenous to Factor 5).
+Manufactured housing and senior housing operate on different
+demographic-wave mechanics and are thesis-orthogonal — they're in the
+universe for correlation-cross-check completeness, not for thesis-
+positioning.
 
-The asset-holding layer is the thesis's pure short-side: short-on-
-unlock baskets sit here exclusively. Long-side of the unlock thesis
-sits in Layers 1-3 + 5-7.
+**Position-side mapping is asymmetric within Layer 4:**
+- *Apartment REITs (Tier 4)* are the explicit short basket. See
+  `analyst/apartment_reit_short_basket.md` for sizing.
+- *SFR REITs (INVH, AMH)* are NOT shorts. The thesis-positive
+  contribution from SFR REITs is the structural withholding itself —
+  they hold supply off the market. The risk is dispositions
+  accelerating (which would *increase* available inventory). Treat
+  them as long-side context for the supply-withhold story, not as a
+  trade vehicle on either direction.
+- *Manufactured housing REITs (ELS, SUI, UMH)* are thesis-orthogonal.
+- *Senior housing (VTR, WELL)* is thesis-orthogonal — captured by the
+  demographic-wave mechanism, not the unlock cycle.
+
+Long-side of the unlock thesis lives in Layers 1-3 + 5-7. The pure
+short basket lives in Layer 4 apartment REITs only.
 
 ---
 
@@ -140,7 +155,7 @@ Where the closing-day services live.
 | Subsector role | Representative tickers | Tier | Beta to existing-home volume |
 |---|---|---|---|
 | Title insurance (top 4) | FAF, FNF, STC, ORI | 1 | Very high — premium per closed transaction |
-| Closing services / e-mortgage | DOC, BLNDA | 2-3 | High |
+| Closing services / e-mortgage adjacencies | (mostly private; representative public name to be confirmed) | 2-3 | High when present in universe |
 
 **Mechanism.** Title insurers earn 0.5-1% of home price per closing
 ($2-4k per $400k home). Like brokerage, the revenue is binary on
@@ -274,7 +289,7 @@ The 262-ticker universe distributes across the layers approximately:
 | 1 — Brokerage | 8-10 | Long (high beta) |
 | 2 — Mortgage origination | 12-15 | Long (high beta + refi component) |
 | 3 — Construction | 50-60 | Long (Tier 1-2 builders + suppliers) |
-| 4 — Asset holding | 35-40 | Mixed (SFR long; apartment short basket) |
+| 4 — Asset holding | 35-40 | Mixed: SFR REITs are structural-withhold context (not directly traded); Apartment REITs are the Tier-4 short basket; Manufactured Housing + Senior Housing are thesis-orthogonal long-side context |
 | 5 — Title / transaction services | 6-8 | Long (high beta) |
 | 6 — Aftermarket / improvement | 60-70 | Long (medium beta) |
 | 7 — Insurance | 10-15 | Lower beta; selective |

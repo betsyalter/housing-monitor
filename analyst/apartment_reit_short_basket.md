@@ -131,8 +131,12 @@ The basket is sized by **conviction × Factor-1+5 sensitivity**:
 
 **Validation step (run weekly during basket maintenance):** check
 `data/correlation_rankings.csv` for each basket member at the 5y window.
-If any member's `pearson_r` vs `mortgage_rate_30yr` is > -0.20 (i.e.,
-weakly correlated or positively correlated), flag for re-evaluation.
+For a short thesis where rates falling produces apartment REIT
+underperformance, the **expected sign of `pearson_r` vs
+`mortgage_rate_30yr` is positive** (REIT prices and rates move in the
+same direction; rates fall → REITs fall). If any member's `pearson_r`
+is materially negative (< -0.20), flag for re-evaluation — the rate-
+sensitivity is running opposite to thesis on that name.
 
 **Sizing math** (against a target portfolio gross of 5%):
 

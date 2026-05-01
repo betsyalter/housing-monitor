@@ -1,9 +1,19 @@
 # Step 5 — Stock Scoring
 
 > _Status: 2026-05-01. Default-driven first draft. ASSUMPTION-flagged
-> on scoring methodology and per-ticker conviction. Output table is
-> illustrative; the canonical scored output regenerates from
-> `data/correlation_rankings.csv` × `analyst/factor_weights.yaml`._
+> on scoring methodology and per-ticker conviction._
+>
+> **Important caveat on the scored tables in this section.** The
+> per-ticker scores below are **directional rankings expressing
+> analyst conviction, not arithmetic outputs of the formula above**.
+> The formula is the *intent* — the canonical scored output should
+> regenerate from `data/correlation_rankings.csv` (currently
+> gitignored / Mac-mini-local) × `analyst/factor_weights.yaml`. That
+> productionized scoring belongs to Script 09b on Betsy's engineering
+> queue. Until 09b ships, treat the tables here as illustrative tier
+> assignments anchored to the Pearson-r values from Script 09's first
+> output (as observed in `output/perplexity/weekly/2026-05-04.md`),
+> not as reproducible computed scores.
 
 This section ties everything to specific names. The structural map
 (Step 1) cataloged who captures dollars; the value chain (Step 3)
@@ -47,8 +57,12 @@ based on Step 1's structural map):
 - `affordability_signal(ticker)` — discrete: -1, 0, +1 based on
   whether the name is a Layer-1/2/5/6 long (volume-beta), Layer-4
   short (apartment REIT), or other.
-- `inventory_signal(ticker)` — discrete: -1 (apartment REIT), 0
-  (most), +1 (SFR REIT or builder if framing supply emergence).
+- `inventory_signal(ticker)` — discrete: -1 (apartment REIT, captured
+  by Tier-4 short basket), 0 (most names), +1 (builder benefiting from
+  supply emergence). SFR REITs (INVH/AMH) themselves are not assigned
+  a signal here; their thesis contribution is via supply withholding,
+  not direct positioning. See structural-map §Layer 4 for the
+  position-side asymmetry.
 - `cohort_signal(ticker)` — discrete: penalty for entry-level / FHA-
   cohort exposed names (LGIH/CCS specifically given Q1 2026 cancel
   data); +1 for diversified-buyer-cohort names.
@@ -82,28 +96,30 @@ Then **validate against Profile/Archetype** [Manual Part III]:
 
 ## Top long-side scored names
 
-_Illustrative — based on Script 09 outputs at 2026-05-01._
+_Illustrative — Pearson r values from Script 09 (5y window); conviction
+tier is analyst-judgment, not arithmetic-formula output. The formula
+above is the design target for Script 09b productionization._
 
-| Ticker | Layer | Tier | Pearson r vs MORTGAGE30US | Inferred Score | Rationale |
+| Ticker | Layer | Tier | Pearson r vs MORTGAGE30US | Conviction tier | Rationale |
 |---|---|---|---:|---:|---|
-| **STC** (Stewart Information) | 5 — Title | 1 | -0.65 | **+0.65** | Pure-play volume beta; low capex; high operating leverage |
-| **RKT** (Rocket Companies) | 2 — Mortgage | 1 | -0.64 | **+0.62** | Largest originator with capacity to capture refi wave |
-| **FAF** (First American Financial) | 5 — Title | 1 | -0.63 | **+0.63** | Title insurance leader; cleanest Factor-1 long exposure |
-| **PFSI** (PennyMac Financial) | 2 — Mortgage | 1 | -0.60 | **+0.58** | Mortgage origination + servicing; lower idiosyncratic noise |
-| **MTH** (Meritage Homes) | 3 — Builder | 1 | -0.58 | **+0.55** | Tier-1 builder; recent QoQ orders +14%; mid-Sun-Belt mix |
-| **NVR** (NVR Inc.) | 3 — Builder | 1 | -0.58 | **+0.60** | Profile 7 (option-the-land) [Manual L1799]; structural quality bumps score |
-| **CCS** (Century Communities) | 3 — Builder | 1-2 | -0.57 | **+0.40** | Tier 1-2 builder with -12% net orders; Factor 4 risk discount |
-| **DHI** (D.R. Horton) | 3 — Builder | 1 | -0.57 | **+0.55** | Largest by volume; defensively positioned |
-| **MHO** (M/I Homes) | 3 — Builder | 1 | -0.56 | **+0.52** | Tier-1 builder; +22% net orders QoQ |
-| **KBH** (KB Home) | 3 — Builder | 1 | -0.56 | **+0.50** | Entry-level mix; some Factor 4 risk |
-| **PHM** (Pulte) | 3 — Builder | 1 | -0.55 | **+0.55** | High ASP exposure ($542K avg); affluent move-up cohort |
-| **BZH** (Beazer) | 3 — Builder | 1 | -0.55 | **+0.45** | Tier-1 with rising cancel rate (13.5%); sizing discount |
-| **GRBK** (Green Brick) | 3 — Builder | 1 | -0.54 | **+0.50** | Smaller-cap builder; high beta |
-| **TMHC** (Taylor Morrison) | 3 — Builder | 1 | — | **+0.55** | Move-up positioning; defensive |
-| **HD** (Home Depot) | 6 — Aftermarket | 1 | — | **+0.30** | Diversified; mover-cohort lift is incremental, not load-bearing |
-| **LOW** (Lowe's) | 6 — Aftermarket | 1 | — | **+0.30** | Same as HD |
-| **W** (Wayfair) | 6 — Furnishings | 2 | — | **+0.45** | Mover-cohort beta higher than HD/LOW |
-| **WHR** (Whirlpool) | 6 — Appliances | 2 | — | **+0.35** | Mid-beta; replacement cycle component |
+| **STC** (Stewart Information) | 5 — Title | 1 | -0.65 | High | Pure-play volume beta; low capex; high operating leverage |
+| **RKT** (Rocket Companies) | 2 — Mortgage | 1 | -0.64 | High | Largest originator with capacity to capture refi wave |
+| **FAF** (First American Financial) | 5 — Title | 1 | -0.63 | High | Title insurance leader; cleanest rate-lockin long exposure |
+| **PFSI** (PennyMac Financial) | 2 — Mortgage | 1 | -0.60 | High | Mortgage origination + servicing; lower idiosyncratic noise |
+| **MTH** (Meritage Homes) | 3 — Builder | 1 | -0.58 | Medium-high | Tier-1 builder; recent QoQ orders +14%; mid-Sun-Belt mix |
+| **NVR** (NVR Inc.) | 3 — Builder | 1 | -0.58 | High | Option-the-land business model; structural quality bump |
+| **CCS** (Century Communities) | 3 — Builder | 1-2 | -0.57 | Medium | Tier 1-2 builder with -12% net orders; affordability-ceiling discount |
+| **DHI** (D.R. Horton) | 3 — Builder | 1 | -0.57 | High | Largest by volume; defensively positioned |
+| **MHO** (M/I Homes) | 3 — Builder | 1 | -0.56 | Medium-high | Tier-1 builder; +22% net orders QoQ |
+| **KBH** (KB Home) | 3 — Builder | 1 | -0.56 | Medium | Entry-level mix; affordability-ceiling risk |
+| **PHM** (Pulte) | 3 — Builder | 1 | -0.55 | High | High ASP exposure ($542K avg); affluent move-up cohort |
+| **BZH** (Beazer) | 3 — Builder | 1 | -0.55 | Medium | Tier-1 with rising cancel rate (13.5%); sizing discount |
+| **GRBK** (Green Brick) | 3 — Builder | 1 | -0.54 | Medium-high | Smaller-cap builder; high beta |
+| **TMHC** (Taylor Morrison) | 3 — Builder | 1 | — | Medium-high | Move-up positioning; defensive |
+| **HD** (Home Depot) | 6 — Aftermarket | 1 | — | Medium | Diversified; mover-cohort lift is incremental, not load-bearing |
+| **LOW** (Lowe's) | 6 — Aftermarket | 1 | — | Medium | Same as HD |
+| **W** (Wayfair) | 6 — Furnishings | 2 | — | Medium-high | Mover-cohort beta higher than HD/LOW |
+| **WHR** (Whirlpool) | 6 — Appliances | 2 | — | Medium | Mid-beta; replacement cycle component |
 
 The pure-play volume-beta names (title insurance, mortgage origination)
 sit at the top — score +0.55 to +0.65. Builders cluster in the +0.45
@@ -114,15 +130,21 @@ issues; entry-level builders for Factor 4 ceiling exposure).
 
 ## High-conviction short-side scored names
 
-| Ticker | Layer | Tier | Pearson r vs MORTGAGE30US | Inferred Score | Rationale |
-|---|---|---|---:|---:|---|
-| **EQR** (Equity Residential) | 4 — Apartment | 4 | (correlation est.: weakly positive — confirmed thesis-positive on rate-down) | **−0.65** | Coastal urban; conviction-tilted basket; see basket file |
-| **AVB** (AvalonBay) | 4 — Apartment | 4 | — | **−0.60** | NEMA / coastal urban; balance-sheet defensive |
-| **MAA** (Mid-America) | 4 — Apartment | 4 | — | **−0.45** | Sun Belt; partial conversion already |
-| **CPT** (Camden) | 4 — Apartment | 4 | — | **−0.45** | Sun Belt + DC defensive |
-| **UDR** | 4 — Apartment | 4 | — | **−0.35** | Diversified; thesis dilution |
-| **ESS** (Essex) | 4 — Apartment | 4 | — | **−0.35** | CA-only; regulatory tail risk |
-| **IRT** (Independence Realty) | 4 — Apartment | 4 | — | **−0.40** | Sun Belt small-cap; high beta |
+For the apartment REIT short basket, the thesis-expected correlation
+sign vs. mortgage_rate_30yr is **positive**: when rates fall, renter-
+to-owner conversion accelerates, apartment REITs underperform → REIT
+prices and rates move in the same direction. (Note this is the
+opposite of the long-side names, which are negatively correlated.)
+
+| Ticker | Layer | Tier | Expected sign vs MORTGAGE30US | Conviction tier | Rationale |
+|---|---|---|---|---|---|
+| **EQR** (Equity Residential) | 4 — Apartment | 4 | Positive (thesis-confirming) | High | Coastal urban; conviction-tilted basket; see basket file |
+| **AVB** (AvalonBay) | 4 — Apartment | 4 | Positive | High | NEMA / coastal urban; balance-sheet defensive |
+| **MAA** (Mid-America) | 4 — Apartment | 4 | Positive | Medium | Sun Belt; partial conversion already |
+| **CPT** (Camden) | 4 — Apartment | 4 | Positive | Medium | Sun Belt + DC defensive |
+| **UDR** | 4 — Apartment | 4 | Positive | Medium-low | Diversified; thesis dilution |
+| **ESS** (Essex) | 4 — Apartment | 4 | Positive | Low | CA-only; regulatory tail risk |
+| **IRT** (Independence Realty) | 4 — Apartment | 4 | Positive | Medium-low | Sun Belt small-cap; high beta |
 
 The apartment REIT short basket sits in the -0.35 to -0.65 band, with
 EQR/AVB at the highest conviction (coastal urban renter-conversion
@@ -173,9 +195,9 @@ similarly). Re-tiering is a PR-driven update to `data/fmp_tickers.csv`.
 | Tranche | Trigger | Names |
 |---|---|---|
 | **1** (T-0 to T+12 weeks of rate-path inflection) | 30yr below 5.5% sustained 60d | Pure-play volume beta: STC, FAF, FNF, RKT, UWMC, PFSI |
-| **2** (T+12 to T+30 weeks) | Pending home sales > 4.4M sustained 2 mo | Tier-1 builders: NVR, DHI, LEN, PHM, MTH, MHO, TMHC |
-| **3** (T+24 to T+50 weeks) | Builder closings inflect + HD/LOW comps confirm | Aftermarket: HD, LOW, W, RH, WHR, GNRC |
-| **4** (T+30 to T+100 weeks) | Apartment REIT same-store rent decel confirmed | Short basket scaling per `analyst/short_baskets.yaml` triggers |
+| **2** (T+12 to T+30 weeks) | Existing-home sales SAAR > 4.4M sustained 2 months | Tier-1 builders: NVR, DHI, LEN, PHM, MTH, MHO, TMHC |
+| **3** (T+24 to T+50 weeks) | Tier-1 builder QoQ closings positive for 2 consecutive quarters AND HD/LOW US-comps positive YoY 2 consecutive quarters | Aftermarket: HD, LOW, W, RH, WHR, GNRC |
+| **4** (T+30 to T+100 weeks) | Trailing 3-month rolling MAA/CPT/IRT same-store rent growth < +2% YoY | Short basket scaling per `analyst/short_baskets.yaml` triggers |
 
 ---
 
