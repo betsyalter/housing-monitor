@@ -232,6 +232,10 @@ footer { margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border
   Geographic breakdown is not yet parsed (Script 06c TODO).</p>
 <div id="reits-table-wrap"></div>
 
+<h2>Recent High-Signal News (last 7 days)</h2>
+<div class="muted" id="news-summary"></div>
+<div id="news-table-wrap"></div>
+
 <h2>Recent Material 8-K Filings</h2>
 <div id="filings-table-wrap"></div>
 
@@ -319,6 +323,7 @@ function render(d) {
   renderBaskets(sec.price_action);
   renderBuilders(sec.homebuilders);
   renderReits(sec.reits);
+  renderNews(sec.news);
   renderFilings(sec.recent_8ks);
   renderInsider(sec.insider);
 }
@@ -774,6 +779,53 @@ function renderReits(s) {
         formatter: c => c.getValue() == null ? "—" : fmtDollar(c.getValue())},
       {title: "Occupancy %", field: "occupancy_pct", hozAlign: "right",
         formatter: c => c.getValue() == null ? "—" : c.getValue().toFixed(1) + "%"},
+    ],
+  });
+}
+
+// ── high-signal news ───────────────────────────────────────────────
+function renderNews(s) {
+  if (!s || s.status === "missing" || s.status === "empty") {
+    missingBlock("news-table-wrap",
+      "News stream log unavailable. Run scripts/14_news_poll.py (or wait for the 5-min cron).");
+    return;
+  }
+  // Summary line: 24h + 7d counts
+  const sumEl = el("news-summary");
+  if (sumEl) {
+    const i24 = s.count_immediate_24h ?? 0, d24 = s.count_digest_24h ?? 0;
+    const i7  = s.count_immediate_7d  ?? 0, d7  = s.count_digest_7d  ?? 0;
+    sumEl.textContent =
+      `Last 24h: ${i24} immediate, ${d24} digest · Last 7d: ${i7} immediate, ${d7} digest`;
+  }
+  const rows = s.articles || [];
+  if (rows.length === 0) {
+    missingBlock("news-table-wrap", "No high-signal news in the last 7 days.");
+    return;
+  }
+  new Tabulator("#news-table-wrap", {
+    data: rows, height: "520px", layout: "fitColumns", pagination: false,
+    initialSort: [{column: "date", dir: "desc"}],
+    columns: [
+      {title: "Detected", field: "date", width: 140},
+      {title: "Ticker", field: "ticker", width: 90,
+        formatter: c => {
+          const v = c.getValue();
+          if (!v || v === "(macro)") return `<span class="muted">(macro)</span>`;
+          return `<a href="https://finance.yahoo.com/quote/${v}" target="_blank">${v}</a>`;
+        }},
+      {title: "Priority", field: "priority", width: 100, hozAlign: "center",
+        formatter: c => {
+          const v = c.getValue() || "";
+          const cls = v === "immediate" ? "warn-badge" : "tag";
+          return `<span class="${cls}">${v}</span>`;
+        }},
+      {title: "Score", field: "score", width: 70, hozAlign: "right", sorter: "number"},
+      {title: "Headline", field: "title", widthGrow: 3,
+        formatter: c => `<a href="${c.getData().url}" target="_blank">${c.getValue()}</a>`},
+      {title: "Publisher", field: "publisher", width: 160},
+      {title: "Keywords", field: "keywords", widthGrow: 2,
+        formatter: c => `<span class="muted">${c.getValue() || "—"}</span>`},
     ],
   });
 }
