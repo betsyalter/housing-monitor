@@ -15,9 +15,14 @@ be 20 brittle parsers. LLM extraction handles all 20 with one prompt.
 
 Idempotent: skips REITs whose latest accession already has geo rows
 in the CSV. Re-runs after a fresh 10-K filing pick up only the new one.
+
+Usage:
+  python scripts/06c_reit_geo_parser.py                  # all 20 REITs
+  python scripts/06c_reit_geo_parser.py --ticker INVH    # one REIT for testing
+  python scripts/06c_reit_geo_parser.py --dry-run        # extract but don't write CSV
 """
 
-import sys, os, json, re, time
+import sys, os, json, re, time, argparse
 sys.path.insert(0, os.path.dirname(__file__))
 from config import DATA_DIR
 
@@ -159,6 +164,12 @@ def extract_with_llm(client, ticker, text):
 
 
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--ticker", help="Run for a single REIT only (e.g. INVH)")
+    parser.add_argument("--dry-run", action="store_true",
+                        help="Extract and print but do not write CSV")
+    args = parser.parse_args()
+
     if not os.path.isdir(RAW_DIR):
         raise SystemExit(f"{RAW_DIR} missing — run scripts/06_sec_reit_properties.py first.")
 
@@ -166,12 +177,18 @@ def main():
     existing = load_existing()
     seen = existing_geo_accessions(existing)
     print(f"Existing geo rows for: {len(seen)} (ticker, accession) pairs")
+    if args.dry_run:
+        print("DRY RUN — will not write to CSV")
 
     all_new_rows = []
     summary = {"extracted": 0, "skipped": 0, "no_text": 0, "llm_fail": 0, "no_geo": 0}
     total_in = total_out = 0
 
-    for ticker in REIT_UNITS:
+    targets = [args.ticker] if args.ticker else list(REIT_UNITS.keys())
+    if args.ticker and args.ticker not in REIT_UNITS:
+        raise SystemExit(f"{args.ticker} not in REIT_UNITS list. Add it or pick from {sorted(REIT_UNITS.keys())}")
+
+    for ticker in targets:
         text, filing_date, accession = load_item_text(ticker)
         if not text:
             print(f"  [{ticker}] no item text on disk")
@@ -225,18 +242,23 @@ def main():
         time.sleep(0.5)
 
     if all_new_rows:
-        new_df = pd.DataFrame(all_new_rows)
-        if existing is not None:
-            combined = pd.concat([existing, new_df], ignore_index=True)
-            # Dedupe on (ticker, accession_no, geo_type, geo_name)
-            combined = combined.drop_duplicates(
-                subset=["ticker", "accession_no", "geo_type", "geo_name"],
-                keep="last",
-            )
+        if args.dry_run:
+            print(f"\n=== DRY RUN: would write {len(all_new_rows)} new geo rows ===")
+            new_df = pd.DataFrame(all_new_rows)
+            print(new_df.to_string(index=False))
         else:
-            combined = new_df
-        combined.to_csv(OUT_CSV, index=False)
-        print(f"\nWrote {len(combined)} total rows ({len(all_new_rows)} new geo rows) -> {OUT_CSV}")
+            new_df = pd.DataFrame(all_new_rows)
+            if existing is not None:
+                combined = pd.concat([existing, new_df], ignore_index=True)
+                # Dedupe on (ticker, accession_no, geo_type, geo_name)
+                combined = combined.drop_duplicates(
+                    subset=["ticker", "accession_no", "geo_type", "geo_name"],
+                    keep="last",
+                )
+            else:
+                combined = new_df
+            combined.to_csv(OUT_CSV, index=False)
+            print(f"\nWrote {len(combined)} total rows ({len(all_new_rows)} new geo rows) -> {OUT_CSV}")
 
     cost = total_in * 1.0 / 1_000_000 + total_out * 5.0 / 1_000_000
     print(f"\nLLM tokens: {total_in:,} in / {total_out:,} out — est. cost ${cost:.4f}")
