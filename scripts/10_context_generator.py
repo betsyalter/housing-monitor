@@ -380,24 +380,36 @@ def section_reits():
                               "REIT property data unavailable",
                               "run scripts/06_sec_reit_properties.py"), state
 
+    # Filter to portfolio-totals only for the headline table; geo rows
+    # would come from Script 06c if it ran. (Currently always portfolio
+    # totals since 06c is deferred.)
+    if "geo_type" in df.columns:
+        portfolio = df[df["geo_type"].fillna("total") == "total"].copy()
+    else:
+        portfolio = df.copy()
+
     rows = []
     json_rows = []
-    for _, r in df.sort_values('ticker').iterrows():
+    for _, r in portfolio.sort_values('ticker').iterrows():
         rows.append(
             f"| {r['ticker']} | {r.get('filing_date','')} | "
+            f"{r.get('fiscal_year_end','') or '—'} | "
             f"{_fmt_num(r.get('home_count'))} | "
             f"${_fmt_num(r.get('avg_monthly_rent'),0)} | "
             f"{_fmt_num(r.get('occupancy_pct'),1,'%')} |"
         )
-        json_rows.append({k: (None if pd.isna(r.get(k)) else r.get(k))
-                          for k in ["ticker","filing_date","home_count","avg_monthly_rent","occupancy_pct"]})
+        json_rows.append({
+            k: (None if pd.isna(r.get(k)) else r.get(k))
+            for k in ["ticker", "filing_date", "fiscal_year_end", "accession_no",
+                      "home_count", "avg_monthly_rent", "occupancy_pct"]
+        })
 
     state["reits"] = json_rows
 
     body = "## REIT Supply Snapshot\n\n"
-    body += "_⚠ home_count is best-effort regex parsing of 10-K Item 2/7. Verify before relying on for material decisions. Geographic breakdown is not yet parsed (Script 06c TODO)._\n\n"
-    body += "| Ticker | Filing Date | Home Count | Avg Rent | Occupancy |\n"
-    body += "|--------|-------------|-----------:|---------:|----------:|\n"
+    body += "_⚠ home_count is best-effort regex parsing of 10-K Item 2/7. Verify before relying on for material decisions. Geographic breakdown via Haiku extraction is deferred (Script 06c on disk; not currently run)._\n\n"
+    body += "| Ticker | Filing Date | Period End | Home Count | Avg Rent | Occupancy |\n"
+    body += "|--------|-------------|------------|-----------:|---------:|----------:|\n"
     body += "\n".join(rows) + "\n"
     return body, state
 
