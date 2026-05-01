@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-01 16:30 UTC",
+  "generated_at": "2026-05-01 16:36 UTC",
   "section_status": {
     "weekly_synthesis": "ok",
     "macro": "ok",
@@ -464,7 +464,7 @@
             "backlog_units": 16882.0,
             "community_count": null,
             "closings_units": 19486.0,
-            "asp_dollars": 361.0,
+            "asp_dollars": 361000.0,
             "gross_margin_pct": 21.0
           },
           "qoq_pct": {
@@ -484,7 +484,7 @@
             "backlog_units": 520.0,
             "community_count": 101.0,
             "closings_units": 1038.0,
-            "asp_dollars": 530.0,
+            "asp_dollars": 530000.0,
             "gross_margin_pct": 29.4
           },
           "qoq_pct": {
@@ -584,14 +584,14 @@
             "backlog_units": 2245.0,
             "community_count": 231.0,
             "closings_units": 1914.0,
-            "asp_dollars": 459.0,
+            "asp_dollars": 459000.0,
             "gross_margin_pct": 22.0
           },
           "qoq_pct": {
             "net_orders_units": "+22%",
             "backlog_units": "+24%",
             "closings_units": "-17%",
-            "asp_dollars": "-100%"
+            "asp_dollars": "-5%"
           }
         },
         {
@@ -604,14 +604,14 @@
             "backlog_units": 1865.0,
             "community_count": 345.0,
             "closings_units": 2967.0,
-            "asp_dollars": 373.0,
+            "asp_dollars": 373000.0,
             "gross_margin_pct": 17.5
           },
           "qoq_pct": {
             "net_orders_units": "+14%",
             "backlog_units": "+60%",
             "closings_units": "-21%",
-            "asp_dollars": "-100%"
+            "asp_dollars": "-1%"
           }
         },
         {
@@ -723,6 +723,8 @@
         {
           "ticker": "AIV",
           "filing_date": "2026-03-02",
+          "fiscal_year_end": "2025-12-31",
+          "accession_no": "0001193125-26-085547",
           "home_count": 2024.0,
           "avg_monthly_rent": null,
           "occupancy_pct": null
@@ -730,6 +732,8 @@
         {
           "ticker": "AMH",
           "filing_date": "2026-02-20",
+          "fiscal_year_end": "2025-12-31",
+          "accession_no": "0001562401-26-000010",
           "home_count": 57573.0,
           "avg_monthly_rent": null,
           "occupancy_pct": null
@@ -737,6 +741,8 @@
         {
           "ticker": "AVB",
           "filing_date": "2026-02-27",
+          "fiscal_year_end": "2025-12-31",
+          "accession_no": "0000915912-26-000004",
           "home_count": 98694.0,
           "avg_monthly_rent": null,
           "occupancy_pct": 90.0
@@ -744,6 +750,8 @@
         {
           "ticker": "BRT",
           "filing_date": "2026-03-12",
+          "fiscal_year_end": "2025-12-31",
+          "accession_no": "0000014846-26-000007",
           "home_count": null,
           "avg_monthly_rent": null,
           "occupancy_pct": 93.8
@@ -751,6 +759,8 @@
         {
           "ticker": "CPT",
           "filing_date": "2026-02-12",
+          "fiscal_year_end": "2025-12-31",
+          "accession_no": "0001628280-26-007697",
           "home_count": 59921.0,
           "avg_monthly_rent": 2006.0,
           "occupancy_pct": 95.0
@@ -758,6 +768,8 @@
         {
           "ticker": "ELME",
           "filing_date": "2026-04-28",
+          "fiscal_year_end": "2025-12-31",
+          "accession_no": "0000104894-26-000015",
           "home_count": null,
           "avg_monthly_rent": null,
           "occupancy_pct": null
@@ -765,6 +777,8 @@
         {
           "ticker": "ELS",
           "filing_date": "2026-02-17",
+          "fiscal_year_end": "2025-12-31",
+          "accession_no": "0001628280-26-008722",
           "home_count": 453.0,
           "avg_monthly_rent": null,
           "occupancy_pct": null
@@ -772,6 +786,8 @@
         {
           "ticker": "EQR",
           "filing_date": "2026-02-13",
+          "fiscal_year_end": "2025-12-31",
+          "accession_no": "0001193125-26-051433",
           "home_count": 85190.0,
           "avg_monthly_rent": null,
           "occupancy_pct": 99.1
@@ -779,6 +795,8 @@
         {
           "ticker": "ESS",
           "filing_date": "2026-02-20",
+          "fiscal_year_end": "2025-12-31",
+          "accession_no": "0000920522-26-000003",
           "home_count": 63077.0,
           "avg_monthly_rent": null,
           "occupancy_pct": 85.0
@@ -786,6 +804,8 @@
         {
           "ticker": "INVH",
           "filing_date": "2026-02-19",
+          "fiscal_year_end": "2025-12-31",
+          "accession_no": "0001687229-26-000016",
           "home_count": 86192.0,
           "avg_monthly_rent": null,
           "occupancy_pct": 96.8
@@ -793,6 +813,8 @@
         {
           "ticker": "IRT",
           "filing_date": "2026-02-17",
+          "fiscal_year_end": "2025-12-31",
+          "accession_no": "0001437749-26-004376",
           "home_count": 33462.0,
           "avg_monthly_rent": null,
           "occupancy_pct": 90.0
@@ -800,6 +822,8 @@
         {
           "ticker": "MAA",
           "filing_date": "2026-02-06",
+          "fiscal_year_end": "2025-12-31",
+          "accession_no": "0001193125-26-041208",
           "home_count": 5995.0,
           "avg_monthly_rent": null,
           "occupancy_pct": 90.0
@@ -807,6 +831,8 @@
         {
           "ticker": "MRP",
           "filing_date": "2026-03-02",
+          "fiscal_year_end": "2025-12-31",
+          "accession_no": "0002017206-26-000002",
           "home_count": 142139.0,
           "avg_monthly_rent": null,
           "occupancy_pct": null
@@ -814,6 +840,8 @@
         {
           "ticker": "NXRT",
           "filing_date": "2026-02-26",
+          "fiscal_year_end": "2025-12-31",
+          "accession_no": "0001193125-26-077343",
           "home_count": null,
           "avg_monthly_rent": null,
           "occupancy_pct": null
@@ -821,6 +849,8 @@
         {
           "ticker": "SUI",
           "filing_date": "2026-02-25",
+          "fiscal_year_end": "2025-12-31",
+          "accession_no": "0000912593-26-000086",
           "home_count": 10923.0,
           "avg_monthly_rent": 1384.0,
           "occupancy_pct": 97.9
@@ -828,6 +858,8 @@
         {
           "ticker": "UDR",
           "filing_date": "2026-02-17",
+          "fiscal_year_end": "2025-12-31",
+          "accession_no": "0000074208-26-000013",
           "home_count": 55240.0,
           "avg_monthly_rent": null,
           "occupancy_pct": 90.0
@@ -835,6 +867,8 @@
         {
           "ticker": "UMH",
           "filing_date": "2026-02-25",
+          "fiscal_year_end": "2025-12-31",
+          "accession_no": "0001493152-26-008042",
           "home_count": 19400.0,
           "avg_monthly_rent": null,
           "occupancy_pct": 88.1
@@ -842,6 +876,8 @@
         {
           "ticker": "VRE",
           "filing_date": "2026-03-23",
+          "fiscal_year_end": "2025-12-31",
+          "accession_no": "0001628280-26-020558",
           "home_count": null,
           "avg_monthly_rent": null,
           "occupancy_pct": null
@@ -849,6 +885,8 @@
         {
           "ticker": "VTR",
           "filing_date": "2026-02-06",
+          "fiscal_year_end": "2025-12-31",
+          "accession_no": "0000740260-26-000006",
           "home_count": 1409.0,
           "avg_monthly_rent": null,
           "occupancy_pct": null
@@ -856,6 +894,8 @@
         {
           "ticker": "WELL",
           "filing_date": "2026-02-12",
+          "fiscal_year_end": "2025-12-31",
+          "accession_no": "0000766704-26-000010",
           "home_count": 2500.0,
           "avg_monthly_rent": null,
           "occupancy_pct": null

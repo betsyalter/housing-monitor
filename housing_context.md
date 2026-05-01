@@ -1,5 +1,5 @@
 # US Housing Monitor — Daily Context
-_Last updated: 2026-05-01 16:30 UTC_
+_Last updated: 2026-05-01 16:36 UTC_
 
 
 ## Weekly Synthesis — 2026-05-04
@@ -98,14 +98,14 @@ Latest reported quarter per builder. ΔQ = quarter-over-quarter change.
 | CCS | Q1 2026 | 2,379 | -12% | 1,155 | +46% | n/a | 2,013 | $364,700 | 316 |
 | CVCO | Q3 FY2026 | n/a |  | n/a |  | n/a | 5,221 | $106,971 | n/a |
 | DFH | Q1 2026 | 2,408 | +37% | 2,377 | +29% | 7.5% | 1,870 | $447,753 | 332 |
-| DHI | Q2 FY2026 | 24,992 | +37% | 16,882 | +48% | 16.0% | 19,486 | $361 | n/a |
-| GRBK | Q4 2025 | 883 | -2% | 520 | -23% | 7.6% | 1,038 | $530 | 101 |
+| DHI | Q2 FY2026 | 24,992 | +37% | 16,882 | +48% | 16.0% | 19,486 | $361,000 | n/a |
+| GRBK | Q4 2025 | 883 | -2% | 520 | -23% | 7.6% | 1,038 | $530,000 | 101 |
 | HOV | Q1 FY2026 | 1,242 | +3% | 1,335 | +7% | 14.0% | 1,099 | $523,894 | 131 |
 | KBH | Q1 2026 | 2,846 | +18% | 3,604 | +15% | 12.0% | 2,370 | $452,100 | 274 |
 | LEN | Q1 2026 | 18,515 | -8% | 15,588 | +12% | n/a | 16,863 | $374,000 | 1,678 |
 | LGIH | Q1 2026 | 1,221 |  | 1,699 | +22% | 45.6% | 881 | $362,924 | 142 |
-| MHO | Q1 2026 | 2,350 | +22% | 2,245 | +24% | 8.0% | 1,914 | $459 | 231 |
-| MTH | Q1 2026 | 3,664 | +14% | 1,865 | +60% | n/a | 2,967 | $373 | 345 |
+| MHO | Q1 2026 | 2,350 | +22% | 2,245 | +24% | 8.0% | 1,914 | $459,000 | 231 |
+| MTH | Q1 2026 | 3,664 | +14% | 1,865 | +60% | n/a | 2,967 | $373,000 | 345 |
 | NVR | Q1 2026 | 5,738 | +16% | 10,171 | +20% | 14.0% | 4,015 | $457,000 | 432 |
 | PHM | Q1 2026 | 8,034 | +25% | 10,427 | +23% | n/a | 6,102 | $542,000 | 1,043 |
 | SKY | Q3 FY2026 | n/a |  | n/a |  | n/a | 6,270 | $99,300 | n/a |
@@ -115,30 +115,30 @@ Latest reported quarter per builder. ΔQ = quarter-over-quarter change.
 
 ## REIT Supply Snapshot
 
-_⚠ home_count is best-effort regex parsing of 10-K Item 2/7. Verify before relying on for material decisions. Geographic breakdown is not yet parsed (Script 06c TODO)._
+_⚠ home_count is best-effort regex parsing of 10-K Item 2/7. Verify before relying on for material decisions. Geographic breakdown via Haiku extraction is deferred (Script 06c on disk; not currently run)._
 
-| Ticker | Filing Date | Home Count | Avg Rent | Occupancy |
-|--------|-------------|-----------:|---------:|----------:|
-| AIV | 2026-03-02 | 2,024 | $n/a | n/a |
-| AMH | 2026-02-20 | 57,573 | $n/a | n/a |
-| AVB | 2026-02-27 | 98,694 | $n/a | 90.0% |
-| BRT | 2026-03-12 | n/a | $n/a | 93.8% |
-| CPT | 2026-02-12 | 59,921 | $2,006 | 95.0% |
-| ELME | 2026-04-28 | n/a | $n/a | n/a |
-| ELS | 2026-02-17 | 453 | $n/a | n/a |
-| EQR | 2026-02-13 | 85,190 | $n/a | 99.1% |
-| ESS | 2026-02-20 | 63,077 | $n/a | 85.0% |
-| INVH | 2026-02-19 | 86,192 | $n/a | 96.8% |
-| IRT | 2026-02-17 | 33,462 | $n/a | 90.0% |
-| MAA | 2026-02-06 | 5,995 | $n/a | 90.0% |
-| MRP | 2026-03-02 | 142,139 | $n/a | n/a |
-| NXRT | 2026-02-26 | n/a | $n/a | n/a |
-| SUI | 2026-02-25 | 10,923 | $1,384 | 97.9% |
-| UDR | 2026-02-17 | 55,240 | $n/a | 90.0% |
-| UMH | 2026-02-25 | 19,400 | $n/a | 88.1% |
-| VRE | 2026-03-23 | n/a | $n/a | n/a |
-| VTR | 2026-02-06 | 1,409 | $n/a | n/a |
-| WELL | 2026-02-12 | 2,500 | $n/a | n/a |
+| Ticker | Filing Date | Period End | Home Count | Avg Rent | Occupancy |
+|--------|-------------|------------|-----------:|---------:|----------:|
+| AIV | 2026-03-02 | 2025-12-31 | 2,024 | $n/a | n/a |
+| AMH | 2026-02-20 | 2025-12-31 | 57,573 | $n/a | n/a |
+| AVB | 2026-02-27 | 2025-12-31 | 98,694 | $n/a | 90.0% |
+| BRT | 2026-03-12 | 2025-12-31 | n/a | $n/a | 93.8% |
+| CPT | 2026-02-12 | 2025-12-31 | 59,921 | $2,006 | 95.0% |
+| ELME | 2026-04-28 | 2025-12-31 | n/a | $n/a | n/a |
+| ELS | 2026-02-17 | 2025-12-31 | 453 | $n/a | n/a |
+| EQR | 2026-02-13 | 2025-12-31 | 85,190 | $n/a | 99.1% |
+| ESS | 2026-02-20 | 2025-12-31 | 63,077 | $n/a | 85.0% |
+| INVH | 2026-02-19 | 2025-12-31 | 86,192 | $n/a | 96.8% |
+| IRT | 2026-02-17 | 2025-12-31 | 33,462 | $n/a | 90.0% |
+| MAA | 2026-02-06 | 2025-12-31 | 5,995 | $n/a | 90.0% |
+| MRP | 2026-03-02 | 2025-12-31 | 142,139 | $n/a | n/a |
+| NXRT | 2026-02-26 | 2025-12-31 | n/a | $n/a | n/a |
+| SUI | 2026-02-25 | 2025-12-31 | 10,923 | $1,384 | 97.9% |
+| UDR | 2026-02-17 | 2025-12-31 | 55,240 | $n/a | 90.0% |
+| UMH | 2026-02-25 | 2025-12-31 | 19,400 | $n/a | 88.1% |
+| VRE | 2026-03-23 | 2025-12-31 | n/a | $n/a | n/a |
+| VTR | 2026-02-06 | 2025-12-31 | 1,409 | $n/a | n/a |
+| WELL | 2026-02-12 | 2025-12-31 | 2,500 | $n/a | n/a |
 
 
 ## Price Action — Universe
@@ -225,7 +225,7 @@ _Pearson r between monthly log-returns and monthly bps change in 30yr mortgage r
 
 ## Recent High-Signal News (last 24h)
 
-_0 immediate, 0 digest-priority, 763 log-only since 2026-04-30 16:30 UTC._
+_0 immediate, 0 digest-priority, 764 log-only since 2026-04-30 16:36 UTC._
 
 _No high-signal news in the last 24 hours._
 
