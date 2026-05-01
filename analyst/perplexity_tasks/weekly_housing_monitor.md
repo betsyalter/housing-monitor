@@ -409,7 +409,15 @@ ask which factor(s) it touches, then which direction.
 
 ## 7. Output schema
 
-### 7.1 Markdown report — strict format
+### 7.1 Markdown report — minimum schema (extend when warranted)
+
+The sections below are **required** in every report. You may **add**
+sections, tables, or analytical asides when they improve clarity — for
+example: a subsector basket dispersion table, a builder cohort QoQ
+matrix, a correlation rankings cross-check, a sentiment-cycle position
+read. Use these additions when the underlying data has structure worth
+surfacing. **Do not omit required sections** even if they're a single
+line ("no event") — silence on a section is itself a signal.
 
 ```markdown
 # Weekly Housing Monitor — <date YYYY-MM-DD>
@@ -603,12 +611,28 @@ These are blocking — the report should self-flag if any are violated.
 4. **Direction discipline.** A factor scorecard direction of `+` or `−`
    requires a specific event citation. Default to `0` for factors that
    didn't move materially.
-5. **Length cap.** Markdown report must be ≤ 1,500 words. Tables don't
-   count toward the cap, but the prose body does. If you're approaching
-   the cap, cut the least-load-bearing section.
+5. **Length is quality-driven, not capped.** Write what the substance
+   warrants. A week with a major signal cluster (FOMC + earnings cohort
+   pattern + policy event) deserves a long report; a quiet week
+   deserves a short one. There is no upper bound — but the principal
+   reads every word, so any sentence that doesn't pull weight should
+   be cut. If two sections say substantially the same thing, merge them.
 6. **No trade recommendations.** No language of the form "buy X" or
    "short Y." The analyst surfaces signal; the principal positions.
 7. **No hallucinated numbers.** If you can't cite, don't cite.
+8. **Named-person attributions require a primary-source URL.** Any
+   quote, paraphrase, or position attributed to a specific person
+   (Powell, Yun, Pulte, a CEO, a sell-side analyst) must include a
+   reachable URL to where that person actually said it. If the
+   attribution is from memory or general knowledge with no link
+   reachable, mark it `[unsourced]` inline — better to show your
+   confidence calibration than to imply a citation you can't produce.
+9. **Framework SHA must be retrieved, not invented.** Run
+   `git log -1 --format=%H -- analyst/five_factor_framework.md` (via
+   the gh CLI working tree) to get the actual SHA. If retrieval fails,
+   write `framework_version: unknown (could not retrieve)` — never
+   invent a SHA. Same rule for `factor_weights_last_updated` (read
+   the YAML's `last_updated` field directly).
 
 ---
 
