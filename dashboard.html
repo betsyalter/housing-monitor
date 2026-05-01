@@ -227,6 +227,10 @@ footer { margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border
   <div class="basket-bars" id="basket-bars"></div>
 </div>
 
+<h2>Universe Prices (EOD)</h2>
+<div class="muted" id="price-table-meta"></div>
+<div id="price-table-wrap"></div>
+
 <!-- Apartment REIT short basket — composition (members, conviction tier, rationale) -->
 <div id="apartment-short-basket-card"></div>
 
@@ -327,6 +331,7 @@ function render(d) {
   renderSpring(sec.coiled_spring);
   renderCorrelations(sec.correlations);
   renderBaskets(sec.price_action);
+  renderPriceTable(sec.price_action);
   renderBuilders(sec.homebuilders);
   renderReits(sec.reits);
   renderNews(sec.news);
@@ -811,6 +816,93 @@ function renderBaskets(s) {
       <div class="v muted">${fmtPct(b.median_1w_pct)}</div>
     </div>`;
   }).join("") + `<div class="muted" style="margin-top:8px">Bar = median 1-month return; right of center text = 1-month, left = 1-week</div>`;
+}
+
+// ── universe prices (full 262-ticker EOD table) ────────────────────
+function renderPriceTable(s) {
+  if (!s || !s.rows || s.rows.length === 0) {
+    missingBlock("price-table-wrap",
+      "Per-ticker price data unavailable. Run scripts/04_fmp_prices.py.");
+    return;
+  }
+  const meta = el("price-table-meta");
+  if (meta) {
+    const asOf = s.rows.map(r => r.as_of).filter(Boolean).sort().pop() || "";
+    meta.textContent = `${s.rows.length} tickers priced · As of ${asOf} · sortable / filterable`;
+  }
+  // Color cell green/red by signed pct return.
+  const pctFmt = (cell) => {
+    const v = cell.getValue();
+    if (v == null || isNaN(v)) return "—";
+    return (v >= 0 ? "+" : "") + Number(v).toFixed(2) + "%";
+  };
+  const pctColor = (cell) => {
+    const v = cell.getValue();
+    if (v == null || isNaN(v)) return "";
+    const a = Math.min(0.6, Math.abs(v) / 8);
+    return v >= 0 ? `background: rgba(63,185,80,${a})` : `background: rgba(248,81,73,${a})`;
+  };
+  // Volume formatter — millions if >= 1M, else thousands.
+  const volFmt = (cell) => {
+    const v = cell.getValue();
+    if (v == null || isNaN(v)) return "—";
+    if (v >= 1e6) return (v / 1e6).toFixed(2) + "M";
+    if (v >= 1e3) return (v / 1e3).toFixed(0) + "k";
+    return Number(v).toLocaleString();
+  };
+  const volRatioFmt = (cell) => {
+    const v = cell.getValue();
+    if (v == null || isNaN(v)) return "—";
+    return v.toFixed(2) + "×";
+  };
+  const volRatioColor = (cell) => {
+    const v = cell.getValue();
+    if (v == null || isNaN(v)) return "";
+    if (v >= 2) return "background: rgba(210,153,34,0.45); color: #000";  // amber on 2×+
+    if (v >= 1.5) return "background: rgba(210,153,34,0.25)";
+    return "";
+  };
+
+  new Tabulator("#price-table-wrap", {
+    data: s.rows, height: "560px", layout: "fitColumns", pagination: false,
+    initialSort: [{column: "ret_1d", dir: "desc"}],
+    columns: [
+      {title: "Ticker", field: "ticker", width: 100, frozen: true,
+        headerFilter: "input",
+        formatter: c => `<a href="https://finance.yahoo.com/quote/${c.getValue()}" target="_blank">${c.getValue()}</a>`},
+      {title: "Price", field: "price", widthGrow: 1, hozAlign: "right",
+        sorter: "number",
+        formatter: c => c.getValue() == null ? "—" : fmtDollar(c.getValue(), 2)},
+      {title: "Day change", field: "ret_1d", widthGrow: 1, hozAlign: "right",
+        sorter: "number", formatter: pctFmt},
+      {title: "Volume", field: "volume", widthGrow: 1, hozAlign: "right",
+        sorter: "number", formatter: volFmt},
+      {title: "Vol % of 30d avg", field: "volume_vs_30d", widthGrow: 1, hozAlign: "right",
+        sorter: "number",
+        formatter: c => {
+          const v = c.getValue();
+          if (v == null || isNaN(v)) return "—";
+          return (v * 100).toFixed(0) + "%";
+        }},
+    ],
+    rowFormatter: (row) => {
+      const data = row.getData();
+      const cells = row.getCells();
+      cells.forEach(cell => {
+        const f = cell.getColumn().getField();
+        const v = data[f];
+        if (f === "ret_1d" && v != null && !isNaN(v)) {
+          const a = Math.min(0.6, Math.abs(v) / 8);
+          cell.getElement().style.background =
+            v >= 0 ? `rgba(63,185,80,${a})` : `rgba(248,81,73,${a})`;
+        }
+        if (f === "volume_vs_30d" && v != null && !isNaN(v)) {
+          if (v >= 2) cell.getElement().style.background = "rgba(210,153,34,0.45)";
+          else if (v >= 1.5) cell.getElement().style.background = "rgba(210,153,34,0.25)";
+        }
+      });
+    },
+  });
 }
 
 // ── homebuilders pulse ─────────────────────────────────────────────

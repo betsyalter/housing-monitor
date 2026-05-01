@@ -651,6 +651,8 @@ def section_price_action():
                               "run scripts/03_fmp_universe.py and scripts/04_fmp_prices.py"), state
 
     rows = []
+    today = pd.Timestamp.now(tz="UTC").normalize().tz_localize(None)
+    ytd_start = pd.Timestamp(year=today.year, month=1, day=1)
     for path in glob.glob(os.path.join(PRICES_DIR, "*.csv")):
         ticker = os.path.basename(path).replace(".csv", "")
         try:
@@ -658,17 +660,42 @@ def section_price_action():
             if p.empty or 'price' not in p.columns:
                 continue
             p['date'] = pd.to_datetime(p['date'])
-            p = p.sort_values('date')
+            p = p.sort_values('date').reset_index(drop=True)
             if len(p) < 6:
                 continue
             latest = p['price'].iloc[-1]
+            latest_date = p['date'].iloc[-1]
+            prior = p['price'].iloc[-2] if len(p) >= 2 else p['price'].iloc[0]
             week_ago = p['price'].iloc[-6] if len(p) >= 6 else p['price'].iloc[0]
             month_ago = p['price'].iloc[-22] if len(p) >= 22 else p['price'].iloc[0]
+            # YTD: first trading-day price >= Jan 1 current year. If no
+            # observation that early, fall back to oldest available.
+            ytd_obs = p[p['date'] >= ytd_start]
+            ytd_anchor = ytd_obs['price'].iloc[0] if not ytd_obs.empty else p['price'].iloc[0]
+
+            # Volume — Script 04 writes 'volume' column. 30-day rolling avg
+            # vs latest gives "unusual activity" signal.
+            vol_latest = None
+            vol_ratio = None
+            if 'volume' in p.columns:
+                v = pd.to_numeric(p['volume'], errors='coerce')
+                vol_latest = v.iloc[-1]
+                if len(v) >= 30:
+                    vol_avg_30d = v.iloc[-31:-1].mean()
+                    if vol_avg_30d and not pd.isna(vol_avg_30d) and vol_avg_30d > 0:
+                        vol_ratio = float(vol_latest / vol_avg_30d)
+                vol_latest = float(vol_latest) if not pd.isna(vol_latest) else None
+
             rows.append({
                 "ticker": ticker,
                 "price": float(latest),
+                "as_of": latest_date.strftime("%Y-%m-%d"),
+                "ret_1d": (latest / prior - 1) * 100 if prior else np.nan,
                 "ret_1w": (latest / week_ago - 1) * 100 if week_ago else np.nan,
                 "ret_1m": (latest / month_ago - 1) * 100 if month_ago else np.nan,
+                "ret_ytd": (latest / ytd_anchor - 1) * 100 if ytd_anchor else np.nan,
+                "volume": vol_latest,
+                "volume_vs_30d": vol_ratio,
             })
         except Exception:
             continue
@@ -730,6 +757,13 @@ def section_price_action():
     state["bottom_5_1w"] = bot.to_dict(orient="records")
     state["subsector_baskets"] = json_baskets
     state["n_universe_priced"] = len(pdf)
+
+    # Full per-ticker rows for the dashboard's universe-prices table.
+    full_cols = ["ticker", "tier", "subsector", "directional", "as_of",
+                 "price", "ret_1d", "ret_1w", "ret_1m", "ret_ytd",
+                 "volume", "volume_vs_30d"]
+    available = [c for c in full_cols if c in pdf.columns]
+    state["rows"] = pdf[available].to_dict(orient="records")
 
     return body, state
 
