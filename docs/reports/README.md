@@ -28,6 +28,14 @@ Third-party research drops Betsy uploaded for the deep-dive report. **Read these
 - **`Morningstar Equity Analyst Report DHI.pdf`** — Morningstar's view (different methodology — moat / fair-value framing).
 - **`Wells Fargo DHI Note 4-23-26.pdf`** — Wells Fargo sell-side post-print.
 
+## NVR (Tier 1, build-to-order — highest-margin model)
+
+Different operating model than DHI or TOL — NVR doesn't speculate on land, only builds when there's a signed contract. Lowest inventory risk, highest gross margin, but slowest to flex up when demand returns. Q1 2026 print was weak; sell-side flagging margin pressure and pricing adjustments.
+
+- **`2026-04-23-NVR.N-Truist Securities-NVR - 1Q26 Earnings - Stock Down On Margin Performance And D.pdf`** — Truist note on Q1 print, stock-down explanation focused on margin compression.
+- **`NVR, Inc._ Post-Call Notes_ We Believe 1Q Demand Slowed in March, Prompting Further Pricing Adjustments_ Slightly Raising Our Ests, PT_ Neutral.pdf`** — Post-call sell-side analysis. Notes March demand slowdown drove pricing adjustments.
+- **`NVR Final_ Weak 1Q Results, Estimates Moving Lower.pdf`** — Sell-side estimate cuts.
+
 ## TOL (Toll Brothers — Tier 1, luxury/move-up)
 
 Key counterweight to DHI's entry-level/volume thesis — TOL is positioned for higher-income, less rate-sensitive buyers. The TOL coverage cluster lets Wyatt write the **"market segmentation by income cohort"** angle of the deep dive.
@@ -40,10 +48,11 @@ Key counterweight to DHI's entry-level/volume thesis — TOL is positioned for h
 
 ## How to use these in the deep dive
 
-DHI is the volume leader; TOL is the move-up/luxury counterweight. Use both clusters as **calibration points** for what the Street is saying — confirms / disconfirms / extends Wyatt's Five-Factor Framework reads. Specifically:
+DHI = volume leader. TOL = move-up/luxury. NVR = high-margin build-to-order. **Three distinct operating models** in Tier 1, each with different rate-sensitivity. Use all three clusters as **calibration points** for what the Street is saying — confirms / disconfirms / extends Wyatt's Five-Factor Framework reads. Specifically:
 
-- The DHI sell-side notes likely have order/backlog/cancel commentary that maps directly to our `homebuilder_ops.csv` Q1 2026 data.
-- The TOL coverage anchors the **luxury/move-up cohort** segment of Step 2 (Demand Cohorts) — TOL ASP $977K vs DHI ASP $361K is a ~2.7x gap that maps directly to the bifurcating affordability story (per Apollo deck slides 31-32 on median buyer age).
+- The DHI / NVR / TOL notes have order/backlog/cancel commentary that maps directly to our `homebuilder_ops.csv` Q1 2026 data. Cross-checking these against our Haiku-extracted ops gives us a sell-side ground-truth for cohort patterns.
+- **The NVR weakness vs TOL strength is itself signal** — NVR's build-to-order model means they need confirmed contracts; weak Q1 demand hits them first. TOL's luxury cohort is more rate-insensitive and is reiterating guidance. Map this to Wyatt's Step 2 (Demand Cohorts) as the bifurcating affordability story.
+- TOL ASP ~$977K vs DHI ASP ~$361K vs NVR ASP ~$457K spans the affordability spectrum — direct support for the median-buyer-age findings in Apollo deck slides 31–32.
 - The HLMN/JELD/TOL multi-name note is useful for Step 3 (Value Chain) — building products vs homebuilders read.
 - The Morningstar fair-value framework is the right lens for the Stock-Scoring section (Step 5 of Part 12).
 - The Apollo deck is the **macro spine** for the Structural Map (Step 1) and Wave Position (Step 4) sections — its thesis-direction frames where we are in the cycle.
@@ -52,4 +61,4 @@ These materials are NOT a substitute for the framework — Wyatt's read is the v
 
 ## Coverage gaps
 
-We have heavy DHI + TOL coverage. Other Tier-1 builders (LEN, NVR, PHM, KBH, MTH, MHO) and the apartment REIT short basket (EQR, AVB, MAA, CPT, UDR, ESS) lack equivalent sell-side context. Wyatt: drop sell-side notes for those — especially the apartment REIT thesis — in this folder as `<source>_<ticker>_<date>.pdf` and re-run the README.
+We now have heavy DHI + TOL + NVR coverage spanning the three Tier-1 operating-model archetypes. Other Tier-1 builders (LEN, PHM, KBH, MTH, MHO) and the apartment REIT short basket (EQR, AVB, MAA, CPT, UDR, ESS) lack equivalent sell-side context. Wyatt: drop sell-side notes for those — especially the apartment REIT thesis — in this folder as `<source>_<ticker>_<date>.pdf` and re-run the README.
