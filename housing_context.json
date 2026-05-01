@@ -1,0 +1,1119 @@
+{
+  "generated_at": "2026-05-01 13:56 UTC",
+  "section_status": {
+    "macro": "ok",
+    "coiled_spring": "ok",
+    "homebuilders": "ok",
+    "reits": "ok",
+    "price_action": "ok",
+    "recent_8ks": "ok",
+    "insider": "ok"
+  },
+  "sections": {
+    "macro": {
+      "name": "macro",
+      "status": "ok",
+      "latest_observed": "2026-04-30",
+      "metrics": [
+        {
+          "metric": "mortgage_rate_30yr",
+          "label": "30yr Mortgage Rate",
+          "value": 6.3,
+          "delta_4w": -0.16000000000000014,
+          "as_of": "2026-04-30",
+          "days_stale": 1
+        },
+        {
+          "metric": "mortgage_rate_15yr",
+          "label": "15yr Mortgage Rate",
+          "value": 5.64,
+          "delta_4w": -0.1299999999999999,
+          "as_of": "2026-04-30",
+          "days_stale": 1
+        },
+        {
+          "metric": "existing_home_sales_saar",
+          "label": "Existing Home Sales (SAAR)",
+          "value": 3980000.0,
+          "delta_4w": -150000.0,
+          "as_of": "2026-03-01",
+          "days_stale": 61
+        },
+        {
+          "metric": "existing_home_inventory",
+          "label": "Active Listing Inventory",
+          "value": 964477.0,
+          "delta_4w": 49617.0,
+          "as_of": "2026-03-01",
+          "days_stale": 61
+        },
+        {
+          "metric": "new_home_sales",
+          "label": "New Home Sales",
+          "value": 587.0,
+          "delta_4w": -125.0,
+          "as_of": "2026-01-01",
+          "days_stale": 120
+        },
+        {
+          "metric": "median_home_price",
+          "label": "Median Home Price",
+          "value": 405300.0,
+          "delta_4w": -4800.0,
+          "as_of": "2025-10-01",
+          "days_stale": 212
+        },
+        {
+          "metric": "housing_starts_total",
+          "label": "Housing Starts",
+          "value": 1502.0,
+          "delta_4w": 146.0,
+          "as_of": "2026-03-01",
+          "days_stale": 61
+        },
+        {
+          "metric": "building_permits",
+          "label": "Building Permits",
+          "value": 1372.0,
+          "delta_4w": -166.0,
+          "as_of": "2026-03-01",
+          "days_stale": 61
+        },
+        {
+          "metric": "homeownership_rate",
+          "label": "Homeownership Rate",
+          "value": 65.3,
+          "delta_4w": -0.4000000000000057,
+          "as_of": "2026-01-01",
+          "days_stale": 120
+        },
+        {
+          "metric": "case_shiller_national",
+          "label": "Case-Shiller National",
+          "value": 332.098,
+          "delta_4w": 0.29700000000002547,
+          "as_of": "2026-02-01",
+          "days_stale": 89
+        }
+      ]
+    },
+    "coiled_spring": {
+      "name": "coiled_spring",
+      "status": "ok",
+      "inputs": {
+        "fhfa": "ok",
+        "scenarios": "ok",
+        "fred": "ok"
+      },
+      "current_30yr_rate": 6.3,
+      "pct_locked_below_current": 0.951,
+      "locked_below_millions": 48.3108,
+      "scenarios": [
+        {
+          "scenario_rate": 6.5,
+          "locked_millions": 41.5036,
+          "unlocked_vs_today_millions": 0.0,
+          "estimated_saar_uplift_k": 0.0
+        },
+        {
+          "scenario_rate": 6.25,
+          "locked_millions": 36.068,
+          "unlocked_vs_today_millions": 5.435600000000001,
+          "estimated_saar_uplift_k": 1521.9680000000003
+        },
+        {
+          "scenario_rate": 6.0,
+          "locked_millions": 36.068,
+          "unlocked_vs_today_millions": 5.435600000000001,
+          "estimated_saar_uplift_k": 1521.9680000000003
+        },
+        {
+          "scenario_rate": 5.75,
+          "locked_millions": 28.905199999999997,
+          "unlocked_vs_today_millions": 12.598400000000002,
+          "estimated_saar_uplift_k": 3527.552000000001
+        },
+        {
+          "scenario_rate": 5.5,
+          "locked_millions": 28.905199999999997,
+          "unlocked_vs_today_millions": 12.598400000000002,
+          "estimated_saar_uplift_k": 3527.552000000001
+        },
+        {
+          "scenario_rate": 5.25,
+          "locked_millions": 20.1676,
+          "unlocked_vs_today_millions": 21.336,
+          "estimated_saar_uplift_k": 5974.08
+        },
+        {
+          "scenario_rate": 5.0,
+          "locked_millions": 20.1676,
+          "unlocked_vs_today_millions": 21.336,
+          "estimated_saar_uplift_k": 5974.08
+        },
+        {
+          "scenario_rate": 4.75,
+          "locked_millions": 11.1252,
+          "unlocked_vs_today_millions": 30.3784,
+          "estimated_saar_uplift_k": 8505.952000000001
+        },
+        {
+          "scenario_rate": 4.5,
+          "locked_millions": 11.1252,
+          "unlocked_vs_today_millions": 30.3784,
+          "estimated_saar_uplift_k": 8505.952000000001
+        }
+      ]
+    },
+    "homebuilders": {
+      "name": "homebuilders",
+      "status": "ok",
+      "builders": [
+        {
+          "ticker": "BZH",
+          "fiscal_period": "Q2 FY2026",
+          "period_end_date": "2026-04-30",
+          "metrics": {
+            "net_orders_units": 1048.0,
+            "cancellation_rate_pct": 13.5,
+            "backlog_units": 1299.0,
+            "community_count": 169.0,
+            "closings_units": 757.0,
+            "asp_dollars": 525400.0,
+            "gross_margin_pct": 12.0
+          },
+          "qoq_pct": {
+            "net_orders_units": "+37%",
+            "backlog_units": "+29%",
+            "closings_units": "+8%",
+            "asp_dollars": "+2%"
+          }
+        },
+        {
+          "ticker": "CCS",
+          "fiscal_period": "Q1 2026",
+          "period_end_date": "2026-04-22",
+          "metrics": {
+            "net_orders_units": 2379.0,
+            "cancellation_rate_pct": null,
+            "backlog_units": 1155.0,
+            "community_count": 316.0,
+            "closings_units": 2013.0,
+            "asp_dollars": 364700.0,
+            "gross_margin_pct": 17.8
+          },
+          "qoq_pct": {
+            "net_orders_units": "-12%",
+            "backlog_units": "+46%",
+            "closings_units": "-34%",
+            "asp_dollars": "-1%"
+          }
+        },
+        {
+          "ticker": "CVCO",
+          "fiscal_period": "Q3 FY2026",
+          "period_end_date": "2026-01-29",
+          "metrics": {
+            "net_orders_units": null,
+            "cancellation_rate_pct": null,
+            "backlog_units": null,
+            "community_count": null,
+            "closings_units": 5221.0,
+            "asp_dollars": 106971.0,
+            "gross_margin_pct": 21.7
+          },
+          "qoq_pct": {
+            "net_orders_units": "",
+            "backlog_units": "",
+            "closings_units": "+1%",
+            "asp_dollars": "+4%"
+          }
+        },
+        {
+          "ticker": "DFH",
+          "fiscal_period": "Q1 2026",
+          "period_end_date": "2026-04-30",
+          "metrics": {
+            "net_orders_units": 2408.0,
+            "cancellation_rate_pct": 7.5,
+            "backlog_units": 2377.0,
+            "community_count": 332.0,
+            "closings_units": 1870.0,
+            "asp_dollars": 447753.0,
+            "gross_margin_pct": 14.5
+          },
+          "qoq_pct": {
+            "net_orders_units": "+37%",
+            "backlog_units": "+29%",
+            "closings_units": "-26%",
+            "asp_dollars": "-3%"
+          }
+        },
+        {
+          "ticker": "DHI",
+          "fiscal_period": "Q2 FY2026",
+          "period_end_date": "2026-04-21",
+          "metrics": {
+            "net_orders_units": 24992.0,
+            "cancellation_rate_pct": 16.0,
+            "backlog_units": 16882.0,
+            "community_count": null,
+            "closings_units": 19486.0,
+            "asp_dollars": 361.0,
+            "gross_margin_pct": 21.0
+          },
+          "qoq_pct": {
+            "net_orders_units": "+37%",
+            "backlog_units": "+48%",
+            "closings_units": "+9%",
+            "asp_dollars": "-1%"
+          }
+        },
+        {
+          "ticker": "GRBK",
+          "fiscal_period": "Q4 2025",
+          "period_end_date": "2026-02-25",
+          "metrics": {
+            "net_orders_units": 883.0,
+            "cancellation_rate_pct": 7.6,
+            "backlog_units": 520.0,
+            "community_count": 101.0,
+            "closings_units": 1038.0,
+            "asp_dollars": 530.0,
+            "gross_margin_pct": 29.4
+          },
+          "qoq_pct": {
+            "net_orders_units": "-2%",
+            "backlog_units": "-23%",
+            "closings_units": "+9%",
+            "asp_dollars": "+1%"
+          }
+        },
+        {
+          "ticker": "HOV",
+          "fiscal_period": "Q1 FY2026",
+          "period_end_date": "2026-02-25",
+          "metrics": {
+            "net_orders_units": 1242.0,
+            "cancellation_rate_pct": 14.0,
+            "backlog_units": 1335.0,
+            "community_count": 131.0,
+            "closings_units": 1099.0,
+            "asp_dollars": 523894.0,
+            "gross_margin_pct": 10.1
+          },
+          "qoq_pct": {
+            "net_orders_units": "+3%",
+            "backlog_units": "+7%",
+            "closings_units": "-28%",
+            "asp_dollars": "+2%"
+          }
+        },
+        {
+          "ticker": "KBH",
+          "fiscal_period": "Q1 2026",
+          "period_end_date": "2026-03-24",
+          "metrics": {
+            "net_orders_units": 2846.0,
+            "cancellation_rate_pct": 12.0,
+            "backlog_units": 3604.0,
+            "community_count": 274.0,
+            "closings_units": 2370.0,
+            "asp_dollars": 452100.0,
+            "gross_margin_pct": 15.3
+          },
+          "qoq_pct": {
+            "net_orders_units": "+18%",
+            "backlog_units": "+15%",
+            "closings_units": "-35%",
+            "asp_dollars": "-3%"
+          }
+        },
+        {
+          "ticker": "LEN",
+          "fiscal_period": "Q1 2026",
+          "period_end_date": "2026-03-12",
+          "metrics": {
+            "net_orders_units": 18515.0,
+            "cancellation_rate_pct": null,
+            "backlog_units": 15588.0,
+            "community_count": 1678.0,
+            "closings_units": 16863.0,
+            "asp_dollars": 374000.0,
+            "gross_margin_pct": 15.2
+          },
+          "qoq_pct": {
+            "net_orders_units": "-8%",
+            "backlog_units": "+12%",
+            "closings_units": "-27%",
+            "asp_dollars": "-3%"
+          }
+        },
+        {
+          "ticker": "LGIH",
+          "fiscal_period": "Q1 2026",
+          "period_end_date": "2026-04-28",
+          "metrics": {
+            "net_orders_units": 1221.0,
+            "cancellation_rate_pct": 45.6,
+            "backlog_units": 1699.0,
+            "community_count": 142.0,
+            "closings_units": 881.0,
+            "asp_dollars": 362924.0,
+            "gross_margin_pct": 18.7
+          },
+          "qoq_pct": {
+            "net_orders_units": "",
+            "backlog_units": "+22%",
+            "closings_units": "-32%",
+            "asp_dollars": "-0%"
+          }
+        },
+        {
+          "ticker": "MHO",
+          "fiscal_period": "Q1 2026",
+          "period_end_date": "2026-04-22",
+          "metrics": {
+            "net_orders_units": 2350.0,
+            "cancellation_rate_pct": 8.0,
+            "backlog_units": 2245.0,
+            "community_count": 231.0,
+            "closings_units": 1914.0,
+            "asp_dollars": 459.0,
+            "gross_margin_pct": 22.0
+          },
+          "qoq_pct": {
+            "net_orders_units": "+22%",
+            "backlog_units": "+24%",
+            "closings_units": "-17%",
+            "asp_dollars": "-100%"
+          }
+        },
+        {
+          "ticker": "MTH",
+          "fiscal_period": "Q1 2026",
+          "period_end_date": "2026-04-22",
+          "metrics": {
+            "net_orders_units": 3664.0,
+            "cancellation_rate_pct": null,
+            "backlog_units": 1865.0,
+            "community_count": 345.0,
+            "closings_units": 2967.0,
+            "asp_dollars": 373.0,
+            "gross_margin_pct": 17.5
+          },
+          "qoq_pct": {
+            "net_orders_units": "+14%",
+            "backlog_units": "+60%",
+            "closings_units": "-21%",
+            "asp_dollars": "-100%"
+          }
+        },
+        {
+          "ticker": "NVR",
+          "fiscal_period": "Q1 2026",
+          "period_end_date": "2026-04-22",
+          "metrics": {
+            "net_orders_units": 5738.0,
+            "cancellation_rate_pct": 14.0,
+            "backlog_units": 10171.0,
+            "community_count": 432.0,
+            "closings_units": 4015.0,
+            "asp_dollars": 457000.0,
+            "gross_margin_pct": 19.6
+          },
+          "qoq_pct": {
+            "net_orders_units": "+16%",
+            "backlog_units": "+20%",
+            "closings_units": "-29%",
+            "asp_dollars": "-2%"
+          }
+        },
+        {
+          "ticker": "PHM",
+          "fiscal_period": "Q1 2026",
+          "period_end_date": "2026-04-22",
+          "metrics": {
+            "net_orders_units": 8034.0,
+            "cancellation_rate_pct": null,
+            "backlog_units": 10427.0,
+            "community_count": 1043.0,
+            "closings_units": 6102.0,
+            "asp_dollars": 542000.0,
+            "gross_margin_pct": 24.4
+          },
+          "qoq_pct": {
+            "net_orders_units": "+25%",
+            "backlog_units": "+23%",
+            "closings_units": "-22%",
+            "asp_dollars": "-5%"
+          }
+        },
+        {
+          "ticker": "SKY",
+          "fiscal_period": "Q3 FY2026",
+          "period_end_date": "2026-02-03",
+          "metrics": {
+            "net_orders_units": null,
+            "cancellation_rate_pct": null,
+            "backlog_units": null,
+            "community_count": null,
+            "closings_units": 6270.0,
+            "asp_dollars": 99300.0,
+            "gross_margin_pct": 26.2
+          },
+          "qoq_pct": {
+            "net_orders_units": "",
+            "backlog_units": "",
+            "closings_units": "-5%",
+            "asp_dollars": "+1%"
+          }
+        },
+        {
+          "ticker": "TMHC",
+          "fiscal_period": "Q1 2026",
+          "period_end_date": "2026-04-22",
+          "metrics": {
+            "net_orders_units": 2914.0,
+            "cancellation_rate_pct": 10.0,
+            "backlog_units": 3465.0,
+            "community_count": 356.0,
+            "closings_units": 2268.0,
+            "asp_dollars": 578000.0,
+            "gross_margin_pct": 20.6
+          },
+          "qoq_pct": {
+            "net_orders_units": "+17%",
+            "backlog_units": "+23%",
+            "closings_units": "-31%",
+            "asp_dollars": "-3%"
+          }
+        },
+        {
+          "ticker": "TOL",
+          "fiscal_period": "Q1 FY2026",
+          "period_end_date": "2026-02-17",
+          "metrics": {
+            "net_orders_units": 2303.0,
+            "cancellation_rate_pct": 5.4,
+            "backlog_units": 5051.0,
+            "community_count": 445.0,
+            "closings_units": 1899.0,
+            "asp_dollars": 977000.0,
+            "gross_margin_pct": 24.8
+          },
+          "qoq_pct": {
+            "net_orders_units": "-11%",
+            "backlog_units": "+9%",
+            "closings_units": "-45%",
+            "asp_dollars": "-1%"
+          }
+        }
+      ]
+    },
+    "reits": {
+      "name": "reits",
+      "status": "ok",
+      "reits": [
+        {
+          "ticker": "AIV",
+          "filing_date": "2026-03-02",
+          "home_count": 2024.0,
+          "avg_monthly_rent": null,
+          "occupancy_pct": null
+        },
+        {
+          "ticker": "AMH",
+          "filing_date": "2026-02-20",
+          "home_count": 57573.0,
+          "avg_monthly_rent": null,
+          "occupancy_pct": null
+        },
+        {
+          "ticker": "AVB",
+          "filing_date": "2026-02-27",
+          "home_count": 98694.0,
+          "avg_monthly_rent": null,
+          "occupancy_pct": 90.0
+        },
+        {
+          "ticker": "BRT",
+          "filing_date": "2026-03-12",
+          "home_count": null,
+          "avg_monthly_rent": null,
+          "occupancy_pct": 93.8
+        },
+        {
+          "ticker": "CPT",
+          "filing_date": "2026-02-12",
+          "home_count": 59921.0,
+          "avg_monthly_rent": 2006.0,
+          "occupancy_pct": 95.0
+        },
+        {
+          "ticker": "ELME",
+          "filing_date": "2026-04-28",
+          "home_count": null,
+          "avg_monthly_rent": null,
+          "occupancy_pct": null
+        },
+        {
+          "ticker": "ELS",
+          "filing_date": "2026-02-17",
+          "home_count": 453.0,
+          "avg_monthly_rent": null,
+          "occupancy_pct": null
+        },
+        {
+          "ticker": "EQR",
+          "filing_date": "2026-02-13",
+          "home_count": 85190.0,
+          "avg_monthly_rent": null,
+          "occupancy_pct": 99.1
+        },
+        {
+          "ticker": "ESS",
+          "filing_date": "2026-02-20",
+          "home_count": 63077.0,
+          "avg_monthly_rent": null,
+          "occupancy_pct": 85.0
+        },
+        {
+          "ticker": "INVH",
+          "filing_date": "2026-02-19",
+          "home_count": 86192.0,
+          "avg_monthly_rent": null,
+          "occupancy_pct": 96.8
+        },
+        {
+          "ticker": "IRT",
+          "filing_date": "2026-02-17",
+          "home_count": 33462.0,
+          "avg_monthly_rent": null,
+          "occupancy_pct": 90.0
+        },
+        {
+          "ticker": "MAA",
+          "filing_date": "2026-02-06",
+          "home_count": 5995.0,
+          "avg_monthly_rent": null,
+          "occupancy_pct": 90.0
+        },
+        {
+          "ticker": "MRP",
+          "filing_date": "2026-03-02",
+          "home_count": 142139.0,
+          "avg_monthly_rent": null,
+          "occupancy_pct": null
+        },
+        {
+          "ticker": "NXRT",
+          "filing_date": "2026-02-26",
+          "home_count": null,
+          "avg_monthly_rent": null,
+          "occupancy_pct": null
+        },
+        {
+          "ticker": "SUI",
+          "filing_date": "2026-02-25",
+          "home_count": 10923.0,
+          "avg_monthly_rent": 1384.0,
+          "occupancy_pct": 97.9
+        },
+        {
+          "ticker": "UDR",
+          "filing_date": "2026-02-17",
+          "home_count": 55240.0,
+          "avg_monthly_rent": null,
+          "occupancy_pct": 90.0
+        },
+        {
+          "ticker": "UMH",
+          "filing_date": "2026-02-25",
+          "home_count": 19400.0,
+          "avg_monthly_rent": null,
+          "occupancy_pct": 88.1
+        },
+        {
+          "ticker": "VRE",
+          "filing_date": "2026-03-23",
+          "home_count": null,
+          "avg_monthly_rent": null,
+          "occupancy_pct": null
+        },
+        {
+          "ticker": "VTR",
+          "filing_date": "2026-02-06",
+          "home_count": 1409.0,
+          "avg_monthly_rent": null,
+          "occupancy_pct": null
+        },
+        {
+          "ticker": "WELL",
+          "filing_date": "2026-02-12",
+          "home_count": 2500.0,
+          "avg_monthly_rent": null,
+          "occupancy_pct": null
+        }
+      ]
+    },
+    "price_action": {
+      "name": "price_action",
+      "status": "ok",
+      "top_5_1w": [
+        {
+          "ticker": "RMAX",
+          "price": 10.69,
+          "ret_1w": 62.957317073170735,
+          "ret_1m": 85.59027777777777,
+          "tier": 1,
+          "subsector": "Title Insurance",
+          "directional": "Long"
+        },
+        {
+          "ticker": "SNBR",
+          "price": 3.005,
+          "ret_1w": 22.154471544715438,
+          "ret_1m": 66.94444444444443,
+          "tier": 2,
+          "subsector": "Home Furnishings",
+          "directional": "Long"
+        },
+        {
+          "ticker": "GNRC",
+          "price": 259.26,
+          "ret_1w": 18.7196629727997,
+          "ret_1m": 32.729227461219466,
+          "tier": 2,
+          "subsector": "Appliances",
+          "directional": "Long"
+        },
+        {
+          "ticker": "SXT",
+          "price": 113.61,
+          "ret_1w": 14.491585206086866,
+          "ret_1m": 31.432207311429906,
+          "tier": 5,
+          "subsector": "Specialty Chemicals",
+          "directional": "Long"
+        },
+        {
+          "ticker": "GOOGL",
+          "price": 384.8,
+          "ret_1w": 13.547168697807566,
+          "ret_1m": 33.81555153707052,
+          "tier": 5,
+          "subsector": "Internet/Platform",
+          "directional": "Long"
+        }
+      ],
+      "bottom_5_1w": [
+        {
+          "ticker": "LESL",
+          "price": 1.67,
+          "ret_1w": -27.705627705627712,
+          "ret_1m": 49.10714285714284,
+          "tier": 3,
+          "subsector": "Flooring/Pool",
+          "directional": "Long"
+        },
+        {
+          "ticker": "W",
+          "price": 63.93,
+          "ret_1w": -16.90927995840915,
+          "ret_1m": -14.99800558436377,
+          "tier": 2,
+          "subsector": "Home Furnishings",
+          "directional": "Long"
+        },
+        {
+          "ticker": "LMND",
+          "price": 56.68,
+          "ret_1w": -14.302993649833684,
+          "ret_1m": -9.572431397574988,
+          "tier": 1,
+          "subsector": "RE Brokerages",
+          "directional": "Long"
+        },
+        {
+          "ticker": "SITE",
+          "price": 126.07,
+          "ret_1w": -12.693905817174523,
+          "ret_1m": -5.288858838554589,
+          "tier": 2,
+          "subsector": "Building Products",
+          "directional": "Long"
+        },
+        {
+          "ticker": "BLDR",
+          "price": 79.08,
+          "ret_1w": -12.26980252939871,
+          "ret_1m": -3.9475282400097123,
+          "tier": 2,
+          "subsector": "Building Products",
+          "directional": "Long"
+        }
+      ],
+      "subsector_baskets": [
+        {
+          "basket": "Homebuilders (T1)",
+          "n": 18,
+          "median_1w_pct": -5.2328527499944375,
+          "median_1m_pct": 4.490960724990178
+        },
+        {
+          "basket": "SFR REITs (Short on unlock)",
+          "n": 5,
+          "median_1w_pct": 0.5903574942604184,
+          "median_1m_pct": 9.535714285714292
+        },
+        {
+          "basket": "Apartment REITs (Short on unlock)",
+          "n": 12,
+          "median_1w_pct": 2.9777443347900334,
+          "median_1m_pct": 8.738321954725116
+        },
+        {
+          "basket": "Mortgage Originators (T1)",
+          "n": 5,
+          "median_1w_pct": -0.1368853322101682,
+          "median_1m_pct": 3.3295194508009107
+        },
+        {
+          "basket": "Title Insurance (T1)",
+          "n": 5,
+          "median_1w_pct": 1.5133876600698537,
+          "median_1m_pct": 13.75446573562844
+        },
+        {
+          "basket": "RE Brokerages (T1)",
+          "n": 12,
+          "median_1w_pct": 0.11797752808988538,
+          "median_1m_pct": 7.496644807067487
+        },
+        {
+          "basket": "Building Products (T2)",
+          "n": 15,
+          "median_1w_pct": -5.00613223324785,
+          "median_1m_pct": 7.605711147721017
+        },
+        {
+          "basket": "Long basket (all tiers)",
+          "n": 224,
+          "median_1w_pct": -0.8847788521733346,
+          "median_1m_pct": 7.163504911393037
+        },
+        {
+          "basket": "Short-on-unlock basket",
+          "n": 18,
+          "median_1w_pct": 2.9777443347900334,
+          "median_1m_pct": 8.868107808067105
+        }
+      ],
+      "n_universe_priced": 262
+    },
+    "recent_8ks": {
+      "name": "recent_8ks",
+      "status": "ok",
+      "filings": [
+        {
+          "date": "2026-05-01",
+          "ticker": "TEX",
+          "items": "2.02|7.01|9.01",
+          "title": "Form 8-K - Current report - Item 2.02 Item 7.01 Item 9.01",
+          "url": "https://www.sec.gov/Archives/edgar/data/97216/000009721626000078/tex-20260501.htm"
+        },
+        {
+          "date": "2026-05-01",
+          "ticker": "NVT",
+          "items": "2.02|9.01",
+          "title": "Form 8-K - Current report - Item 2.02 Item 9.01",
+          "url": "https://www.sec.gov/Archives/edgar/data/1720635/000162828026029098/nvt-20260501.htm"
+        },
+        {
+          "date": "2026-05-01",
+          "ticker": "DE",
+          "items": "5.02|7.01|9.01",
+          "title": "Form 8-K - Current report - Item 5.02 Item 7.01 Item 9.01",
+          "url": "https://www.sec.gov/Archives/edgar/data/315189/000110465926053322/de-20260428x8k.htm"
+        },
+        {
+          "date": "2026-04-30",
+          "ticker": "BANR",
+          "items": "1.01|7.01|9.01",
+          "title": "Form 8-K - Current report - Item 1.01 Item 7.01 Item 9.01",
+          "url": "https://www.sec.gov/Archives/edgar/data/946673/000094667326000123/banr-20260430.htm"
+        },
+        {
+          "date": "2026-04-30",
+          "ticker": "BCC",
+          "items": "7.01|9.01",
+          "title": "Form 8-K - Current report - Item 7.01 Item 9.01",
+          "url": "https://www.sec.gov/Archives/edgar/data/1328581/000132858126000011/bcc-20260430.htm"
+        },
+        {
+          "date": "2026-04-30",
+          "ticker": "OPAD",
+          "items": "8.01|9.01",
+          "title": "Form 8-K - Current report - Item 8.01 Item 9.01",
+          "url": "https://www.sec.gov/Archives/edgar/data/1825024/000119312526197718/d255502d8k.htm"
+        },
+        {
+          "date": "2026-04-30",
+          "ticker": "UMH",
+          "items": "2.02|7.01|9.01",
+          "title": "Form 8-K - Current report - Item 2.02 Item 7.01 Item 9.01",
+          "url": "https://www.sec.gov/Archives/edgar/data/752642/000149315226020648/form8-k.htm"
+        },
+        {
+          "date": "2026-04-30",
+          "ticker": "WFC",
+          "items": "5.02|5.07|9.01",
+          "title": "Form 8-K - Current report - Item 5.02 Item 5.07 Item 9.01",
+          "url": "https://www.sec.gov/Archives/edgar/data/72971/000007297126000227/wfc-20260428.htm"
+        },
+        {
+          "date": "2026-04-30",
+          "ticker": "BOBS",
+          "items": "1.01|2.03|9.01",
+          "title": "Form 8-K - Current report - Item 1.01 Item 2.03 Item 9.01",
+          "url": "https://www.sec.gov/Archives/edgar/data/2085187/000162828026028946/bobs-20260429.htm"
+        },
+        {
+          "date": "2026-04-30",
+          "ticker": "FR",
+          "items": "5.07|7.01|9.01",
+          "title": "Form 8-K - Current report - Item 5.07 Item 7.01 Item 9.01",
+          "url": "https://www.sec.gov/Archives/edgar/data/921825/000092182526000057/fr-20260430.htm"
+        },
+        {
+          "date": "2026-04-30",
+          "ticker": "CPT",
+          "items": "2.02|9.01",
+          "title": "Form 8-K - Current report - Item 2.02 Item 9.01",
+          "url": "https://www.sec.gov/Archives/edgar/data/906345/000162828026028942/cpt-20260430.htm"
+        },
+        {
+          "date": "2026-04-30",
+          "ticker": "LDI",
+          "items": "1.01|1.02|2.03|9.01",
+          "title": "Form 8-K - Current report - Item 1.01 Item 1.02 Item 2.03 Item 9.01",
+          "url": "https://www.sec.gov/Archives/edgar/data/1831631/000183163126000052/ldi-20260427.htm"
+        },
+        {
+          "date": "2026-04-30",
+          "ticker": "HUN",
+          "items": "2.02|9.01",
+          "title": "Form 8-K - Current report - Item 2.02 Item 9.01",
+          "url": "https://www.sec.gov/Archives/edgar/data/1307954/000110465926053018/tm2613226d1_8k.htm"
+        },
+        {
+          "date": "2026-04-30",
+          "ticker": "MHK",
+          "items": "2.02|9.01",
+          "title": "Form 8-K - Current report - Item 2.02 Item 9.01",
+          "url": "https://www.sec.gov/Archives/edgar/data/851968/000085196826000015/mhk-20260430.htm"
+        },
+        {
+          "date": "2026-04-30",
+          "ticker": "BZH",
+          "items": "2.02|9.01",
+          "title": "Form 8-K - Current report - Item 2.02 Item 9.01",
+          "url": "https://www.sec.gov/Archives/edgar/data/915840/000091584026000040/bzh-20260430.htm"
+        },
+        {
+          "date": "2026-04-30",
+          "ticker": "TREE",
+          "items": "2.02|9.01",
+          "title": "Form 8-K - Current report - Item 2.02 Item 9.01",
+          "url": "https://www.sec.gov/Archives/edgar/data/1434621/000162828026028909/tree-20260430.htm"
+        },
+        {
+          "date": "2026-04-30",
+          "ticker": "FND",
+          "items": "2.02|8.01|9.01",
+          "title": "Form 8-K - Current report - Item 2.02 Item 8.01 Item 9.01",
+          "url": "https://www.sec.gov/Archives/edgar/data/1507079/000162828026028899/fnd-20260430.htm"
+        },
+        {
+          "date": "2026-04-30",
+          "ticker": "WY",
+          "items": "2.02|9.01",
+          "title": "Form 8-K - Current report - Item 2.02 Item 9.01",
+          "url": "https://www.sec.gov/Archives/edgar/data/106535/000119312526197281/wy-20260430.htm"
+        },
+        {
+          "date": "2026-04-30",
+          "ticker": "OPAD",
+          "items": "2.02|9.01",
+          "title": "Form 8-K - Current report - Item 2.02 Item 9.01",
+          "url": "https://www.sec.gov/Archives/edgar/data/1825024/000119312526197276/d112145d8k.htm"
+        },
+        {
+          "date": "2026-04-30",
+          "ticker": "AX",
+          "items": "2.02|9.01",
+          "title": "Form 8-K - Current report - Item 2.02 Item 9.01",
+          "url": "https://www.sec.gov/Archives/edgar/data/1299709/000129970926000034/ax-20260430.htm"
+        }
+      ],
+      "count_7d": 74
+    },
+    "insider": {
+      "name": "insider",
+      "status": "ok",
+      "transactions": [
+        {
+          "ticker": "HHH",
+          "date": "2026-04-23",
+          "name": "Pershing Square Capital Management, L.P.",
+          "type": "director, 10 percent owner: ",
+          "txn": "D",
+          "shares": 341033.0,
+          "price": 65.86,
+          "value": 22460433.38
+        },
+        {
+          "ticker": "HHH",
+          "date": "2026-04-23",
+          "name": "Pershing Square Capital Management, L.P.",
+          "type": "director, 10 percent owner: ",
+          "txn": "A",
+          "shares": 341033.0,
+          "price": 65.86,
+          "value": 22460433.38
+        },
+        {
+          "ticker": "RMAX",
+          "date": "2026-04-29",
+          "name": "Peterson Adam K",
+          "type": "other: See Footnote 6",
+          "txn": "D",
+          "shares": 632091.0,
+          "price": 9.84,
+          "value": 6219775.4399999995
+        },
+        {
+          "ticker": "RMAX",
+          "date": "2026-04-29",
+          "name": "Peterson Adam K",
+          "type": "other: See Footnote 6",
+          "txn": "D",
+          "shares": 493006.0,
+          "price": 10.97,
+          "value": 5408275.82
+        },
+        {
+          "ticker": "UWMC",
+          "date": "2026-04-20",
+          "name": "Mat Ishbia",
+          "type": "director, 10 percent owner, officer: President and CEO",
+          "txn": "D",
+          "shares": 1000574.0,
+          "price": 3.94,
+          "value": 3942261.56
+        },
+        {
+          "ticker": "UWMC",
+          "date": "2026-04-20",
+          "name": "Mat Ishbia",
+          "type": "director, 10 percent owner, officer: President and CEO",
+          "txn": "D",
+          "shares": 1000574.0,
+          "price": 3.93,
+          "value": 3932255.8200000003
+        },
+        {
+          "ticker": "UWMC",
+          "date": "2026-04-13",
+          "name": "Mat Ishbia",
+          "type": "director, 10 percent owner, officer: President and CEO",
+          "txn": "D",
+          "shares": 1000574.0,
+          "price": 3.91,
+          "value": 3912244.3400000003
+        },
+        {
+          "ticker": "UWMC",
+          "date": "2026-04-08",
+          "name": "Mat Ishbia",
+          "type": "director, 10 percent owner, officer: President and CEO",
+          "txn": "D",
+          "shares": 1000574.0,
+          "price": 3.87,
+          "value": 3872221.38
+        },
+        {
+          "ticker": "UWMC",
+          "date": "2026-04-22",
+          "name": "Mat Ishbia",
+          "type": "director, 10 percent owner, officer: President and CEO",
+          "txn": "D",
+          "shares": 1000574.0,
+          "price": 3.82,
+          "value": 3822192.6799999997
+        },
+        {
+          "ticker": "UWMC",
+          "date": "2026-04-27",
+          "name": "Mat Ishbia",
+          "type": "director, 10 percent owner, officer: President and CEO",
+          "txn": "D",
+          "shares": 1000574.0,
+          "price": 3.78,
+          "value": 3782169.7199999997
+        },
+        {
+          "ticker": "UWMC",
+          "date": "2026-04-15",
+          "name": "Mat Ishbia",
+          "type": "director, 10 percent owner, officer: President and CEO",
+          "txn": "D",
+          "shares": 1000574.0,
+          "price": 3.78,
+          "value": 3782169.7199999997
+        },
+        {
+          "ticker": "UWMC",
+          "date": "2026-04-20",
+          "name": "Mat Ishbia",
+          "type": "director, 10 percent owner, officer: President and CEO",
+          "txn": "D",
+          "shares": 1000574.0,
+          "price": 3.76,
+          "value": 3762158.2399999998
+        },
+        {
+          "ticker": "UWMC",
+          "date": "2026-04-27",
+          "name": "Mat Ishbia",
+          "type": "director, 10 percent owner, officer: President and CEO",
+          "txn": "D",
+          "shares": 1000574.0,
+          "price": 3.75,
+          "value": 3752152.5
+        },
+        {
+          "ticker": "UWMC",
+          "date": "2026-04-06",
+          "name": "Mat Ishbia",
+          "type": "director, 10 percent owner, officer: President and CEO",
+          "txn": "D",
+          "shares": 1000574.0,
+          "price": 3.73,
+          "value": 3732141.02
+        },
+        {
+          "ticker": "UWMC",
+          "date": "2026-04-15",
+          "name": "Mat Ishbia",
+          "type": "director, 10 percent owner, officer: President and CEO",
+          "txn": "D",
+          "shares": 1000574.0,
+          "price": 3.71,
+          "value": 3712129.54
+        }
+      ]
+    }
+  }
+}
