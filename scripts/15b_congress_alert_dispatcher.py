@@ -19,7 +19,12 @@ LOG_CSV = os.path.join(DATA_DIR, "congress_bill_log.csv")
 def load_log():
     if not os.path.exists(LOG_CSV):
         return None
-    return pd.read_csv(LOG_CSV)
+    # Force the bookkeeping columns to string dtype — if every row has a
+    # blank value, pandas infers float64 and `df.loc[..., col] = "..."` fails.
+    return pd.read_csv(
+        LOG_CSV,
+        dtype={"email_status": str, "email_sent_at_utc": str},
+    ).fillna({"email_status": "none", "email_sent_at_utc": ""})
 
 
 def save_log(df):
