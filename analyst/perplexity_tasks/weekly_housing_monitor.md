@@ -130,6 +130,66 @@ Always fetch fresh — do not cache between runs.
   rate-sensitive names per indicator. **Use this** to validate "X
   outperformed because thesis exposure" claims.
 
+### Deep-dive data inventory — what's reachable vs not
+
+**Reachable via GitHub raw URLs** (no credentials, just HTTPS GET):
+
+| File | Path | Use for |
+|---|---|---|
+| Daily structured snapshot | `housing_context.json` | Primary feed; latest values + 4w deltas |
+| Daily markdown mirror | `housing_context.md` | Human-readable narrative |
+| Dashboard | `dashboard.html` | Visual reference |
+| Full FRED time series | `data/fred_housing.csv` | Trend questions, multi-week trajectory |
+| FHFA mortgage distribution | `data/fhfa_distribution.csv` | Coiled-spring math input |
+| Coiled-spring scenarios | `data/coiled_spring_scenarios.csv` | Pre-computed unlock table |
+| 262-ticker universe | `data/fmp_tickers.csv` | Tier / subsector / directional metadata |
+| Full builder KPI history | `data/homebuilder_ops.csv` | 842 rows, 17 builders × 8 quarters — trend questions |
+| REIT property snapshot | `data/sec_reit_homes.csv` | Latest 10-K extracted home counts |
+| Five-factor framework | `analyst/five_factor_framework.md` | Re-read every run |
+| Factor weights | `analyst/factor_weights.yaml` | Current YAML state |
+| Apartment REIT basket | `analyst/apartment_reit_short_basket.md` | Tier 4 short thesis |
+| Short basket members (when sized) | `analyst/short_baskets.yaml` | Structured basket roster — may not exist yet |
+| News source quality tiers | `analyst/news_sources.yaml` | How Betsy's news pipeline scores sources |
+
+Raw URL pattern: `https://raw.githubusercontent.com/betsyalter/housing-monitor/main/<path>`
+
+**NOT reachable** (gitignored on the Mac mini, local-only — do not attempt
+to fetch):
+
+| What | Path | Why hidden |
+|---|---|---|
+| Per-ticker daily prices | `data/fmp_prices/{TICKER}.csv` | 262 files, ~5MB each, would bloat repo |
+| Per-ticker financials | `data/fmp_financials/{TICKER}.csv` | Same |
+| Earnings transcripts | `data/fmp_transcripts/{TICKER}.txt` | Same; also licensing concerns |
+| Insider trades | `data/fmp_insider/{TICKER}.csv` | Same |
+| Raw 10-K filings | `data/sec_filings/` | Multi-MB per filing |
+| Full 8-K stream | `data/sec_stream_log.csv` | Idempotent state file |
+| Full news stream | `data/news_stream_log.csv` | Same; high churn |
+| Full pairwise correlation matrix | `data/correlation_matrix.csv` | 5,467 rows — large; rankings are the digested view in JSON |
+
+**Implication for analytical depth.** This task's natural scope is the
+**digested-feed level**. For per-ticker deep dives (e.g., "quote a specific
+sentence from TMHC's last earnings call" or "show me INVH's exact Q1
+acquisitions"), use external APIs:
+
+- **FMP REST API** (`financialmodelingprep.com`) — needs `FMP_API_KEY`. If
+  the task is configured with a key, the agent can hit FMP for transcripts
+  / price detail / financials directly. If not, do not invent the content
+  — say "transcript content not accessible to this task profile" and
+  cite the public earnings press release URL instead.
+- **SEC EDGAR** (`sec.gov/cgi-bin/browse-edgar`) — public, no auth. The
+  agent can pull a filing URL and read the text. Always reachable.
+- **FRED API** — needs `FRED_API_KEY` for high-frequency series, but
+  `data/fred_housing.csv` is updated daily and covers the canonical 12-series
+  housing universe. Use the CSV unless you need a series not in it.
+- **NAR releases** (`nar.realtor/research-and-statistics`) — public.
+- **MBA weekly applications** (`mba.org/news-and-research/...`) — public,
+  Wednesday-released.
+
+The "external signal sources" table earlier in §4 is the operational list
+of what to check each week. The deep-dive data inventory above is for
+when you need to back up a specific claim with primary-source detail.
+
 ### Prior-week comparison
 - **Last week's report:** `output/perplexity/weekly/<previous_monday>.md`
   if it exists. Pull deltas.
