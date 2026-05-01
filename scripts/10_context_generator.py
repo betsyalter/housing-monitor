@@ -38,19 +38,19 @@ def _safe_read_csv(path, **kw):
         return None, f"error:{type(e).__name__}"
 
 
-def _fmt_num(x, decimals=0, suffix=""):
+def _fmt_num(x, decimals=0, suffix="", prefix=""):
     if x is None or (isinstance(x, float) and np.isnan(x)):
         return "n/a"
     if isinstance(x, (int, np.integer)):
-        return f"{x:,}{suffix}"
-    return f"{x:,.{decimals}f}{suffix}"
+        return f"{prefix}{x:,}{suffix}"
+    return f"{prefix}{x:,.{decimals}f}{suffix}"
 
 
-def _fmt_delta(x, decimals=2, suffix=""):
+def _fmt_delta(x, decimals=2, suffix="", prefix=""):
     if x is None or (isinstance(x, float) and np.isnan(x)):
         return "n/a"
-    sign = "+" if x >= 0 else ""
-    return f"{sign}{x:.{decimals}f}{suffix}"
+    sign = "+" if x >= 0 else "-"
+    return f"{sign}{prefix}{abs(x):,.{decimals}f}{suffix}"
 
 
 def _days_stale(date_or_iso):
@@ -87,17 +87,18 @@ def section_macro():
     rows = []
     json_rows = []
     latest_observed = None
-    for col, label, decimals, suffix, scale in [
-        ("mortgage_rate_30yr", "30yr Mortgage Rate", 2, "%", 1),
-        ("mortgage_rate_15yr", "15yr Mortgage Rate", 2, "%", 1),
-        ("existing_home_sales_saar", "Existing Home Sales (SAAR)", 0, "k units", 1),
-        ("existing_home_inventory", "Active Listing Inventory", 0, "", 1),
-        ("new_home_sales", "New Home Sales", 0, "k units", 1),
-        ("median_home_price", "Median Home Price", 0, " USD", 1),
-        ("housing_starts_total", "Housing Starts", 0, "k units", 1),
-        ("building_permits", "Building Permits", 0, "k units", 1),
-        ("homeownership_rate", "Homeownership Rate", 1, "%", 1),
-        ("case_shiller_national", "Case-Shiller National", 1, "", 1),
+    # Tuple: col, label, decimals, prefix, suffix, scale
+    for col, label, decimals, prefix, suffix, scale in [
+        ("mortgage_rate_30yr",       "30yr Mortgage Rate",         2, "",  "%",       1),
+        ("mortgage_rate_15yr",       "15yr Mortgage Rate",         2, "",  "%",       1),
+        ("existing_home_sales_saar", "Existing Home Sales (SAAR)", 0, "",  " k units", 0.001),
+        ("existing_home_inventory",  "Active Listing Inventory",   0, "",  "",        1),
+        ("new_home_sales",           "New Home Sales",             0, "",  " k units", 1),
+        ("median_home_price",        "Median Home Price",          0, "$", "",        1),
+        ("housing_starts_total",     "Housing Starts",             0, "",  " k units", 1),
+        ("building_permits",         "Building Permits",           0, "",  " k units", 1),
+        ("homeownership_rate",       "Homeownership Rate",         1, "",  "%",       1),
+        ("case_shiller_national",    "Case-Shiller National",      1, "",  "",        1),
     ]:
         if col not in df.columns:
             continue
@@ -115,10 +116,10 @@ def section_macro():
         delta = None
         if not prior.empty:
             delta = (latest[col] - prior.iloc[-1][col]) * scale
-        delta_str = _fmt_delta(delta, decimals, suffix.strip().replace("k units", "k").replace(" USD", ""))
+        delta_str = _fmt_delta(delta, decimals, suffix, prefix)
 
         rows.append(
-            f"| {label} | {_fmt_num(latest_val, decimals, suffix)} | {delta_str} | {latest_date} | {stale}d |"
+            f"| {label} | {_fmt_num(latest_val, decimals, suffix, prefix)} | {delta_str} | {latest_date} | {stale}d |"
         )
         json_rows.append({
             "metric": col, "label": label, "value": float(latest_val),
@@ -363,6 +364,50 @@ def section_price_action():
     return body, state
 
 
+def section_correlations():
+    """Read correlation_rankings.csv (output of Script 09); surface most rate-sensitive
+    names in markdown, embed full rankings into JSON for the dashboard to consume."""
+    df, status = _safe_read_csv(f"{DATA_DIR}/correlation_rankings.csv")
+    state = {"name": "correlations", "status": status}
+    if df is None:
+        return _missing_block("Rate Sensitivity Rankings",
+                              "correlation rankings not yet generated",
+                              "run scripts/09_correlation_engine.py"), state
+
+    body = "## Rate Sensitivity Rankings (5y trailing, monthly)\n\n"
+    body += ("_Pearson r between monthly log-returns and monthly bps change in 30yr "
+             "mortgage rate. Negative = stock falls when rates rise. Per Script 09._\n\n")
+
+    rate_df = df[df["indicator"] == "mortgage_rate_30yr"].copy()
+    if rate_df.empty:
+        body += "_No 30yr-rate rankings available — possibly all tickers below min-obs threshold._\n"
+        state["rankings_by_indicator"] = {}
+        return body, state
+
+    body += "**Most rate-sensitive longs (top 10 negative r):**\n\n"
+    body += "| Rank | Ticker | Subsector | r | n |\n|-----:|--------|-----------|----:|---:|\n"
+    bot = rate_df[rate_df["rank_side"] == "bottom"].sort_values("rank").head(10)
+    for _, r in bot.iterrows():
+        body += (f"| {int(r['rank'])} | {r['ticker']} | {r.get('subsector','')} | "
+                 f"{r['pearson_r']:+.3f} | {int(r['n_obs'])} |\n")
+
+    body += "\n**Rate-defensive (top 10 positive r):**\n\n"
+    body += "| Rank | Ticker | Subsector | r | n |\n|-----:|--------|-----------|----:|---:|\n"
+    top = rate_df[rate_df["rank_side"] == "top"].sort_values("rank").head(10)
+    for _, r in top.iterrows():
+        body += (f"| {int(r['rank'])} | {r['ticker']} | {r.get('subsector','')} | "
+                 f"{r['pearson_r']:+.3f} | {int(r['n_obs'])} |\n")
+
+    # Embed full rankings (all indicators, all ranks) into JSON for the dashboard
+    rankings_by_indicator = {}
+    for ind in df["indicator"].unique():
+        rankings_by_indicator[ind] = df[df["indicator"] == ind].to_dict(orient="records")
+    state["rankings_by_indicator"] = rankings_by_indicator
+    state["indicators_with_rankings"] = sorted(df["indicator"].unique().tolist())
+
+    return body, state
+
+
 def section_recent_8ks():
     df, status = _safe_read_csv(f"{DATA_DIR}/sec_stream_log.csv")
     state = {"name": "recent_8ks", "status": status}
@@ -480,7 +525,8 @@ def main():
     states = []
 
     for fn in [section_macro, section_coiled_spring, section_homebuilders,
-               section_reits, section_price_action, section_recent_8ks, section_insider]:
+               section_reits, section_price_action, section_correlations,
+               section_recent_8ks, section_insider]:
         try:
             md, state = fn()
             md_parts.append(md)
