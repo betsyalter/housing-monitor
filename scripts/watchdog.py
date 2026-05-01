@@ -126,13 +126,18 @@ def check_fred_freshness():
 
     failures = []
     # cadence per column (max staleness in days before flagging)
+    # Threshold = max expected days between release dates + buffer for end-of-cycle.
+    # NAR/Census monthly series typically release 22nd of following month — so a
+    # March reading (released April 22) is legitimately 30-50 days old at any given
+    # time. Threshold = 75d catches genuine pipeline failure without firing on
+    # natural release cadence gaps.
     cadence = {
-        "mortgage_rate_30yr": 14,    # Freddie Mac weekly
-        "existing_home_sales_saar": 60,  # NAR monthly + reporting lag
-        "housing_starts_total": 60,
-        "building_permits": 60,
-        "median_home_price": 90,     # quarterly
-        "case_shiller_national": 90, # 2-month lag
+        "mortgage_rate_30yr": 14,         # Freddie Mac weekly
+        "existing_home_sales_saar": 75,   # NAR monthly, ~22nd of following month
+        "housing_starts_total": 75,       # Census monthly
+        "building_permits": 75,           # Census monthly
+        "median_home_price": 120,         # NAR monthly but historically variable
+        "case_shiller_national": 120,     # 2-month publication lag, monthly
     }
     today = pd.Timestamp.now()
     for col, max_days in cadence.items():
