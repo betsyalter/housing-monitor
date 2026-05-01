@@ -133,12 +133,31 @@ def classify(row, universe):
     return "low", ""
 
 
+def _filed_str(row):
+    """Coerce row['filed_at'] (pandas Timestamp or str) into ISO string."""
+    v = row.get("filed_at", "")
+    if pd.isna(v):
+        return ""
+    if hasattr(v, "strftime"):
+        return v.strftime("%Y-%m-%d %H:%M %Z").strip()
+    return str(v)
+
+
+def _filed_date(row):
+    v = row.get("filed_at", "")
+    if pd.isna(v):
+        return ""
+    if hasattr(v, "strftime"):
+        return v.strftime("%Y-%m-%d")
+    return str(v)[:10]
+
+
 def format_high_email(row, reason):
     ticker = row.get("ticker", "?")
     items = row.get("item_codes", "")
     title = (row.get("title", "") or "")[:60]
     company = row.get("company_name", "")
-    filed_at = row.get("filed_at", "")
+    filed_at = _filed_str(row)
     excerpt = (row.get("excerpt", "") or "")[:600]
     primary = row.get("primary_doc_url", "")
     filing = row.get("filing_url", "")
@@ -166,9 +185,9 @@ def format_digest_email(rows_with_reasons):
         ticker = row.get("ticker", "?")
         items = row.get("item_codes", "")
         title = (row.get("title", "") or "")[:80]
-        filed_at = row.get("filed_at", "")
+        filed_at = _filed_date(row)
         primary = row.get("primary_doc_url", "")
-        lines.append(f"• {filed_at[:10]} [{ticker}] items {items} — {title}")
+        lines.append(f"• {filed_at} [{ticker}] items {items} — {title}")
         lines.append(f"    Trigger: {reason}")
         lines.append(f"    Doc: {primary}\n")
     return subject, "\n".join(lines)
