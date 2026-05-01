@@ -17,7 +17,7 @@ if not os.path.exists(LOG_CSV):
     print(f"Log not found: {LOG_CSV}")
     sys.exit(1)
 
-df = pd.read_csv(LOG_CSV)
+df = pd.read_csv(LOG_CSV).fillna("")
 print(f"Total rows: {len(df)}")
 print(f"\n=== STREAM BREAKDOWN ===")
 print(df["stream"].value_counts().to_string())
@@ -34,8 +34,8 @@ for _, r in top.iterrows():
     print(f"  [{r['score']:>2.0f}] [{r['stream']}] [{r['alert_priority']}] "
           f"{r.get('ticker','') or '(macro)':>5}  {(r['publisher'] or '?')[:25]:>25}")
     print(f"        {(r['title'] or '')[:130]}")
-    high = (r['keyword_hits_high'] or '').replace('|', ', ')
-    medium = (r['keyword_hits_medium'] or '').replace('|', ', ')
+    high = str(r['keyword_hits_high'] or '').replace('|', ', ').replace('nan', '')
+    medium = str(r['keyword_hits_medium'] or '').replace('|', ', ').replace('nan', '')
     print(f"        HIGH: {high or '—'}")
     print(f"        MED:  {medium or '—'}")
 
