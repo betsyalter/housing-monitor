@@ -318,12 +318,16 @@ def main():
     def stub_title_matches(stub_title):
         """Cheap pre-filter: does the stub title hit any housing keyword?
         Lets us skip ~95% of detail fetches on first-run (most bills aren't
-        housing). False negatives possible if title is vague but subjects/
-        committees would have hit — accept the trade for ~10x speedup."""
+        housing). Also checks MEDIUM_REGEX so legit standalone-word matches
+        (e.g. 'Rent Relief Act') aren't dropped by the keyword-only check.
+        False negatives possible if title is vague but subjects/committees
+        would have hit — accept the trade for ~10x speedup."""
         if not stub_title:
             return False
         title_lower = stub_title.lower()
-        return any(k in title_lower for k in all_keywords)
+        if any(k in title_lower for k in all_keywords):
+            return True
+        return any(re.search(pat, stub_title, re.IGNORECASE) for pat in MEDIUM_REGEX)
 
     for bill_type in BILL_TYPES:
         print(f"\n--- Listing recent {bill_type.upper()} bills ---")
