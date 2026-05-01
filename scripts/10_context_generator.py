@@ -9,13 +9,37 @@ Critical distinction: "upstream script hasn't run" vs "no recent activity"
 shows up explicitly in the section status so stale data isn't masked.
 """
 
-import sys, os, glob, json
+import sys, os, glob, json, math
 sys.path.insert(0, os.path.dirname(__file__))
 from config import DATA_DIR
 
 import pandas as pd
 import numpy as np
 from datetime import datetime, timezone, timedelta
+
+
+def _sanitize_for_json(obj):
+    """Recursively replace NaN / Inf floats with None so the JSON is valid
+    per the JSON spec — Python's json.dump emits NaN/Infinity literals by
+    default which JavaScript JSON.parse rejects."""
+    if isinstance(obj, float):
+        if math.isnan(obj) or math.isinf(obj):
+            return None
+        return obj
+    if isinstance(obj, dict):
+        return {k: _sanitize_for_json(v) for k, v in obj.items()}
+    if isinstance(obj, (list, tuple)):
+        return [_sanitize_for_json(v) for v in obj]
+    if obj is pd.NA:
+        return None
+    # numpy / pandas scalars commonly leak through — coerce to native types
+    if hasattr(obj, "item"):
+        try:
+            v = obj.item()
+            return _sanitize_for_json(v)
+        except (ValueError, AttributeError):
+            return obj
+    return obj
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT_MD = os.path.join(REPO_ROOT, "housing_context.md")
@@ -904,8 +928,11 @@ def main():
         "section_status": {s["name"]: s.get("status") for s in states},
         "sections": {s["name"]: s for s in states},
     }
+    payload = _sanitize_for_json(payload)
     with open(OUT_JSON, "w", encoding="utf-8") as f:
-        json.dump(payload, f, indent=2, default=str)
+        # allow_nan=False would raise on NaN, but we sanitized above; the flag
+        # still acts as a defense-in-depth so we never silently emit bad JSON.
+        json.dump(payload, f, indent=2, default=str, allow_nan=False)
 
     print(f"Wrote {OUT_MD} ({os.path.getsize(OUT_MD):,} bytes)")
     print(f"Wrote {OUT_JSON} ({os.path.getsize(OUT_JSON):,} bytes)")
