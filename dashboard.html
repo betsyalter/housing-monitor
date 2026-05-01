@@ -863,9 +863,15 @@ function renderPriceTable(s) {
     return "";
   };
 
+  // Default order: biggest absolute day-change at top (largest movers,
+  // up or down). User can click any column header to override.
+  const sorted = [...s.rows].sort((a, b) => {
+    const av = (a.ret_1d == null || isNaN(a.ret_1d)) ? -Infinity : Math.abs(a.ret_1d);
+    const bv = (b.ret_1d == null || isNaN(b.ret_1d)) ? -Infinity : Math.abs(b.ret_1d);
+    return bv - av;
+  });
   new Tabulator("#price-table-wrap", {
-    data: s.rows, height: "560px", layout: "fitColumns", pagination: false,
-    initialSort: [{column: "ret_1d", dir: "desc"}],
+    data: sorted, height: "560px", layout: "fitColumns", pagination: false,
     columns: [
       {title: "Ticker", field: "ticker", width: 100, frozen: true,
         headerFilter: "input",
