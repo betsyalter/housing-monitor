@@ -22,6 +22,7 @@ OUT_MD = os.path.join(REPO_ROOT, "housing_context.md")
 OUT_JSON = os.path.join(REPO_ROOT, "housing_context.json")
 PRICES_DIR = os.path.join(DATA_DIR, "fmp_prices")
 INSIDER_DIR = os.path.join(DATA_DIR, "fmp_insider")
+PERPLEXITY_WEEKLY_DIR = os.path.join(REPO_ROOT, "output", "perplexity", "weekly")
 
 
 # ── helpers ────────────────────────────────────────────────────────────────
@@ -72,6 +73,114 @@ def _missing_block(title, missing_what, hint):
 
 
 # ── sections ───────────────────────────────────────────────────────────────
+
+def section_weekly_synthesis():
+    """Surface the latest weekly Perplexity Computer output (analyst layer 3
+    per docs/end_to_end_plan.md). Card-style display at top of dashboard:
+    bottom line, factor scorecard, key risk, underappreciated catalyst."""
+    state = {"name": "weekly_synthesis"}
+    if not os.path.isdir(PERPLEXITY_WEEKLY_DIR):
+        state["status"] = "missing"
+        return _missing_block("Weekly Synthesis (Perplexity Computer)",
+                              "no output/perplexity/weekly/ directory yet",
+                              "wait for Wyatt's first weekly Perplexity run"), state
+
+    json_files = sorted(glob.glob(os.path.join(PERPLEXITY_WEEKLY_DIR, "*.json")))
+    if not json_files:
+        state["status"] = "empty"
+        return _missing_block("Weekly Synthesis (Perplexity Computer)",
+                              "no weekly JSON outputs yet",
+                              "wait for Wyatt's first weekly Perplexity run"), state
+
+    latest_json_path = json_files[-1]
+    try:
+        with open(latest_json_path, encoding="utf-8") as f:
+            wk = json.load(f)
+    except Exception as e:
+        state["status"] = f"error:{type(e).__name__}"
+        return _missing_block("Weekly Synthesis (Perplexity Computer)",
+                              f"could not parse {os.path.basename(latest_json_path)}: {e}",
+                              "verify JSON is valid"), state
+
+    state["status"] = "ok"
+    report_date = wk.get("report_date", "unknown")
+    md_path = latest_json_path.replace(".json", ".md")
+    md_filename = os.path.basename(md_path)
+
+    summary = wk.get("executive_summary", {}) or {}
+    factor_scorecard = wk.get("factor_scorecard", []) or []
+    key_risk = wk.get("key_risk", {}) or {}
+    catalyst = wk.get("underappreciated_catalyst", {}) or {}
+    stock_signals = wk.get("stock_signals", []) or []
+    policy_events = wk.get("policy_events", []) or []
+
+    body = f"## Weekly Synthesis — {report_date}\n\n"
+    body += f"_Perplexity Computer synthesis layer. "
+    body += f"[Read full report]({os.path.relpath(md_path, REPO_ROOT).replace(os.sep, '/')})._\n\n"
+
+    if summary.get("bottom_line"):
+        body += f"**Bottom line:** {summary['bottom_line']}\n\n"
+
+    if summary.get("whats_new"):
+        body += f"**What's new:** {summary['whats_new']}\n\n"
+
+    if factor_scorecard:
+        body += "### Factor scorecard\n\n"
+        body += "| Factor | Strength | Direction | Signal |\n"
+        body += "|--------|----------|:---------:|--------|\n"
+        for f in factor_scorecard:
+            label = f.get("name", str(f.get("factor", "?"))).replace("_", " ").title()
+            strength = f.get("strength", "?")
+            direction = f.get("direction", "?")
+            arrow = {"+": "▲", "-": "▼", "0": "—", "mixed": "↔"}.get(direction, direction)
+            signal = (f.get("signal", "") or "")[:200]
+            body += f"| {label} | {strength} | {arrow} | {signal} |\n"
+        body += "\n"
+
+    if stock_signals:
+        body += "### Analyst-flagged names\n\n"
+        for s in stock_signals[:6]:
+            ticker = s.get("ticker", "?")
+            move = s.get("move_1w_pct")
+            move_str = f"{move:+.1f}%" if isinstance(move, (int, float)) else "—"
+            cause = (s.get("cause", "") or "")[:200]
+            read = (s.get("thesis_read", "") or "")[:280]
+            body += f"- **{ticker}** ({move_str} 1w) — *{cause}*\n"
+            body += f"  - Read: {read}\n"
+        body += "\n"
+
+    if policy_events:
+        body += "### Material policy events this week\n\n"
+        for p in policy_events[:6]:
+            event = (p.get("event", "") or "")[:160]
+            date = p.get("date", "")
+            direction = p.get("direction", "?")
+            arrow = {"+": "▲", "-": "▼", "0": "—", "mixed": "↔"}.get(direction, direction)
+            url = p.get("source", "") or ""
+            body += f"- **{date}** {arrow} {event}"
+            if url:
+                body += f" — [source]({url})"
+            body += "\n"
+        body += "\n"
+
+    if key_risk.get("summary"):
+        body += f"### Key risk\n\n{key_risk['summary']}\n\n"
+
+    if catalyst.get("summary"):
+        body += f"### Underappreciated catalyst\n\n{catalyst['summary']}\n\n"
+
+    state.update({
+        "report_date": report_date,
+        "report_path_md": os.path.relpath(md_path, REPO_ROOT).replace(os.sep, "/"),
+        "executive_summary": summary,
+        "factor_scorecard": factor_scorecard,
+        "stock_signals": stock_signals,
+        "policy_events": policy_events,
+        "key_risk": key_risk,
+        "underappreciated_catalyst": catalyst,
+    })
+    return body, state
+
 
 def section_macro():
     df, status = _safe_read_csv(f"{DATA_DIR}/fred_housing.csv")
@@ -606,7 +715,9 @@ def main():
     md_parts = [f"# US Housing Monitor — Daily Context\n_Last updated: {generated_at}_\n"]
     states = []
 
-    for fn in [section_macro, section_coiled_spring, section_homebuilders,
+    # Weekly synthesis at the top — sets the analytical frame before raw data
+    for fn in [section_weekly_synthesis,
+               section_macro, section_coiled_spring, section_homebuilders,
                section_reits, section_price_action, section_correlations,
                section_news, section_recent_8ks, section_insider]:
         try:

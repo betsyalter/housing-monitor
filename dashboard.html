@@ -66,6 +66,28 @@ a:hover { text-decoration: underline; }
   background: var(--card); border: 1px dashed var(--border); border-radius: 8px; }
 .tag { display: inline-block; padding: 1px 6px; border-radius: 3px; font-size: 11px;
   background: rgba(88,166,255,0.15); color: var(--accent); }
+.synthesis { background: linear-gradient(180deg, #1e2937, #161b22); border: 1px solid var(--border);
+  border-radius: 8px; padding: 20px; margin-bottom: 24px; }
+.synthesis h2 { margin-top: 0; border: none; padding: 0; }
+.synthesis .meta { color: var(--muted); font-size: 13px; margin-bottom: 12px; }
+.synthesis .bottom-line { font-size: 15px; padding: 12px; background: rgba(0,0,0,0.25);
+  border-left: 3px solid var(--accent); border-radius: 0 4px 4px 0; margin: 12px 0; }
+.synthesis .factor-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr));
+  gap: 8px; margin: 16px 0; }
+.synthesis .factor { background: rgba(0,0,0,0.2); padding: 10px; border-radius: 4px; font-size: 13px; }
+.synthesis .factor .name { font-weight: 600; }
+.synthesis .factor .arrow { font-size: 18px; margin-right: 6px; }
+.arrow-up { color: var(--good); } .arrow-down { color: var(--bad); }
+.arrow-flat { color: var(--muted); } .arrow-mixed { color: var(--warn); }
+.synthesis details { margin: 8px 0; padding: 8px 0; border-top: 1px solid var(--border); }
+.synthesis details summary { cursor: pointer; font-weight: 600; font-size: 13px;
+  color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
+.synthesis details[open] summary { color: var(--fg); }
+.synthesis .stock-row { padding: 8px 0; border-bottom: 1px dashed var(--border); }
+.synthesis .stock-row:last-child { border-bottom: 0; }
+.synthesis .stock-row .ticker { font-weight: 700; color: var(--accent); }
+.synthesis .stock-row .move { font-variant-numeric: tabular-nums; }
+.synthesis .stock-row .read { font-size: 13px; color: var(--muted); margin-top: 2px; }
 .r-cell { font-variant-numeric: tabular-nums; padding: 4px 8px; border-radius: 3px; }
 footer { margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border);
   color: var(--muted); font-size: 12px; }
@@ -84,6 +106,9 @@ footer { margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border
     <a href="housing_context.md">View raw markdown →</a>
   </div>
 </div>
+
+<!-- Weekly synthesis card — shows up first if a Perplexity output exists -->
+<div id="synthesis-card"></div>
 
 <!-- Hero: macro + coiled spring above the fold -->
 <div class="hero">
@@ -197,6 +222,7 @@ function render(d) {
   }
 
   const sec = d.sections || {};
+  renderSynthesis(sec.weekly_synthesis);
   renderMacro(sec.macro);
   renderSpring(sec.coiled_spring);
   renderCorrelations(sec.correlations);
@@ -205,6 +231,88 @@ function render(d) {
   renderReits(sec.reits);
   renderFilings(sec.recent_8ks);
   renderInsider(sec.insider);
+}
+
+// ── weekly synthesis (Perplexity output) ──────────────────────────
+function renderSynthesis(s) {
+  if (!s || s.status !== "ok") return;  // hide card entirely if no output yet
+  const card = el("synthesis-card");
+  const summary = s.executive_summary || {};
+  const factors = s.factor_scorecard || [];
+  const stocks = s.stock_signals || [];
+  const policy = s.policy_events || [];
+
+  const arrowMap = {"+": ["▲", "arrow-up"], "-": ["▼", "arrow-down"],
+                    "0": ["—", "arrow-flat"], "mixed": ["↔", "arrow-mixed"]};
+
+  let html = `<div class="synthesis">
+    <h2>📊 Weekly Synthesis — ${s.report_date}</h2>
+    <div class="meta">Perplexity Computer analyst run. <a href="${s.report_path_md}">Read full report →</a></div>`;
+
+  if (summary.bottom_line) {
+    html += `<div class="bottom-line"><strong>Bottom line:</strong> ${summary.bottom_line}</div>`;
+  }
+
+  if (factors.length) {
+    html += `<div class="factor-grid">`;
+    for (const f of factors) {
+      const [arrow, klass] = arrowMap[f.direction] || [f.direction, ""];
+      const name = (f.name || `Factor ${f.factor}`).replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+      html += `<div class="factor">
+        <span class="arrow ${klass}">${arrow}</span><span class="name">${name}</span>
+        <div class="muted" style="font-size:11px; text-transform:uppercase;">${f.strength}</div>
+      </div>`;
+    }
+    html += `</div>`;
+  }
+
+  if (summary.whats_new) {
+    html += `<details><summary>What's new this week</summary>
+      <div style="margin-top:8px; font-size:14px;">${summary.whats_new}</div></details>`;
+  }
+
+  if (stocks.length) {
+    html += `<details open><summary>Analyst-flagged names (${stocks.length})</summary><div style="margin-top:8px;">`;
+    for (const st of stocks.slice(0, 6)) {
+      const move = st.move_1w_pct;
+      const moveStr = (move != null && !isNaN(move))
+        ? `<span class="move ${move >= 0 ? "delta up" : "delta down"}">${move >= 0 ? "+" : ""}${Number(move).toFixed(1)}% 1w</span>`
+        : "";
+      html += `<div class="stock-row">
+        <span class="ticker">${st.ticker}</span> ${moveStr}
+        <span class="muted"> · ${st.subsector || ""} · Tier ${st.tier || "?"}</span>
+        <div class="read">${st.cause || ""}</div>
+        <div class="read"><strong>Read:</strong> ${st.thesis_read || ""}</div>
+      </div>`;
+    }
+    html += `</div></details>`;
+  }
+
+  if (policy.length) {
+    html += `<details><summary>Policy events (${policy.length})</summary><div style="margin-top:8px;">`;
+    for (const p of policy.slice(0, 8)) {
+      const [arrow, klass] = arrowMap[p.direction] || [p.direction, ""];
+      const link = p.source ? `<a href="${p.source}" target="_blank">source</a>` : "";
+      html += `<div class="stock-row">
+        <span class="arrow ${klass}">${arrow}</span>
+        <span class="muted">${p.date || ""}</span> · ${p.event || ""} ${link ? "· " + link : ""}
+      </div>`;
+    }
+    html += `</div></details>`;
+  }
+
+  if (s.key_risk?.summary) {
+    html += `<details><summary>Key risk</summary>
+      <div style="margin-top:8px; font-size:14px;">${s.key_risk.summary}</div></details>`;
+  }
+
+  if (s.underappreciated_catalyst?.summary) {
+    html += `<details><summary>Underappreciated catalyst</summary>
+      <div style="margin-top:8px; font-size:14px;">${s.underappreciated_catalyst.summary}</div></details>`;
+  }
+
+  html += `</div>`;
+  card.innerHTML = html;
 }
 
 // ── macro snapshot ─────────────────────────────────────────────────
