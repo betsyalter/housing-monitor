@@ -12,5 +12,8 @@ data/sec_filings/
 data/sec_raw/
 data/sec_stream_log.csv
 data/homebuilder_press_releases/
+# FTDR research — separate workstream, not part of housing-monitor pipeline
+build_*.py
+FTDR_*.xlsx
 data/last_run.json
 get-pip.py
