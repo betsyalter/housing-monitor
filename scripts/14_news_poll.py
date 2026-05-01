@@ -41,31 +41,48 @@ TOPIC_NEWS_LIMIT = 100
 SEEN_TTL_DAYS = 14
 FIRST_RUN_LOOKBACK_HOURS = 6   # only alert on articles within this window on first run
 
-# Keyword lists — codex's recommended structure
+# Keyword lists — multi-word phrases use substring match;
+# short single-tokens use word-boundary regex to avoid catching "narrow"/"binary".
 HIGH_SIGNAL = [
     "federal reserve", "fomc", "rate cut", "rate hike", "fed cuts", "fed hikes",
+    "powell", "fed officials", "fed chair",
     "housing legislation", "fannie mae", "freddie mac", "fhfa", "hud",
     "assumable mortgage", "capital gains exclusion", "section 8",
     "ginnie mae", "gse reform", "housing finance reform",
+    "treasury yields", "central bank",
 ]
 MEDIUM_SIGNAL = [
-    "nar", "national association of realtors", "existing home sales",
+    "national association of realtors", "existing home sales",
     "housing starts", "building permits", "mortgage rate", "30-year mortgage",
     "homebuilder", "home price", "case-shiller", "case shiller",
     "homeownership", "household formation", "rent control", "single-family rental",
+    "redfin", "zillow", "realtor.com",
 ]
+# Short tokens that need word-boundary matching (avoid 'nar' matching 'narrow')
+HIGH_SIGNAL_REGEX = [r"\bNAR\b"]   # case-sensitive: NAR (the org)
+MEDIUM_SIGNAL_REGEX = []
 
 # Hard-promote: if BOTH a macro-policy term AND a housing-transmission term hit,
 # article is immediate regardless of raw score
 MACRO_POLICY_TERMS = ["federal reserve", "fomc", "fhfa", "fannie", "freddie",
                       "hud", "housing legislation", "assumable mortgage",
-                      "capital gains exclusion"]
+                      "capital gains exclusion", "powell", "fed officials"]
 HOUSING_TRANSMISSION_TERMS = ["mortgage", "housing", "home sales", "homebuilder",
                               "permits", "starts", "home price", "homeowner"]
 
-# Tighter rule for ambiguous terms: require co-occurrence in same article
+# Tighter rule for ambiguous terms: require co-occurrence in same article.
+# These keywords STILL hit, but get stripped (in score AND title bonus) if the
+# article has no housing-transmission term anywhere.
 AMBIGUOUS_REQUIRES_HOUSING = ["federal reserve", "fomc", "rate cut", "rate hike",
-                              "fed cuts", "fed hikes", "30-year"]
+                              "fed cuts", "fed hikes", "30-year",
+                              "treasury yields", "central bank",
+                              "powell", "fed officials", "fed chair"]
+
+# Press release wires — relevant for FMP /news/stock when ticker is in our universe,
+# but they overlap with 8-K stream coverage. Cap their score so they don't drown
+# the email inbox with redundant company earnings releases.
+PRESS_RELEASE_WIRES = ["businesswire.com", "prnewswire.com", "globenewswire.com",
+                       "Business Wire", "PRNewsWire", "GlobeNewsWire"]
 
 # Topic-stream denylist — drop article entirely if title matches any
 TOPIC_DENY_PATTERNS = [
@@ -188,28 +205,50 @@ def should_poll_now(now_utc, last_poll_utc):
 # ── scoring ────────────────────────────────────────────────────────
 
 def find_hits(text, keywords):
+    """Substring match for multi-word phrases (lowercased)."""
     text_lower = text.lower()
     return [k for k in keywords if k in text_lower]
+
+
+def find_regex_hits(text, regex_patterns):
+    """Word-boundary regex matches — for short tokens like NAR that
+    substring-match too aggressively (would match 'narrow'/'binary')."""
+    return [p for p in regex_patterns if re.search(p, text)]
+
+
+def is_press_release(site, publisher):
+    site_lower = (site or "").lower()
+    pub_lower = (publisher or "").lower()
+    for wire in PRESS_RELEASE_WIRES:
+        if wire.lower() in site_lower or wire.lower() in pub_lower:
+            return True
+    return False
 
 
 def score_article(title, body, site, publisher, sources):
     title_lower = (title or "").lower()
     body_lower = (body or "").lower()
-    combined = title_lower + " " + body_lower
+    combined_text = (title or "") + " " + (body or "")    # case-preserved for regex
+    combined_lower = title_lower + " " + body_lower
 
-    high_hits = find_hits(combined, HIGH_SIGNAL)
-    medium_hits = find_hits(combined, MEDIUM_SIGNAL)
+    high_hits = find_hits(combined_lower, HIGH_SIGNAL)
+    high_hits += find_regex_hits(combined_text, HIGH_SIGNAL_REGEX)
+    medium_hits = find_hits(combined_lower, MEDIUM_SIGNAL)
+    medium_hits += find_regex_hits(combined_text, MEDIUM_SIGNAL_REGEX)
 
-    # Apply ambiguity rule: if hit is in AMBIGUOUS_REQUIRES_HOUSING but no
-    # housing-transmission term in the article, drop it from the count
-    if any(amb in high_hits or amb in medium_hits for amb in AMBIGUOUS_REQUIRES_HOUSING):
-        if not any(t in combined for t in HOUSING_TRANSMISSION_TERMS):
-            high_hits = [h for h in high_hits if h not in AMBIGUOUS_REQUIRES_HOUSING]
-            medium_hits = [m for m in medium_hits if m not in AMBIGUOUS_REQUIRES_HOUSING]
+    # Ambiguity rule: ambiguous hits get stripped from BOTH score and title bonus
+    # if the article has no housing-transmission term.
+    has_housing = any(t in combined_lower for t in HOUSING_TRANSMISSION_TERMS)
+    if not has_housing:
+        high_hits = [h for h in high_hits if h not in AMBIGUOUS_REQUIRES_HOUSING]
+        medium_hits = [m for m in medium_hits if m not in AMBIGUOUS_REQUIRES_HOUSING]
 
-    # Title-first: hits in title get +1 bonus each
-    title_high = find_hits(title_lower, HIGH_SIGNAL)
-    title_medium = find_hits(title_lower, MEDIUM_SIGNAL)
+    # Title-first: hits in title get bonus, but only count keywords that
+    # *survived* the ambiguity stripping above
+    title_high = [h for h in high_hits if h in title_lower or
+                  (h in HIGH_SIGNAL_REGEX and re.search(h, title or ""))]
+    title_medium = [m for m in medium_hits if m in title_lower or
+                    (m in MEDIUM_SIGNAL_REGEX and re.search(m, title or ""))]
 
     score = 2 * len(high_hits) + len(medium_hits) + len(title_high) + len(title_medium) // 2
 
@@ -221,6 +260,12 @@ def score_article(title, body, site, publisher, sources):
         score -= 2
     # exclude is filtered before scoring
 
+    # Press-release cap: BusinessWire/PRNewswire ticker articles overlap with the
+    # 8-K stream pipeline (Script 11 already alerts on those). Cap their score so
+    # they don't double-fire emails for company earnings.
+    if is_press_release(site, publisher):
+        score = min(score, 2)  # hard cap below digest threshold (3)
+
     matched_in = []
     if title_high or title_medium:
         matched_in.append("title")
@@ -228,9 +273,8 @@ def score_article(title, body, site, publisher, sources):
         matched_in.append("text")
 
     # Hard-promote: macro + housing combo
-    has_macro = any(t in combined for t in MACRO_POLICY_TERMS)
-    has_housing = any(t in combined for t in HOUSING_TRANSMISSION_TERMS)
-    promote = has_macro and has_housing
+    has_macro = any(t in combined_lower for t in MACRO_POLICY_TERMS)
+    promote = has_macro and has_housing and not is_press_release(site, publisher)
 
     return {
         "score": score,
