@@ -26,4 +26,8 @@ mkdir -p logs
     echo "Pushed daily context update."
   fi
   echo
+
+  echo "--- watchdog ---"
+  $PY scripts/watchdog.py
+  echo
 } >> $LOG 2>&1
