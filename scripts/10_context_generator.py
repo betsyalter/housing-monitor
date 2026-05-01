@@ -183,6 +183,107 @@ def section_weekly_synthesis():
     return body, state
 
 
+def section_analyst_artifacts():
+    """Emit a structured navigation block for analyst artifacts so the
+    dashboard can surface them without each consumer re-globbing the repo.
+    Schema mirrors Wyatt's Claude coordination request 2026-05-01:
+    framework, 6-section deep-dive report, short baskets (with members from
+    YAML), policy pipeline. last_updated comes from YAML fields where they
+    exist, file mtime otherwise."""
+    state = {"name": "analyst_artifacts"}
+    GH_BASE = "https://github.com/betsyalter/housing-monitor/blob/main/"
+
+    def _file_meta(rel_path):
+        abs_path = os.path.join(REPO_ROOT, rel_path)
+        if not os.path.exists(abs_path):
+            return None
+        mtime = datetime.fromtimestamp(os.path.getmtime(abs_path), tz=timezone.utc)
+        return {
+            "path": rel_path,
+            "github_url": GH_BASE + rel_path,
+            "last_updated": mtime.strftime("%Y-%m-%d"),
+        }
+
+    # Framework — prefer YAML last_updated over file mtime
+    fw = _file_meta("analyst/five_factor_framework.md")
+    if fw:
+        fw["title"] = "Five-Factor Framework"
+        try:
+            import yaml
+            with open(os.path.join(REPO_ROOT, "analyst", "factor_weights.yaml"),
+                      encoding="utf-8") as f:
+                weights = yaml.safe_load(f) or {}
+            if weights.get("last_updated"):
+                fw["last_updated"] = str(weights["last_updated"])
+        except Exception:
+            pass
+
+    # Deep-dive report — README + 6 numbered sections
+    report_files = [
+        ("Overview (README)", "analyst/report/00_README.md"),
+        ("Step 1 — Structural Map", "analyst/report/01_structural_map.md"),
+        ("Step 2 — Demand Cohorts", "analyst/report/02_demand_cohorts.md"),
+        ("Step 3 — Value Chain", "analyst/report/03_value_chain.md"),
+        ("Step 4 — Wave Position", "analyst/report/04_wave_position.md"),
+        ("Step 5 — Stock Scoring", "analyst/report/05_stock_scoring.md"),
+        ("Step 6 — Political Economy", "analyst/report/06_political_economy.md"),
+    ]
+    report_sections = []
+    for title, rel in report_files:
+        m = _file_meta(rel)
+        if m:
+            m["title"] = title
+            report_sections.append(m)
+    deep_dive = {
+        "title": "Comprehensive Housing Thesis Report",
+        "sections": report_sections,
+    } if report_sections else None
+
+    # Short baskets — parse YAML and emit per-basket member tables
+    short_baskets_block = None
+    sb_path = "analyst/short_baskets.yaml"
+    sb_meta = _file_meta(sb_path)
+    if sb_meta:
+        try:
+            import yaml
+            with open(os.path.join(REPO_ROOT, sb_path), encoding="utf-8") as f:
+                sb_data = yaml.safe_load(f) or {}
+            if sb_data.get("last_updated"):
+                sb_meta["last_updated"] = str(sb_data["last_updated"])
+            baskets = []
+            for name, basket in (sb_data.get("baskets") or {}).items():
+                members = [{
+                    "ticker": m.get("ticker"),
+                    "weight": m.get("weight"),
+                    "conviction_tier": m.get("conviction_tier", ""),
+                    "rationale": m.get("rationale", ""),
+                } for m in (basket.get("members") or [])]
+                rationale_doc = basket.get("rationale_doc")
+                baskets.append({
+                    "name": name,
+                    "thesis": (basket.get("thesis") or "").strip(),
+                    "members": members,
+                    "rationale_doc": rationale_doc,
+                    "rationale_doc_url": (GH_BASE + rationale_doc) if rationale_doc else None,
+                })
+            short_baskets_block = {"yaml": sb_meta, "baskets": baskets}
+        except Exception as e:
+            state["short_baskets_error"] = f"{type(e).__name__}: {e}"
+
+    # Policy pipeline (Perplexity-maintained, but useful as nav target)
+    policy_pipeline = _file_meta("output/perplexity/policy_pipeline.md")
+    if policy_pipeline:
+        policy_pipeline["title"] = "Policy Pipeline (Perplexity standing log)"
+        policy_pipeline["maintainer"] = "perplexity_weekly"
+
+    state["status"] = "ok"
+    state["framework"] = fw
+    state["deep_dive_report"] = deep_dive
+    state["short_baskets"] = short_baskets_block
+    state["policy_pipeline"] = policy_pipeline
+    return ("", state)
+
+
 def section_perplexity_report():
     """Render the latest weekly Perplexity Computer report (full prose) as HTML
     so the dashboard can show it inline. The synthesis card above renders the
@@ -778,7 +879,8 @@ def main():
     states = []
 
     # Weekly synthesis at the top — sets the analytical frame before raw data
-    for fn in [section_weekly_synthesis, section_perplexity_report,
+    for fn in [section_weekly_synthesis, section_analyst_artifacts,
+               section_perplexity_report,
                section_macro, section_coiled_spring, section_homebuilders,
                section_reits, section_price_action, section_correlations,
                section_news, section_recent_8ks, section_insider]:

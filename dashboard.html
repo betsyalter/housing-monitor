@@ -134,6 +134,41 @@ footer { margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border
 .report-content hr { border: 0; border-top: 1px solid var(--border); margin: 24px 0; }
 .report-content strong { color: var(--fg); font-weight: 600; }
 .report-content em { color: var(--muted); }
+
+/* ── analyst artifacts navigation panel ── */
+.analyst-nav { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px; }
+.analyst-nav .nav-block { padding: 8px 0; }
+.analyst-nav .nav-block .label { color: var(--muted); font-size: 11px; text-transform: uppercase;
+  letter-spacing: 0.04em; margin-bottom: 4px; }
+.analyst-nav .nav-block details { padding: 0; }
+.analyst-nav .nav-block details summary { cursor: pointer; padding: 4px 0;
+  font-weight: 600; color: var(--fg); list-style: none; display: flex; align-items: center; }
+.analyst-nav .nav-block details summary::before { content: "▸"; margin-right: 6px;
+  color: var(--muted); transition: transform 0.15s; display: inline-block; }
+.analyst-nav .nav-block details[open] summary::before { transform: rotate(90deg); }
+.analyst-nav .nav-block .nav-row { padding: 3px 0 3px 18px; font-size: 13px; }
+.analyst-nav .nav-block .nav-row a { color: var(--accent); }
+.analyst-nav .nav-block .nav-meta { color: var(--muted); font-size: 12px; margin-left: 6px; }
+.analyst-nav .nav-block .nav-flat { padding: 4px 0; font-size: 14px; font-weight: 600; }
+
+/* ── apartment short basket composition table ── */
+.basket-comp-card .thesis { font-size: 13px; color: var(--muted); margin: 8px 0 16px 0;
+  padding: 10px 14px; border-left: 3px solid var(--bad); background: rgba(248,81,73,0.06);
+  border-radius: 0 4px 4px 0; }
+.basket-comp { width: 100%; border-collapse: collapse; font-size: 13px; }
+.basket-comp th, .basket-comp td { border-bottom: 1px solid var(--border); padding: 8px 10px;
+  text-align: left; vertical-align: top; }
+.basket-comp th { font-weight: 600; color: var(--muted); text-transform: uppercase;
+  font-size: 11px; letter-spacing: 0.04em; }
+.basket-comp td.weight, .basket-comp td.ticker { font-variant-numeric: tabular-nums; }
+.basket-comp .ticker-cell { font-weight: 700; color: var(--accent);
+  font-family: ui-monospace, "SFMono-Regular", Consolas, monospace; }
+.tier-badge { display: inline-block; padding: 2px 8px; border-radius: 3px; font-size: 11px;
+  font-weight: 600; text-transform: uppercase; }
+.tier-high { background: rgba(63,185,80,0.18); color: var(--good); }
+.tier-medium { background: rgba(210,153,34,0.18); color: var(--warn); }
+.tier-low { background: rgba(139,148,158,0.18); color: var(--muted); }
 </style>
 </head>
 <body>
@@ -151,6 +186,9 @@ footer { margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border
 
 <!-- Weekly synthesis card — shows up first if a Perplexity output exists -->
 <div id="synthesis-card"></div>
+
+<!-- Analyst artifacts navigation (framework, deep-dive sections, baskets, policy log) -->
+<div id="analyst-nav-card"></div>
 
 <!-- Full deep-dive Perplexity report rendered inline (below the synthesis summary) -->
 <div id="perplexity-report-card"></div>
@@ -181,6 +219,9 @@ footer { margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border
 <div class="card" id="card-baskets">
   <div class="basket-bars" id="basket-bars"></div>
 </div>
+
+<!-- Apartment REIT short basket — composition (members, conviction tier, rationale) -->
+<div id="apartment-short-basket-card"></div>
 
 <h2>Homebuilder Pulse</h2>
 <div id="builders-table-wrap"></div>
@@ -268,7 +309,9 @@ function render(d) {
 
   const sec = d.sections || {};
   renderSynthesis(sec.weekly_synthesis);
+  renderAnalystArtifacts(sec.analyst_artifacts);
   renderPerplexityReport(sec.perplexity_report);
+  renderApartmentShortBasket(sec.analyst_artifacts);
   renderMacro(sec.macro);
   renderSpring(sec.coiled_spring);
   renderCorrelations(sec.correlations);
@@ -389,6 +432,115 @@ function renderPerplexityReport(s) {
     content.classList.remove("expanded");
     content.scrollTop = 0;
   });
+}
+
+// ── analyst artifacts navigation panel ─────────────────────────────
+function renderAnalystArtifacts(s) {
+  if (!s || s.status !== "ok") return;
+  const card = el("analyst-nav-card");
+
+  const linkRow = (m) => `<div class="nav-row">
+    <a href="${m.github_url}" target="_blank">${m.title || m.path}</a>
+    <span class="nav-meta">${m.last_updated || ""}</span>
+  </div>`;
+
+  let html = `<div class="card" style="margin-bottom:24px">
+    <h3>📚 Analyst Reports & Frameworks</h3>
+    <div class="analyst-nav">`;
+
+  // Framework
+  if (s.framework) {
+    html += `<div class="nav-block">
+      <div class="label">Framework</div>
+      <div class="nav-flat">
+        <a href="${s.framework.github_url}" target="_blank">${s.framework.title}</a>
+        <span class="nav-meta">updated ${s.framework.last_updated}</span>
+      </div>
+    </div>`;
+  }
+
+  // Deep-dive report (collapsible — README + 6 sections)
+  if (s.deep_dive_report && s.deep_dive_report.sections.length) {
+    html += `<div class="nav-block">
+      <div class="label">Deep-Dive Report</div>
+      <details open>
+        <summary>${s.deep_dive_report.title} (${s.deep_dive_report.sections.length})</summary>
+        ${s.deep_dive_report.sections.map(linkRow).join("")}
+      </details>
+    </div>`;
+  }
+
+  // Short baskets
+  if (s.short_baskets && s.short_baskets.baskets && s.short_baskets.baskets.length) {
+    html += `<div class="nav-block">
+      <div class="label">Short Baskets</div>
+      <details>
+        <summary>short_baskets.yaml (${s.short_baskets.baskets.length})</summary>
+        ${s.short_baskets.baskets.map(b => `<div class="nav-row">
+          <span style="font-family:ui-monospace,monospace">${b.name}</span>
+          <span class="nav-meta">${b.members.length} members</span>
+          ${b.rationale_doc_url ? `· <a href="${b.rationale_doc_url}" target="_blank">rationale</a>` : ""}
+        </div>`).join("")}
+        <div class="nav-row">
+          <a href="${s.short_baskets.yaml.github_url}" target="_blank">YAML source</a>
+          <span class="nav-meta">updated ${s.short_baskets.yaml.last_updated}</span>
+        </div>
+      </details>
+    </div>`;
+  }
+
+  // Policy pipeline (Perplexity-maintained)
+  if (s.policy_pipeline) {
+    html += `<div class="nav-block">
+      <div class="label">Policy Pipeline</div>
+      <div class="nav-flat">
+        <a href="${s.policy_pipeline.github_url}" target="_blank">${s.policy_pipeline.title}</a>
+        <span class="nav-meta">updated ${s.policy_pipeline.last_updated}</span>
+      </div>
+    </div>`;
+  }
+
+  html += `</div></div>`;
+  card.innerHTML = html;
+}
+
+// ── apartment REIT short basket composition (from analyst/short_baskets.yaml) ──
+function renderApartmentShortBasket(s) {
+  if (!s || !s.short_baskets || !s.short_baskets.baskets) return;
+  const basket = s.short_baskets.baskets.find(b => b.name === "apartment_reit_short");
+  if (!basket || !basket.members || !basket.members.length) return;
+
+  const card = el("apartment-short-basket-card");
+  const sortedMembers = basket.members.slice().sort((a, b) => (b.weight || 0) - (a.weight || 0));
+  const tierKey = t => (t || "").toLowerCase().trim();
+
+  let html = `<div class="card basket-comp-card" style="margin-bottom:24px">
+    <h3>🏢 Apartment REIT Short Basket — Composition</h3>
+    <div class="thesis">${basket.thesis.replace(/\n/g, " ")}</div>
+    <table class="basket-comp">
+      <thead><tr>
+        <th>Ticker</th><th>Weight</th><th>Conviction</th><th>Rationale</th>
+      </tr></thead>
+      <tbody>`;
+  for (const m of sortedMembers) {
+    const w = m.weight != null ? `${(m.weight * 100).toFixed(1)}%` : "—";
+    const tier = tierKey(m.conviction_tier);
+    const tierClass = ["high","medium","low"].includes(tier) ? `tier-${tier}` : "";
+    html += `<tr>
+      <td class="ticker-cell">${m.ticker || "?"}</td>
+      <td class="weight">${w}</td>
+      <td><span class="tier-badge ${tierClass}">${m.conviction_tier || "—"}</span></td>
+      <td>${m.rationale || ""}</td>
+    </tr>`;
+  }
+  html += `</tbody></table>
+    ${basket.rationale_doc_url
+      ? `<div class="muted" style="margin-top:12px;font-size:12px">
+           Full rationale: <a href="${basket.rationale_doc_url}" target="_blank">${basket.rationale_doc}</a>
+         </div>`
+      : ""}
+  </div>`;
+  card.innerHTML = html;
 }
 
 // ── macro snapshot ─────────────────────────────────────────────────
