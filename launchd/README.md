@@ -11,6 +11,7 @@ Two scheduled jobs make this a real-time monitor instead of a manually-run tool.
 | `com.housing-monitor.news`     | Every 5 min, 24/7 (script throttles internally to 5 min market hours / 15 min after-market / 30 min off-hours) | `14_news_poll.py` → `14b_news_alert_dispatcher.py`. Polls FMP news, scores articles, emails high-priority alerts. Medium-priority queued for digest. |
 | `com.housing-monitor.news-digest` | 1:15 PM Mac mini local (= 4:15 PM ET) | `14b_news_alert_dispatcher.py --digest`. Sends the day's batched medium-priority news as one email. |
 | `com.housing-monitor.legislative` | 3:15 PM Mac mini local (= 6:15 PM ET) | `15_congress_bill_poll.py` → `15b_congress_alert_dispatcher.py`. Same-day detection of housing-related federal legislation. Polls Congress.gov API for new bills + committee actions, alerts on House Financial Services / Senate Banking / Ways and Means / Senate Finance committee activity. |
+| `com.housing-monitor.market-close` | 2:00 PM Mac mini local (= 5:00 PM ET), weekdays only | `04_fmp_prices.py` → `09_correlation_engine.py`. Refreshes daily prices for the 262-ticker universe, then rebuilds the correlation matrices against new prints. Output flows through `housing_context.json` to the dashboard's price action and rate-sensitivity sections. |
 
 Schedules are intentionally simple — every hour and once a day. 8-Ks land any time (not just market hours), and the alert dispatcher is a no-op when nothing's new, so over-running it costs nothing.
 
@@ -20,6 +21,7 @@ Schedules are intentionally simple — every hour and once a day. 8-Ks land any 
 # Make wrapper scripts executable
 chmod +x ~/housing_monitor/scripts/run_hourly.sh
 chmod +x ~/housing_monitor/scripts/run_daily.sh
+chmod +x ~/housing_monitor/scripts/run_market_close.sh
 
 # Symlink (or copy) plists into LaunchAgents
 mkdir -p ~/Library/LaunchAgents
@@ -28,6 +30,7 @@ ln -sf ~/housing_monitor/launchd/com.housing-monitor.daily.plist ~/Library/Launc
 ln -sf ~/housing_monitor/launchd/com.housing-monitor.news.plist ~/Library/LaunchAgents/
 ln -sf ~/housing_monitor/launchd/com.housing-monitor.news-digest.plist ~/Library/LaunchAgents/
 ln -sf ~/housing_monitor/launchd/com.housing-monitor.legislative.plist ~/Library/LaunchAgents/
+ln -sf ~/housing_monitor/launchd/com.housing-monitor.market-close.plist ~/Library/LaunchAgents/
 
 # Load them
 launchctl load ~/Library/LaunchAgents/com.housing-monitor.hourly.plist
@@ -35,6 +38,7 @@ launchctl load ~/Library/LaunchAgents/com.housing-monitor.daily.plist
 launchctl load ~/Library/LaunchAgents/com.housing-monitor.news.plist
 launchctl load ~/Library/LaunchAgents/com.housing-monitor.news-digest.plist
 launchctl load ~/Library/LaunchAgents/com.housing-monitor.legislative.plist
+launchctl load ~/Library/LaunchAgents/com.housing-monitor.market-close.plist
 
 # Verify they're loaded
 launchctl list | grep housing-monitor
