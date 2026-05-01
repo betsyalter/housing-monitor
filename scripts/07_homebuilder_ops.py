@@ -63,7 +63,7 @@ Extract these metrics for the **most recent reporting quarter only** (NOT year-t
 - backlog_units: homes under contract but not yet closed at quarter end (units, integer)
 - community_count: active selling communities (avg or end-of-period, integer)
 - closings_units: homes closed/delivered in the quarter (units, integer)
-- asp_dollars: average selling price of homes CLOSED (USD, integer; if PR shows ASP for both closings and new orders, prefer closings)
+- asp_dollars: average selling price of homes CLOSED. **MUST be in native USD, NOT thousands.** Many press releases show ASP in tabular columns labeled "in thousands" — in that case multiply by 1000 to get native USD (e.g., a table value of "459" with header "in thousands" means $459,000 → return 459000). Never return values <5000. If ASP for both closings and new orders is shown, prefer closings.
 - gross_margin_pct: homebuilding gross margin (numeric, exclude financial services / mortgage subsidiary)
 
 Rules:
@@ -159,6 +159,30 @@ def existing_keys():
         return set()
 
 
+def _sanity_check_value(metric, value):
+    """Catch unit-truncation bugs (e.g. ASP shown as 459 instead of $459,000).
+    Returns (corrected_value, was_corrected_bool, reason_str)."""
+    if value is None:
+        return value, False, ""
+    if metric == "asp_dollars":
+        # Real homebuilder ASPs are $100,000-$2,000,000. Anything <5000 is
+        # almost certainly truncated thousands. Scale up.
+        if 50 <= value < 5000:
+            return value * 1000, True, "asp_dollars scaled ×1000 (was implausibly small)"
+        if value < 50 or value > 5_000_000:
+            return value, False, f"asp_dollars={value} is out of range [50, 5_000_000]"
+    elif metric in ("net_orders_units", "backlog_units", "closings_units"):
+        if value < 0 or value > 200_000:
+            return value, False, f"{metric}={value} out of range [0, 200000]"
+    elif metric == "community_count":
+        if value < 0 or value > 5_000:
+            return value, False, f"community_count={value} out of range"
+    elif metric.endswith("_pct"):
+        if value < 0 or value > 100:
+            return value, False, f"{metric}={value} not in [0, 100]"
+    return value, False, ""
+
+
 def melt_to_rows(ticker, filing, extracted, source_label):
     rows = []
     accession = filing.get("accessionNo", "")
@@ -168,6 +192,11 @@ def melt_to_rows(ticker, filing, extracted, source_label):
         v = extracted.get(metric)
         if v is None:
             continue
+        v_corrected, was_fixed, reason = _sanity_check_value(metric, v)
+        if was_fixed:
+            print(f"  [{ticker}] {reason} (raw={v})")
+        elif reason:
+            print(f"  [{ticker}] WARN: {reason}")
         rows.append({
             "ticker": ticker,
             "fiscal_period": fiscal_period,
@@ -175,7 +204,7 @@ def melt_to_rows(ticker, filing, extracted, source_label):
             "accession_no": accession,
             "segment": "consolidated",
             "metric_name": metric,
-            "metric_value": v,
+            "metric_value": v_corrected,
             "metric_unit": unit,
             "source_label": source_label,
         })
