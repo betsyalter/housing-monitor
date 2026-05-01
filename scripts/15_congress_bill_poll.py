@@ -87,6 +87,7 @@ HARD_PROMOTE_COMMITTEES = {
     "Ways and Means Committee",
     "Senate Finance Committee",
     "Senate Committee on Finance",
+    "Finance Committee",
 }
 
 # Sponsor watchlist — bills introduced by these members get +1 promotion
