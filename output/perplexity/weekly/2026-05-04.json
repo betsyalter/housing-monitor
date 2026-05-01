@@ -142,6 +142,18 @@
       "counter_read": "+37% QoQ partially reflects easy comp; watch YoY trajectory in Q3"
     },
     {
+      "ticker": "PHM",
+      "tier": 1,
+      "subsector": "Homebuilders (mix-shift archetype: entry / move-up / active-adult)",
+      "q1_metrics": {"period": "Q1 26", "net_orders": 8034, "qoq_pct": 25, "backlog": 10427, "backlog_qoq_pct": 23, "closings": 6102, "asp": 542000, "communities": 1043},
+      "cohort_positioning": "Bridge between DHI entry-level/volume and TOL move-up/luxury; deliberate three-segment mix; Del Webb (active-adult) is the most rate-insensitive Tier-1 demand pool (cash-rich Boomer downsizers)",
+      "moat_fragility": "Strongest mix-diversification in the cohort (active-adult is true rate-insensitivity hedge); fragility = mix-shift execution under management discretion (2H-loaded communities require permitting/land development on schedule)",
+      "sell_side_data_used": "Oppenheimer model update Apr 24 ('2026 Guide Reiterated, Execution Remains Strong'); post-call notes Apr 24 ('GMs now likely at lower end of range, slightly lowering ests, OW maintained'); 'More 2H Weighting Pending Better Mix - Sidelined on Valuation'; PHM 1Q26 Conference Call Takeaways; Wells Fargo PHM Note May 1 (today, completes Wells Fargo Tier-1 set DHI 4-23 / TOL 2-20 / PHM 5-1). Per spec: using DATA (margins at low end of guide, mix back-half-weighted) not CONCLUSIONS (sidelined call).",
+      "counter_read": "+25% QoQ orders flatter than reality due to easy-Q1 comp dynamic (same as DHI); the GM-at-low-end-of-range is the real signal: affordability ceiling now touching the move-up cohort",
+      "read": "PHM is the mid-cycle tell. Four-archetype rate-sensitivity layering now legible: NVR weakest (build-to-order needs signed contracts), LGIH catastrophic (entry-level/FHA fractured), PHM margins compressing (mix-shift mid-cycle squeeze), DHI mixed (volume scale advantage muting), TOL guide-reiterated (luxury wealth-effect cohort holds longest). The cross-archetype layering IS the affordability bifurcation story in operating data.",
+      "watch": "PHM 2Q-3Q 2026 prints for whether full-year GMs settle below the original guide range—that confirms bifurcation has migrated from FTHB cohort to broader move-up cohort"
+    },
+    {
       "ticker": "SUI",
       "tier": 3,
       "subsector": "Manufactured Housing REITs",
@@ -157,8 +169,16 @@
     "qoq_closings_range_pct": "-17% to -34% (cohort universal weakness)",
     "qoq_backlog_range_pct": "+20% to +60%",
     "cancellation_rate_pattern": "LGIH 45.6 (all-time high) divergent from peer median 11-14% (peers falling QoQ)",
-    "asp_range": "$361K (DHI) to $977K (TOL) - 2.7x cohort spread; bifurcation deepening",
-    "thesis_read": "The Diagonal: orders strong, closings weak, backlog inflating = affordability ceiling biting at conversion stage. LGIH cohort outlier localizes stress to FHA-leveraged entry-level. ASP bifurcation indicates luxury and entry-level cohorts decoupling structurally."
+    "asp_range": "$361K (DHI) to $977K (TOL) - 2.7x cohort spread; bifurcation deepening; PHM $542K + NVR $457K + TMHC $578K populate the middle bucket where mid-cycle margin compression is most visible",
+    "thesis_read": "The Diagonal: orders strong, closings weak, backlog inflating = affordability ceiling biting at conversion stage. LGIH cohort outlier localizes stress to FHA-leveraged entry-level. ASP bifurcation indicates luxury and entry-level cohorts decoupling structurally.",
+    "four_archetype_tier1_read": {
+      "DHI_volume_leader": "Broad cohort exposure; +37% QoQ orders flatters via easy-Q1 comp; Wells Fargo + BTIG + Morningstar coverage in docs/reports/",
+      "NVR_build_to_order": "No spec land, signed-contract dependent; weakness shows up FIRST in slowing cohort; estimates cut on margin pressure (Truist + post-call notes)",
+      "TOL_luxury_move_up": "FY26 guide reiterated; OW maintained; wealth-effect cohort holds longest; Citizens + Wells Fargo + Jefferies",
+      "PHM_mix_shift": "Entry / move-up / active-adult; guide reiterated BUT margins now at lower end of range; estimates trimmed; OW maintained on valuation; Oppenheimer + post-call + Wells Fargo May 1",
+      "layering_synthesis": "NVR-weak / LGIH-fractured / PHM-margin-compressed / DHI-mixed / TOL-firm IS the affordability bifurcation story in operating data. Street is treating each name idiosyncratically; cross-archetype margin migration is not yet priced as a synthesis signal."
+    },
+    "second_surprising_data_point": "PHM lower-end-of-range gross-margin commentary (April 24 print): consensus underweighted because headline 'guide reiterated' reads bullish but GM-at-low-end says mid-cycle squeeze has started in mix-shift cohort, not just entry-level. Watch PHM 2Q-3Q 2026 for full-year GMs settling below original guide range."
   },
   "subsector_basket_dispersion": [
     {"basket": "Homebuilders T1", "n": 18, "median_1w": -5.23, "median_1m": 4.49, "read": "Sold off on FOMC; 1m positive"},
