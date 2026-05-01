@@ -106,7 +106,9 @@ compounding the unlock effect. The framework should not double-count this.
 **Mechanism.**
 Two distinct effects, often conflated:
 1. **Acquisition (2012–2022).** Permanent removal of N homes from
-   owner-occupied stock. This shifted the supply curve down once.
+   owner-occupied stock. INVH and AMH together hold ~144k homes per the
+   latest 10-Ks (`data/sec_reit_homes.csv`: INVH 86,192; AMH 57,573).
+   This shifted the supply curve down once.
 2. **Turnover differential (ongoing).** Owner-occupied homes turn over at
    ~5%/yr; REIT-held homes turn over at <3%/yr. Each year of differential
    turnover moves a small additional slice of stock out of "willing seller"
@@ -182,9 +184,12 @@ real estate), NAR Profile of Home Buyers and Sellers.
 > own framing. The 2025 edition forecasts dramatically slower household
 > growth than prior editions (8.6M for 2025–2035 vs the ~12-13.5M pace of
 > the 1990s/2010s) without explicitly acknowledging the revision. The new
-> data both supports and reframes Wyatt's thesis: JCHS has effectively
-> walked back the "shortage" narrative, but consensus opinion (builders,
-> lenders, Wall Street REIT theses) is still pricing the old forecasts.
+> data both supports and reframes Wyatt's thesis: **JCHS revised forward
+> household and new-unit demand materially lower, which complicates the
+> shortage narrative** even though the report still characterizes
+> affordability and supply stress as severe. Consensus opinion (builders,
+> lenders, Wall Street REIT theses) is still largely pricing the old,
+> higher forecasts.
 
 **Placeholder weight:** TBD (currently rolled into `demographics: 0.10`)
 
@@ -208,7 +213,7 @@ than that:
 4. **JCHS does not explicitly flag the revision.** The closest hedge is a
    sentence on p. 20 that lower demand "still yield[s] historically low
    levels of new construction" — softening the gap from prior reports
-   without a "we revised" admission. (See Appendix A item 7.)
+   without a "we revised" admission. (See Appendix A.8.)
 
 **Implication for the unlock thesis.** This actually *strengthens* the
 "affordability ceiling" element of the thesis (less new demand to absorb
@@ -349,7 +354,7 @@ If we keep the abstracted YAML schema (not the playbook-1:1 rename):
 > Source PDF: `Harvard_JCHS_The_State_of_the_Nations_Housing_2025.pdf` (52 pages).
 > Page numbers refer to the JCHS-printed footer.
 
-### A.1 Household formation forecast — verbatim
+### A.1 Household formation forecast — verbatim (with marked omissions)
 
 > "Under the Census Bureau's main population projection, **8.6 million net
 > new households will form between 2025 and 2035** and another **5.1 million
@@ -359,12 +364,12 @@ If we keep the abstracted YAML schema (not the playbook-1:1 rename):
 > million new households that formed in the 1990s and in the 2010s**,
 > respectively (Figure 13). If, however, immigration levels follow the
 > Census Bureau's projection that assumes an annual average of 422,000
-> people… household growth is projected to total just **6.9 million
+> people [...] household growth is projected to total just **6.9 million
 > households in the next decade and a scant 3.2 million from 2035 to
 > 2045**." (p. 19–20)
 
 > "In 2024, the number of US households increased by 1.56 million to
-> 131.7 million… far lower than the pandemic-era surge of 1.93 million
+> 131.7 million [...] far lower than the pandemic-era surge of 1.93 million
 > households averaged annually between 2019 and 2022. And the annual rate
 > continues to decline, dropping to 1.26 million households by the first
 > quarter of 2025." (p. 17)
@@ -388,7 +393,8 @@ If we keep the abstracted YAML schema (not the playbook-1:1 rename):
 
 > "The US homeownership rate fell in 2024 for the first time in eight
 > years to **65.6 percent** and continued downward to **65.1 percent in
-> the first quarter of 2025**." (p. 6, p. 9)
+> the first quarter of 2025**." (executive summary p. 3; Homeownership
+> chapter p. 24)
 
 > "While homeownership rates remained relatively unchanged in 2024 for
 > households age 45 and over, the **homeownership rate dropped 1.4
@@ -408,29 +414,32 @@ If we keep the abstracted YAML schema (not the playbook-1:1 rename):
 > with formations among younger adults entirely driven by underlying
 > population growth." (p. 18)
 
-### A.5 Cost burden — verbatim
+### A.5 Cost burden — verbatim (two quotes spliced via [...] for length)
 
 > "In 2023, the number of cost-burdened homeowners—those spending more
 > than 30 percent of income on housing and utilities—rose by 646,000 to
-> **20.3 million**… nearly a quarter (24 percent) of all homeowners are
-> cost burdened." (p. 5, p. 27)
+> **20.3 million**." (p. 5)
+
+> "[N]early a quarter (24 percent) of all homeowners are cost burdened."
+> (p. 27)
 
 > "For the third consecutive year, the number of cost-burdened renters
 > reached another record high in 2023 at **22.6 million renters
 > (50 percent)**. This includes more than **12.1 million (27 percent)
 > who are severely burdened**, spending more than half of their income on
-> housing and utilities." (p. 5, p. 32)
+> housing and utilities." (p. 5; renters chapter detail p. 32)
 
-### A.6 First-time buyer affordability ceiling — verbatim
+### A.6 First-time buyer affordability ceiling — verbatim (with marked omissions)
 
 > "Today, a typical first-time homebuyer needs an annual income of at least
 > **$126,700** to afford payments on the median-priced home (**$412,500**)
-> … a first-time homebuyer would need to provide **$26,800 in cash** to
+> [...] a first-time homebuyer would need to provide **$26,800 in cash** to
 > cover the downpayment and 3 percent closing costs. Roughly **12 percent**
-> of renters had this much in cash savings as of 2022… **the median age of
-> a first-time homebuyer hit a record-high 38 in 2024**, and the median
-> annual household income of first-time buyers was $26,000 higher than it
-> was just two years earlier." (p. 27)
+> of renters can meet this requirement based on the 2022 Survey of Consumer
+> Finances [...] **the median age of a first-time homebuyer hit a
+> record-high 38 in 2024**, and the median annual household income of
+> first-time buyers was $26,000 higher than it was just two years earlier."
+> (p. 27)
 
 ### A.7 Lock-in cross-reference — verbatim
 
