@@ -39,7 +39,7 @@ if not ANTHROPIC_API_KEY:
 
 RAW_DIR = os.path.join(DATA_DIR, "sec_filings")
 OUT_CSV = os.path.join(DATA_DIR, "sec_reit_homes.csv")
-MODEL = "claude-haiku-4-5-20251001"
+MODEL = "claude-sonnet-4-6"  # Sonnet handles irregular table layouts better than Haiku
 
 # REITs and their preferred reporting unit (helps the LLM frame the extraction)
 REIT_UNITS = {
@@ -66,42 +66,56 @@ REIT_UNITS = {
 }
 
 
-EXTRACTION_PROMPT = """You are extracting geographic portfolio breakdowns from a US REIT's 10-K Item 1 / Item 2 / Item 7 text.
+EXTRACTION_PROMPT = """You are extracting geographic portfolio breakdowns from a US REIT's 10-K text.
 
 This REIT primarily holds: {unit_hint}.
 
-**The text often has flattened HTML tables — be aggressive about reconstructing them.**
+**The text below was extracted from an HTML 10-K and the tables got flattened.** You need to reconstruct the rows. Here are the EXACT layouts you'll encounter, with byte-for-byte examples:
 
-Common patterns you'll see:
-1. Standard table: "Atlanta | 12,624 | 95.4% | $2,097"
-2. Flattened with market name AFTER numbers: "9,200 96.7% 2,074 1.22 9.5 % Las Vegas"
-   (means Las Vegas: 9,200 homes, 96.7% occupancy, $2,074 rent)
-3. Market name on a separate line above/below its data row
-4. Prose: "Our Atlanta market consists of approximately 12,500 single-family rental homes..."
+LAYOUT A — market name appears AFTER its data row (most common in INVH/AMH):
+  Input:  "9,200 96.7% 2,074 1.22 9.5 % Las Vegas"
+  Parse:  Las Vegas market — home_count=9200, occupancy_pct=96.7, avg_monthly_rent=2074
+  (The 1.22 and 9.5% are auxiliary metrics — homes/sqft ratio and % of total portfolio. Ignore them.)
 
-Numeric ranges to expect:
-- home_count: 500–60,000 per market (depends on REIT — INVH/AMH/EQR have largest)
-- avg_monthly_rent: $800–$4,500 (apartment > SFR; coastal > inland)
-- occupancy_pct: 88–99% (typically 92–97%)
+LAYOUT B — market name appears BEFORE its data row (sometimes the first market in a table):
+  Input:  "Atlanta\\n12,624 95.4% 2,097 1.01 12.6 % Carolinas"
+  Parse:  TWO rows here.
+    - Atlanta — home_count=12624, occupancy_pct=95.4, avg_monthly_rent=2097
+    - Carolinas — read the next data row (which follows in the source)
 
-When you see numbers near a known US market name (Atlanta, Las Vegas, Tampa, Phoenix, Dallas, Houston, Charlotte, Orlando, Jacksonville, Denver, etc.), pair them up — even if the table layout is messy.
+LAYOUT C — clean pipe-separated or column table (some REITs preserve this):
+  Input:  "Atlanta | 12,500 | 96.4% | $2,150"
+  Parse:  Atlanta — home_count=12500, occupancy_pct=96.4, avg_monthly_rent=2150
+
+LAYOUT D — prose:
+  Input:  "Our Atlanta market consisted of approximately 12,500 single-family rental homes..."
+  Parse:  Atlanta — home_count=12500 (rent/occupancy null if not in same sentence)
+
+**Critical rule:** when you see 3-5 numbers in a row followed/preceded by a US market name, pair them up. The pattern is consistent within a given REIT's table — once you identify the column order from the first row, apply the same mapping to all subsequent rows.
+
+For INVH/AMH SFR REITs specifically, the column order in the flattened layout is:
+  [home_count] [occupancy %] [avg_monthly_rent] [auxiliary_ratio] [% of portfolio] [market_name]
+
+Numeric ranges to sanity-check your output:
+- home_count: 500–60,000 per market
+- avg_monthly_rent: $800–$4,500
+- occupancy_pct: 88–99%
 
 For each row, output one JSON object:
   - geo_type: "state" | "msa" | "market" | "region" | "total"
-  - geo_name: label as written (e.g., "Atlanta", "Florida", "Sun Belt", "Mid-Atlantic")
-  - home_count: integer (null only if truly absent)
-  - avg_monthly_rent: USD integer, null if not disclosed at this granularity
-  - occupancy_pct: numeric (e.g. 96.4 for 96.4%), null if not at this granularity
+  - geo_name: label as written (e.g., "Atlanta", "Florida", "Sun Belt")
+  - home_count: integer
+  - avg_monthly_rent: USD integer, null if truly not disclosed
+  - occupancy_pct: numeric (e.g. 96.4 for 96.4%), null if truly not at this granularity
 
 Rules:
-- Aim for 10–25 rows for SFR/apartment REITs (they typically disclose 12–20 markets)
-- Aim for 5–15 rows for MH/senior REITs (broader regional categories)
-- Don't invent values, but DO pair numbers with adjacent market names even if layout is unusual
-- Skip non-property tables (debt schedules, exec comp, lease maturities)
-- Include geographically-aggregated rows (e.g., "Total Sun Belt: 45,000 homes") with geo_type="region"
-- Return ONLY a JSON array. Empty array [] if truly nothing extractable.
+- Aim for 10–25 rows for SFR/apartment REITs
+- Aim for 5–15 rows for MH/senior REITs
+- DO populate values when you can pair them with a market name — even if layout is irregular. **Returning null when the data is right there in the text is a failure mode.**
+- Skip non-property tables (debt schedules, exec comp)
+- Return ONLY a JSON array. Empty array [] only if there's truly no breakdown.
 
-Example for INVH (illustrating flattened-table parsing):
+Example output:
 [
   {{"geo_type": "market", "geo_name": "Atlanta", "home_count": 12624, "avg_monthly_rent": 2097, "occupancy_pct": 95.4}},
   {{"geo_type": "market", "geo_name": "Tampa", "home_count": 8058, "avg_monthly_rent": 3118, "occupancy_pct": 95.4}},
