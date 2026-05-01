@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-01 19:53 UTC",
+  "generated_at": "2026-05-01 19:57 UTC",
   "section_status": {
     "weekly_synthesis": "ok",
     "analyst_artifacts": "ok",
@@ -6302,7 +6302,7 @@
       "top_articles": [
         {
           "title": "New Fed chair Warsh will have a fight on his hands if he pushes for interest-rate cuts",
-          "ticker": NaN,
+          "ticker": null,
           "publisher": "Market Watch",
           "url": "https://www.marketwatch.com/story/new-fed-chair-warsh-will-have-a-fight-on-his-hands-if-he-pushes-for-interest-rate-cuts-a1fb5595",
           "score": 9,
@@ -6312,7 +6312,7 @@
         },
         {
           "title": "Pirro keeps pressure on Fed's Powell despite dropping probe",
-          "ticker": NaN,
+          "ticker": null,
           "publisher": "CNBC",
           "url": "https://www.cnbc.com/2026/05/01/fed-powell-pirro-investigation.html",
           "score": 3,

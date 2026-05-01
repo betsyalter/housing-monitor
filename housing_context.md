@@ -1,5 +1,5 @@
 # US Housing Monitor — Daily Context
-_Last updated: 2026-05-01 19:53 UTC_
+_Last updated: 2026-05-01 19:57 UTC_
 
 
 ## Weekly Synthesis — 2026-05-04
@@ -221,7 +221,7 @@ _Pearson r between monthly log-returns and monthly bps change in 30yr mortgage r
 
 ## Recent High-Signal News (last 24h)
 
-_1 immediate, 1 digest-priority, 810 log-only since 2026-04-30 19:53 UTC._
+_1 immediate, 1 digest-priority, 811 log-only since 2026-04-30 19:57 UTC._
 
 - **[9] nan** — [New Fed chair Warsh will have a fight on his hands if he pushes for interest-rate cuts](https://www.marketwatch.com/story/new-fed-chair-warsh-will-have-a-fight-on-his-hands-if-he-pushes-for-interest-rate-cuts-a1fb5595)
     Market Watch &middot; *immediate* &middot; keywords: rate cut, fed chair, warsh
