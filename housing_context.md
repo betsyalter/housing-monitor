@@ -1,5 +1,5 @@
 # US Housing Monitor — Daily Context
-_Last updated: 2026-05-01 20:30 UTC_
+_Last updated: 2026-05-01 20:48 UTC_
 
 
 ## Weekly Synthesis — 2026-05-04
@@ -66,22 +66,25 @@ VantageScore 4.0 + FICO 10T historical loss-rate distributions, due summer 2026
 ## Coiled Spring Status
 
 **Current 30yr rate:** 6.30%  
-**% of mortgages locked below current rate:** 95.1%  
-**Total locked-low homeowners:** ~48.3M
+**Total mortgage stock tracked:** 50.8M  
+**Currently locked-low (rate <6.30%):** 48.3M (95.1% of stock)  
+**EHS deficit vs pre-2022 normalized:** ~1,300k SAAR/yr
 
 **Unlock scenarios:**
 
-| Scenario Rate | Locked (M) | Newly Unlocked (M) | Est. SAAR Uplift (k units) |
-|--------------:|-----------:|-------------------:|---------------------------:|
-| 6.50% | 41.5 | 0.0 | 0 |
-| 6.25% | 36.1 | 5.4 | 1,522 |
-| 6.00% | 36.1 | 5.4 | 1,522 |
-| 5.75% | 28.9 | 12.6 | 3,528 |
-| 5.50% | 28.9 | 12.6 | 3,528 |
-| 5.25% | 20.2 | 21.3 | 5,974 |
-| 5.00% | 20.2 | 21.3 | 5,974 |
-| 4.75% | 11.1 | 30.4 | 8,506 |
-| 4.50% | 11.1 | 30.4 | 8,506 |
+| Scenario Rate | Locked (M) | % of Stock | Newly Unlocked (M) | % of Locked | SAAR Uplift (k) | × Deficit |
+|--------------:|-----------:|-----------:|-------------------:|------------:|----------------:|----------:|
+| 6.50% | 41.5 | 82% | 0.0 | 0% | 0 | 0.0× |
+| 6.25% | 36.1 | 71% | 5.4 | 11% | 1,522 | 1.2× |
+| 6.00% | 36.1 | 71% | 5.4 | 11% | 1,522 | 1.2× |
+| 5.75% | 28.9 | 57% | 12.6 | 26% | 3,528 | 2.7× |
+| 5.50% | 28.9 | 57% | 12.6 | 26% | 3,528 | 2.7× |
+| 5.25% | 20.2 | 40% | 21.3 | 44% | 5,974 | 4.6× |
+| 5.00% | 20.2 | 40% | 21.3 | 44% | 5,974 | 4.6× |
+| 4.75% | 11.1 | 22% | 30.4 | 63% | 8,506 | 6.5× |
+| 4.50% | 11.1 | 22% | 30.4 | 63% | 8,506 | 6.5× |
+| 4.25% | 11.1 | 22% | 30.4 | 63% | 8,506 | 6.5× |
+| 4.00% | 0.0 | 0% | 41.5 | 86% | 11,620 | 8.9× |
 
 
 ## Homebuilder Pulse
@@ -137,34 +140,143 @@ _⚠ home_count is best-effort regex parsing of 10-K Item 2/7. Verify before rel
 | WELL | 2026-02-12 | 2025-12-31 | 2,500 | $n/a | n/a |
 
 
-## Price Action
+## Price Action — Universe
 
-_⚠ ticker universe or price files unavailable_  
-_Hint: run scripts/03_fmp_universe.py and scripts/04_fmp_prices.py_
+**Top 5 (1-week return):**
+
+| Ticker | Subsector | Price | 1w | 1m |
+|--------|-----------|------:|----:|----:|
+| RMAX | Title Insurance | $10.78 | +34.9% | +90.5% |
+| SNBR | Home Furnishings | $3.10 | +31.4% | +81.3% |
+| GNRC | Appliances | $259.34 | +17.4% | +30.3% |
+| CMPR | Cement/Aggregates | $93.75 | +14.4% | +26.6% |
+| GOOGL | Internet/Platform | $385.69 | +12.0% | +29.7% |
+
+**Bottom 5 (1-week return):**
+
+| Ticker | Subsector | Price | 1w | 1m |
+|--------|-----------|------:|----:|----:|
+| LESL | Flooring/Pool | $1.71 | -19.7% | +26.7% |
+| TREE | RE Brokerages | $38.81 | -19.6% | -8.1% |
+| OPAD | RE Brokerages | $0.67 | -17.7% | -4.9% |
+| W | Home Furnishings | $65.50 | -16.9% | -13.0% |
+| BLDR | Building Products | $75.72 | -15.9% | -6.5% |
+
+**Thesis basket performance (median return):**
+
+| Basket | n | Median 1w | Median 1m |
+|--------|--:|----------:|----------:|
+| Homebuilders (T1) | 18 | -5.54% | +3.60% |
+| SFR REITs (Short on unlock) | 5 | +0.13% | +7.66% |
+| Apartment REITs (Short on unlock) | 12 | +2.88% | +7.39% |
+| Mortgage Originators (T1) | 5 | -1.26% | +4.12% |
+| Title Insurance (T1) | 5 | -1.34% | +15.57% |
+| RE Brokerages (T1) | 12 | -0.78% | +7.49% |
+| Building Products (T2) | 15 | -5.20% | +6.07% |
+| Long basket (all tiers) | 224 | -0.67% | +6.01% |
+| Short-on-unlock basket | 18 | +2.75% | +6.89% |
+
+**Tier basket performance:**
+
+| Tier | n | Median 1w | Median 1m |
+|------|--:|----------:|----------:|
+| 1 | 46 | -3.03% | +4.67% |
+| 2 | 51 | -2.19% | +7.66% |
+| 3 | 109 | +0.57% | +5.44% |
+| 4 | 17 | +2.31% | +6.44% |
+| 5 | 39 | -0.09% | +10.55% |
 
 
-## Rate Sensitivity Rankings
+## Rate Sensitivity Rankings (5y trailing, monthly)
 
-_⚠ correlation rankings not yet generated_  
-_Hint: run scripts/09_correlation_engine.py_
+_Pearson r between monthly log-returns and monthly bps change in 30yr mortgage rate. Negative = stock falls when rates rise. Per Script 09._
+
+**Most rate-sensitive longs (top 10 negative r):**
+
+| Rank | Ticker | Subsector | r | n |
+|-----:|--------|-----------|----:|---:|
+| 1 | TMF | Housing ETFs | -0.780 | 59 |
+| 2 | PFFR | Housing ETFs | -0.683 | 59 |
+| 3 | STC | Title Insurance | -0.646 | 59 |
+| 4 | RKT | Mortgage Originators | -0.637 | 59 |
+| 5 | FAF | Title Insurance | -0.627 | 59 |
+| 6 | HOMZ | Housing ETFs | -0.619 | 59 |
+| 7 | SUI | Manufactured Housing REITs | -0.616 | 59 |
+| 8 | MORT | Housing ETFs | -0.598 | 59 |
+| 9 | PFSI | Mortgage Originators | -0.596 | 59 |
+| 10 | NNN | REITs Co-Movement | -0.593 | 59 |
+
+**Rate-defensive (top 10 positive r):**
+
+| Rank | Ticker | Subsector | r | n |
+|-----:|--------|-----------|----:|---:|
+| 1 | TBT | Housing ETFs | +0.780 | 59 |
+| 2 | HMN | Home Warranty | +0.107 | 59 |
+| 3 | LXU | Flooring/Pool | +0.083 | 59 |
+| 4 | ALL | P&C Insurance | +0.019 | 59 |
+| 5 | APPF | Security/PropTech | +0.017 | 59 |
+| 6 | GLRE | P&C Insurance | -0.010 | 59 |
+| 7 | FHN | Banks | -0.013 | 59 |
+| 8 | STRW | Land Developers | -0.027 | 43 |
+| 9 | PGR | P&C Insurance | -0.030 | 59 |
+| 10 | LMND | RE Brokerages | -0.043 | 59 |
 
 
 ## Recent High-Signal News (last 7d)
 
-_⚠ news stream log not yet generated_  
-_Hint: run scripts/14_news_poll.py (or wait for the 5-min cron)_
+_Last 24h: 1 immediate, 1 digest. Last 7d: 1 immediate, 1 digest._
+
+- **[9] nan** — [New Fed chair Warsh will have a fight on his hands if he pushes for interest-rate cuts](https://www.marketwatch.com/story/new-fed-chair-warsh-will-have-a-fight-on-his-hands-if-he-pushes-for-interest-rate-cuts-a1fb5595)
+    Market Watch &middot; *immediate*
+- **[3] nan** — [Pirro keeps pressure on Fed's Powell despite dropping probe](https://www.cnbc.com/2026/05/01/fed-powell-pirro-investigation.html)
+    CNBC &middot; *digest*
 
 
-## Recent Material 8-K Filings
+## Recent Material 8-K Filings (last 7 days)
 
-_⚠ 8-K stream log not yet generated_  
-_Hint: run scripts/06b_sec_8k_scan.py (preferably on a launchd timer)_
+- **2026-05-01** [LPX] items `8.01|9.01` — [Form 8-K - Current report - Item 8.01 Item 9.01](https://www.sec.gov/Archives/edgar/data/60519/000006051926000014/lpx-20260501.htm)
+- **2026-05-01** [OC] items `5.02` — [Form 8-K - Current report - Item 5.02](https://www.sec.gov/Archives/edgar/data/1370946/000137094626000140/oc-20260428.htm)
+- **2026-05-01** [OC] items `8.01` — [Form 8-K - Current report - Item 8.01](https://www.sec.gov/Archives/edgar/data/1370946/000137094626000136/oc-20260430.htm)
+- **2026-05-01** [CUBE] items `2.02|7.01|9.01` — [Form 8-K - Current report - Item 2.02 Item 7.01 Item 9.01](https://www.sec.gov/Archives/edgar/data/1298675/000129867526000015/cube-20260430x8k.htm)
+- **2026-05-01** [TEX] items `2.02|7.01|9.01` — [Form 8-K - Current report - Item 2.02 Item 7.01 Item 9.01](https://www.sec.gov/Archives/edgar/data/97216/000009721626000078/tex-20260501.htm)
+- **2026-05-01** [NWL] items `2.02|9.01` — [Form 8-K - Current report - Item 2.02 Item 9.01](https://www.sec.gov/Archives/edgar/data/814453/000081445326000013/nwl-20260501.htm)
+- **2026-05-01** [NVT] items `2.02|9.01` — [Form 8-K - Current report - Item 2.02 Item 9.01](https://www.sec.gov/Archives/edgar/data/1720635/000162828026029098/nvt-20260501.htm)
+- **2026-05-01** [DE] items `5.02|7.01|9.01` — [Form 8-K - Current report - Item 5.02 Item 7.01 Item 9.01](https://www.sec.gov/Archives/edgar/data/315189/000110465926053322/de-20260428x8k.htm)
+- **2026-05-01** [UWMC] items `7.01|9.01` — [Form 8-K - Current report - Item 7.01 Item 9.01](https://www.sec.gov/Archives/edgar/data/1783398/000178339826000034/xbrl-20260430.htm)
+- **2026-04-30** [BANR] items `1.01|7.01|9.01` — [Form 8-K - Current report - Item 1.01 Item 7.01 Item 9.01](https://www.sec.gov/Archives/edgar/data/946673/000094667326000123/banr-20260430.htm)
+- **2026-04-30** [BCC] items `7.01|9.01` — [Form 8-K - Current report - Item 7.01 Item 9.01](https://www.sec.gov/Archives/edgar/data/1328581/000132858126000011/bcc-20260430.htm)
+- **2026-04-30** [OPAD] items `8.01|9.01` — [Form 8-K - Current report - Item 8.01 Item 9.01](https://www.sec.gov/Archives/edgar/data/1825024/000119312526197718/d255502d8k.htm)
+- **2026-04-30** [UMH] items `2.02|7.01|9.01` — [Form 8-K - Current report - Item 2.02 Item 7.01 Item 9.01](https://www.sec.gov/Archives/edgar/data/752642/000149315226020648/form8-k.htm)
+- **2026-04-30** [WFC] items `5.02|5.07|9.01` — [Form 8-K - Current report - Item 5.02 Item 5.07 Item 9.01](https://www.sec.gov/Archives/edgar/data/72971/000007297126000227/wfc-20260428.htm)
+- **2026-04-30** [BOBS] items `1.01|2.03|9.01` — [Form 8-K - Current report - Item 1.01 Item 2.03 Item 9.01](https://www.sec.gov/Archives/edgar/data/2085187/000162828026028946/bobs-20260429.htm)
+- **2026-04-30** [FR] items `5.07|7.01|9.01` — [Form 8-K - Current report - Item 5.07 Item 7.01 Item 9.01](https://www.sec.gov/Archives/edgar/data/921825/000092182526000057/fr-20260430.htm)
+- **2026-04-30** [CPT] items `2.02|9.01` — [Form 8-K - Current report - Item 2.02 Item 9.01](https://www.sec.gov/Archives/edgar/data/906345/000162828026028942/cpt-20260430.htm)
+- **2026-04-30** [LDI] items `1.01|1.02|2.03|9.01` — [Form 8-K - Current report - Item 1.01 Item 1.02 Item 2.03 Item 9.01](https://www.sec.gov/Archives/edgar/data/1831631/000183163126000052/ldi-20260427.htm)
+- **2026-04-30** [HUN] items `2.02|9.01` — [Form 8-K - Current report - Item 2.02 Item 9.01](https://www.sec.gov/Archives/edgar/data/1307954/000110465926053018/tm2613226d1_8k.htm)
+- **2026-04-30** [MHK] items `2.02|9.01` — [Form 8-K - Current report - Item 2.02 Item 9.01](https://www.sec.gov/Archives/edgar/data/851968/000085196826000015/mhk-20260430.htm)
 
 
-## Insider Activity
+## Insider Activity — Tier 1 (last 30 days)
 
-_⚠ insider trade files unavailable_  
-_Hint: run scripts/05c_fmp_insider.py_
+Top 15 by transaction value:
+
+| Date | Ticker | Insider | Role | A/D | Shares | Price |
+|------|--------|---------|------|-----|-------:|------:|
+| 2026-04-23 | HHH | Pershing Square Capital Management, L.P. | director, 10 percent owner:  | D | 341,033 | $65.86 |
+| 2026-04-23 | HHH | Pershing Square Capital Management, L.P. | director, 10 percent owner:  | A | 341,033 | $65.86 |
+| 2026-04-29 | RMAX | Peterson Adam K | other: See Footnote 6 | D | 632,091 | $9.84 |
+| 2026-04-29 | RMAX | Peterson Adam K | other: See Footnote 6 | D | 493,006 | $10.97 |
+| 2026-04-20 | UWMC | Mat Ishbia | director, 10 percent owner, officer: President and CEO | D | 1,000,574 | $3.94 |
+| 2026-04-20 | UWMC | Mat Ishbia | director, 10 percent owner, officer: President and CEO | D | 1,000,574 | $3.93 |
+| 2026-04-13 | UWMC | Mat Ishbia | director, 10 percent owner, officer: President and CEO | D | 1,000,574 | $3.91 |
+| 2026-04-08 | UWMC | Mat Ishbia | director, 10 percent owner, officer: President and CEO | D | 1,000,574 | $3.87 |
+| 2026-04-22 | UWMC | Mat Ishbia | director, 10 percent owner, officer: President and CEO | D | 1,000,574 | $3.82 |
+| 2026-04-27 | UWMC | Mat Ishbia | director, 10 percent owner, officer: President and CEO | D | 1,000,574 | $3.78 |
+| 2026-04-15 | UWMC | Mat Ishbia | director, 10 percent owner, officer: President and CEO | D | 1,000,574 | $3.78 |
+| 2026-04-20 | UWMC | Mat Ishbia | director, 10 percent owner, officer: President and CEO | D | 1,000,574 | $3.76 |
+| 2026-04-27 | UWMC | Mat Ishbia | director, 10 percent owner, officer: President and CEO | D | 1,000,574 | $3.75 |
+| 2026-04-06 | UWMC | Mat Ishbia | director, 10 percent owner, officer: President and CEO | D | 1,000,574 | $3.73 |
+| 2026-04-15 | UWMC | Mat Ishbia | director, 10 percent owner, officer: President and CEO | D | 1,000,574 | $3.71 |
 
 
 ## Five-Factor Framework
