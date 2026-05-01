@@ -66,30 +66,46 @@ REIT_UNITS = {
 }
 
 
-EXTRACTION_PROMPT = """You are extracting geographic portfolio breakdowns from a US REIT's 10-K Item 2 / Item 7 text.
+EXTRACTION_PROMPT = """You are extracting geographic portfolio breakdowns from a US REIT's 10-K Item 1 / Item 2 / Item 7 text.
 
 This REIT primarily holds: {unit_hint}.
 
-Find every geographic breakdown table in the text. For each row of those tables, output one record:
-  - geo_type: "state" (US state name), "msa" (metro statistical area), "market" (REIT-specific market like "Atlanta" or "Las Vegas"), "region" (REIT-defined region like "Sun Belt" or "Southeast"), or "total" if this is the portfolio-wide row.
-  - geo_name: the label as written in the 10-K (e.g. "Atlanta-Sandy Springs-Alpharetta GA", or "Florida", or "Mid-Atlantic").
-  - home_count: the property/unit/site count for that geography. Integer.
-  - avg_monthly_rent: average monthly rent for that geography. USD integer. null if not disclosed at this granularity.
-  - occupancy_pct: occupancy as a decimal percentage (e.g. 96.4 for 96.4%). null if not disclosed at this granularity.
+**The text often has flattened HTML tables — be aggressive about reconstructing them.**
+
+Common patterns you'll see:
+1. Standard table: "Atlanta | 12,624 | 95.4% | $2,097"
+2. Flattened with market name AFTER numbers: "9,200 96.7% 2,074 1.22 9.5 % Las Vegas"
+   (means Las Vegas: 9,200 homes, 96.7% occupancy, $2,074 rent)
+3. Market name on a separate line above/below its data row
+4. Prose: "Our Atlanta market consists of approximately 12,500 single-family rental homes..."
+
+Numeric ranges to expect:
+- home_count: 500–60,000 per market (depends on REIT — INVH/AMH/EQR have largest)
+- avg_monthly_rent: $800–$4,500 (apartment > SFR; coastal > inland)
+- occupancy_pct: 88–99% (typically 92–97%)
+
+When you see numbers near a known US market name (Atlanta, Las Vegas, Tampa, Phoenix, Dallas, Houston, Charlotte, Orlando, Jacksonville, Denver, etc.), pair them up — even if the table layout is messy.
+
+For each row, output one JSON object:
+  - geo_type: "state" | "msa" | "market" | "region" | "total"
+  - geo_name: label as written (e.g., "Atlanta", "Florida", "Sun Belt", "Mid-Atlantic")
+  - home_count: integer (null only if truly absent)
+  - avg_monthly_rent: USD integer, null if not disclosed at this granularity
+  - occupancy_pct: numeric (e.g. 96.4 for 96.4%), null if not at this granularity
 
 Rules:
-- If only home_count is disclosed for a region and rent / occupancy are portfolio-wide, leave rent / occupancy null for the region row.
-- Do NOT invent values. If the table doesn't show a number, return null.
-- Skip any table that's about non-property data (e.g., debt maturity by year, executive compensation).
-- If multiple geographic breakdowns exist (e.g., breakdown by state AND by MSA), include both — distinguish by geo_type.
-- Return ONLY a JSON array. No prose, no markdown fences. Empty array [] if no breakdown found.
+- Aim for 10–25 rows for SFR/apartment REITs (they typically disclose 12–20 markets)
+- Aim for 5–15 rows for MH/senior REITs (broader regional categories)
+- Don't invent values, but DO pair numbers with adjacent market names even if layout is unusual
+- Skip non-property tables (debt schedules, exec comp, lease maturities)
+- Include geographically-aggregated rows (e.g., "Total Sun Belt: 45,000 homes") with geo_type="region"
+- Return ONLY a JSON array. Empty array [] if truly nothing extractable.
 
-Schema:
+Example for INVH (illustrating flattened-table parsing):
 [
-  {{"geo_type": "msa", "geo_name": "Atlanta-Sandy Springs-Alpharetta GA",
-    "home_count": 12500, "avg_monthly_rent": 2150, "occupancy_pct": 96.4}},
-  {{"geo_type": "state", "geo_name": "Florida",
-    "home_count": 18000, "avg_monthly_rent": null, "occupancy_pct": null}}
+  {{"geo_type": "market", "geo_name": "Atlanta", "home_count": 12624, "avg_monthly_rent": 2097, "occupancy_pct": 95.4}},
+  {{"geo_type": "market", "geo_name": "Tampa", "home_count": 8058, "avg_monthly_rent": 3118, "occupancy_pct": 95.4}},
+  {{"geo_type": "market", "geo_name": "Las Vegas", "home_count": 9200, "avg_monthly_rent": 2074, "occupancy_pct": 96.7}}
 ]
 
 10-K text:
@@ -145,7 +161,7 @@ def extract_with_llm(client, ticker, text):
     prompt = EXTRACTION_PROMPT.replace("{unit_hint}", unit_hint).replace("{text}", text[:60000])
     msg = client.messages.create(
         model=MODEL,
-        max_tokens=2000,
+        max_tokens=4000,  # 25 markets × ~120 tokens each + slack
         temperature=0,
         messages=[{"role": "user", "content": prompt}],
     )
