@@ -1,0 +1,10 @@
+# Per-ticker overrides applied on top of data/fmp_tickers.csv.
+# Use sparingly — prefer fixing the source CSV. Overrides exist to capture
+# Analyst judgement that doesn't fit the universe screener.
+last_updated: "2026-04-30"
+overrides: {}
+# Example structure (commented out — populate as needed):
+#   AAPL:
+#     tier: 5
+#     directional: short
+#     notes: "irrelevant to housing — example only"

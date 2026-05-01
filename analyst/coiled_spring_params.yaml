@@ -1,0 +1,44 @@
+# Mortgage rate distribution + lock-in threshold.
+# Source: FHFA, mirrored at data/fhfa_distribution.csv for diff verification.
+# Update quarterly when new FHFA data drops.
+last_updated: "2026-04-30"
+baseline_market_rate: 6.5
+lockin_threshold: 1.5      # owner is locked when market_rate > current_rate + threshold
+saar_per_million: 280.0    # thousands of SAAR uplift per million unlocked homes
+distribution:
+  - rate_bucket: "<3%"
+    pct_of_outstanding: 0.219
+    approx_midpoint_rate: 2.5
+    est_homes_millions: 11.1252
+  - rate_bucket: "3-3.5%"
+    pct_of_outstanding: 0.178
+    approx_midpoint_rate: 3.25
+    est_homes_millions: 9.0424
+  - rate_bucket: "3.5-4%"
+    pct_of_outstanding: 0.172
+    approx_midpoint_rate: 3.75
+    est_homes_millions: 8.7376
+  - rate_bucket: "4-4.5%"
+    pct_of_outstanding: 0.141
+    approx_midpoint_rate: 4.25
+    est_homes_millions: 7.1628
+  - rate_bucket: "4.5-5%"
+    pct_of_outstanding: 0.107
+    approx_midpoint_rate: 4.75
+    est_homes_millions: 5.4356
+  - rate_bucket: "5-5.5%"
+    pct_of_outstanding: 0.044
+    approx_midpoint_rate: 5.25
+    est_homes_millions: 2.2352
+  - rate_bucket: "5.5-6%"
+    pct_of_outstanding: 0.032
+    approx_midpoint_rate: 5.75
+    est_homes_millions: 1.6256
+  - rate_bucket: "6-6.5%"
+    pct_of_outstanding: 0.058
+    approx_midpoint_rate: 6.25
+    est_homes_millions: 2.9464
+  - rate_bucket: ">6.5%"
+    pct_of_outstanding: 0.049
+    approx_midpoint_rate: 7.0
+    est_homes_millions: 2.4892
