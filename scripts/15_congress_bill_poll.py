@@ -276,6 +276,19 @@ def main():
     summary = {"new_bills_logged": 0, "new_actions_logged": 0, "skipped_unchanged": 0,
                "no_match": 0, "detail_failed": 0, "list_failed": 0}
 
+    # Combined keyword set for cheap stub-title pre-filter
+    all_keywords = set(HIGH_KEYWORDS + MEDIUM_KEYWORDS)
+
+    def stub_title_matches(stub_title):
+        """Cheap pre-filter: does the stub title hit any housing keyword?
+        Lets us skip ~95% of detail fetches on first-run (most bills aren't
+        housing). False negatives possible if title is vague but subjects/
+        committees would have hit — accept the trade for ~10x speedup."""
+        if not stub_title:
+            return False
+        title_lower = stub_title.lower()
+        return any(k in title_lower for k in all_keywords)
+
     for bill_type in BILL_TYPES:
         print(f"\n--- Listing recent {bill_type.upper()} bills ---")
         try:
@@ -286,12 +299,15 @@ def main():
             continue
         print(f"  {len(recent)} bills returned")
 
-        for stub in recent:
+        title_filtered = 0
+        detail_fetched = 0
+        for i, stub in enumerate(recent):
             bill_number = str(stub.get("number", ""))
             if not bill_number:
                 continue
             bill_id = make_bill_id(CURRENT_CONGRESS, bill_type, bill_number)
             stub_update = stub.get("updateDate", "")
+            stub_title = stub.get("title", "") or ""
 
             # Skip if seen and update-date hasn't changed
             prev_update = state["tracked_bills"].get(bill_id)
@@ -299,14 +315,30 @@ def main():
                 summary["skipped_unchanged"] += 1
                 continue
 
+            # Cheap stub-title pre-filter — skip detail fetch if title has
+            # zero housing keywords. Tracked-bills with new actions are
+            # exception (we still need to fetch their detail).
+            already_tracked = bill_id in state["seen_bill_ids"]
+            if not already_tracked and not stub_title_matches(stub_title):
+                state["seen_bill_ids"][bill_id] = now_utc.isoformat()
+                state["tracked_bills"][bill_id] = stub_update
+                title_filtered += 1
+                continue
+
             # Stage 2: fetch detail
             try:
                 detail = fetch_bill_detail(CURRENT_CONGRESS, bill_type, bill_number)
                 time.sleep(DETAIL_THROTTLE_SEC)
+                detail_fetched += 1
             except Exception as e:
                 print(f"  [{bill_id}] detail fetch failed: {e}")
                 summary["detail_failed"] += 1
                 continue
+
+            # Progress every 25 detail fetches
+            if detail_fetched % 25 == 0:
+                print(f"  ({i+1}/{len(recent)} processed, {detail_fetched} detail fetches, "
+                      f"{title_filtered} title-filtered)")
 
             # Score
             scored = score_bill(detail)
