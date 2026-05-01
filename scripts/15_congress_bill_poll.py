@@ -60,9 +60,14 @@ HIGH_KEYWORDS = [
 ]
 
 MEDIUM_KEYWORDS = [
-    "rent", "rental", "evictions", "affordable housing",
+    "rental", "evictions", "affordable housing",
     "zoning", "land use", "building code", "construction",
     "real estate", "property tax",
+]
+# Short tokens that need word-boundary matching (avoid "rent" matching
+# "Parenthood" / "Apprenticeship" / "different")
+MEDIUM_REGEX = [
+    r"\brent\b",  # standalone word "rent" only
 ]
 
 # Bill-number patterns — we already log structured bill_id, but use regex
@@ -175,13 +180,31 @@ def find_keyword_hits(text, keywords):
     return [k for k in keywords if k in text_lower]
 
 
-def score_bill(bill_detail):
+def find_regex_hits(text, patterns):
+    """Word-boundary regex hits — for short tokens like 'rent' that would
+    otherwise match 'Parenthood' / 'Apprenticeship'."""
+    if not text:
+        return []
+    out = []
+    for pat in patterns:
+        if re.search(pat, text, re.IGNORECASE):
+            # Strip regex syntax for display
+            label = pat.replace(r"\b", "").strip()
+            out.append(label)
+    return out
+
+
+def score_bill(bill_detail, committee_names=None):
     """Score a bill detail dict. Returns dict with score, hits, matched_fields,
-    promote (bool), priority."""
+    promote (bool), priority. `committee_names` must be passed in (the bill
+    detail endpoint returns committees as a URL reference, not inline)."""
+    if committee_names is None:
+        committee_names = []
     title = (bill_detail.get("title", "") or "")
     policy_area = (bill_detail.get("policyArea", {}) or {}).get("name", "")
     subjects_list = bill_detail.get("subjects", {}).get("legislativeSubjects", []) or []
     subjects = " ".join(s.get("name", "") for s in subjects_list if s)
+    subj_blob = policy_area + " " + subjects
     sponsor_name = ""
     sponsors = bill_detail.get("sponsors", []) or []
     if sponsors:
@@ -189,8 +212,10 @@ def score_bill(bill_detail):
 
     title_high = find_keyword_hits(title, HIGH_KEYWORDS)
     title_med = find_keyword_hits(title, MEDIUM_KEYWORDS)
-    subj_high = find_keyword_hits(policy_area + " " + subjects, HIGH_KEYWORDS)
-    subj_med = find_keyword_hits(policy_area + " " + subjects, MEDIUM_KEYWORDS)
+    title_med += find_regex_hits(title, MEDIUM_REGEX)
+    subj_high = find_keyword_hits(subj_blob, HIGH_KEYWORDS)
+    subj_med = find_keyword_hits(subj_blob, MEDIUM_KEYWORDS)
+    subj_med += find_regex_hits(subj_blob, MEDIUM_REGEX)
 
     matched_fields = []
     if title_high or title_med:
@@ -209,9 +234,6 @@ def score_bill(bill_detail):
         matched_fields.append("sponsor")
 
     # Hard-promote: any matched committee in our promote-set
-    committees = bill_detail.get("committees", {}) or {}
-    committee_list = committees.get("committees", []) or []
-    committee_names = [c.get("name", "") for c in committee_list]
     on_promote_committee = any(c in HARD_PROMOTE_COMMITTEES for c in committee_names)
     if on_promote_committee and (title_high or subj_high):
         matched_fields.append("committee")
@@ -253,9 +275,23 @@ def list_recent_bills(bill_type):
 
 
 def fetch_bill_detail(congress, bill_type, bill_number):
-    """Stage 2: detail endpoint — get full bill object incl. committees, subjects."""
+    """Stage 2: detail endpoint — full bill object (subjects, sponsor, action).
+    NOTE: committees come back as a `{url}` reference, not inline — fetch
+    them separately via fetch_bill_committees() when needed."""
     data = api_get(f"bill/{congress}/{bill_type}/{bill_number}")
     return data.get("bill", {}) or {}
+
+
+def fetch_bill_committees(congress, bill_type, bill_number):
+    """Stage 2b: committees endpoint — separate call because the main bill
+    detail returns only a URL reference. Returns list of committee names."""
+    try:
+        data = api_get(f"bill/{congress}/{bill_type}/{bill_number}/committees")
+        committees = data.get("committees", []) or []
+        return [c.get("name", "") for c in committees if c.get("name")]
+    except Exception as e:
+        print(f"  [committees fetch failed] {congress}-{bill_type}-{bill_number}: {e}")
+        return []
 
 
 # ── main ───────────────────────────────────────────────────────────────────
@@ -340,14 +376,21 @@ def main():
                 print(f"  ({i+1}/{len(recent)} processed, {detail_fetched} detail fetches, "
                       f"{title_filtered} title-filtered)")
 
-            # Score
-            scored = score_bill(detail)
-            if scored["priority"] == "log" and not scored["hits"]:
+            # Score (first pass — no committees yet, hard-promote can't fire)
+            scored = score_bill(detail, committee_names=[])
+            if not scored["hits"]:
                 # Not housing-relevant at all — mark seen so we don't re-evaluate
                 state["seen_bill_ids"][bill_id] = now_utc.isoformat()
                 state["tracked_bills"][bill_id] = stub_update
                 summary["no_match"] += 1
                 continue
+
+            # Has at least one keyword hit — fetch committees so the
+            # hard-promote rule (HFS / Banking / Ways & Means / Finance)
+            # can actually fire. Bill-detail returns committees as a URL ref.
+            committee_names = fetch_bill_committees(CURRENT_CONGRESS, bill_type, bill_number)
+            time.sleep(DETAIL_THROTTLE_SEC)
+            scored = score_bill(detail, committee_names=committee_names)
 
             # Action-change detection (re-alert if signature changed)
             latest_action = detail.get("latestAction", {}) or {}
