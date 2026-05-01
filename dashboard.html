@@ -55,12 +55,14 @@ a:hover { text-decoration: underline; }
 .scenario .stat .num { font-size: 20px; font-weight: 600; }
 .scenario .stat .l { font-size: 11px; color: var(--muted); text-transform: uppercase; }
 .scenario .stat .sub { font-size: 11px; color: var(--muted); margin-top: 4px; opacity: 0.85; }
-.spring-controls { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 6px; }
-.spring-controls .spring-label { color: var(--muted); font-size: 13px; }
-.spring-controls .spring-pct { color: var(--muted); font-size: 13px; margin-left: -4px; margin-right: 4px; }
-.spring-controls input[type="number"] { width: 70px; padding: 4px 6px; background: rgba(0,0,0,0.3); color: inherit; border: 1px solid rgba(255,255,255,0.15); border-radius: 4px; font-size: 13px; font-variant-numeric: tabular-nums; }
-.spring-controls button { padding: 4px 10px; background: rgba(255,255,255,0.08); color: inherit; border: 1px solid rgba(255,255,255,0.15); border-radius: 4px; font-size: 12px; cursor: pointer; }
-.spring-controls button:hover { background: rgba(255,255,255,0.15); }
+.spring-controls { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 8px; }
+.spring-controls .spring-label { color: var(--muted); font-size: 13px; text-transform: uppercase; letter-spacing: 0.04em; font-weight: 600; }
+.spring-controls .spring-pct { color: var(--fg); font-size: 22px; font-weight: 600; margin-left: -4px; margin-right: 6px; font-variant-numeric: tabular-nums; }
+.spring-controls input[type="number"] { width: 110px; padding: 8px 12px; background: rgba(0,0,0,0.35); color: var(--fg); border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; font-size: 22px; font-weight: 600; font-variant-numeric: tabular-nums; text-align: right; }
+.spring-controls input[type="number"]:focus { outline: none; border-color: var(--accent); background: rgba(0,0,0,0.5); }
+.spring-controls input[type="number"]::-webkit-inner-spin-button { opacity: 0.6; }
+.spring-controls button { padding: 6px 12px; background: rgba(255,255,255,0.08); color: var(--muted); border: 1px solid rgba(255,255,255,0.15); border-radius: 4px; font-size: 12px; cursor: pointer; align-self: center; }
+.spring-controls button:hover { background: rgba(255,255,255,0.15); color: var(--fg); }
 .basket-bars { display: flex; flex-direction: column; gap: 4px; }
 .basket-row { display: grid; grid-template-columns: 220px 1fr 60px 60px; gap: 8px;
   align-items: center; font-size: 13px; }
