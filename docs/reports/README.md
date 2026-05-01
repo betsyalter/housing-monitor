@@ -46,13 +46,25 @@ Key counterweight to DHI's entry-level/volume thesis — TOL is positioned for h
 - **`FQ1 Down the Fairway, TOL Remains Best-Positioned.pdf`** — Sell-side framing TOL as best-positioned vs. peers in current environment.
 - **`TOL Final_ One of the Best Houses in the Neighborhood.pdf`** — Bullish thematic note on TOL's relative strength.
 
+## PHM (PulteGroup — Tier 1, mix-shift to entry/active-adult)
+
+PHM bridges DHI's entry-level volume play and TOL's move-up positioning — they run a deliberate three-segment mix (entry / move-up / active-adult). Q1 2026 print: 2026 guidance reiterated but gross margins now likely at the lower end of the range, prompting estimate-trims and "sidelined-on-valuation" calls. Useful for the "mid-cycle margin compression" cohort read where rate-sensitivity is real but not catastrophic.
+
+- **`2026-04-24-PHM.N-Oppenheimer  Co., I-Model Update_ 2026 Guide Reiterated, Execution Remains Stron...-121617753 (1).pdf`** — Oppenheimer model update post-print.
+- **`PHM 1Q26 earnings debrief takeaways.pdf`** — Compact post-earnings analytical recap (matches the DHI debrief format).
+- **`PHM_ 1Q26 Conference Call Takeaways.pdf`** — Conference call read-through.
+- **`PulteGroup Inc._ More 2H Weighting Pending Better Mix_ Sidelined on Valuation.pdf`** — Cautious sell-side framing — guide intact but mix-shift back-half-loaded, valuation no longer compelling.
+- **`PulteGroup Inc._ Post-Call Notes_ 2026 Guidance Reiterated Although GMs Now Likely at Lower End of Range_ Slightly Lowering Our Ests, PT_ Overweight. Fri Apr 24 2026.pdf`** — Sell-side post-call notes, estimates trimmed, OW maintained.
+- **`Wells Fargo PHM Note 5-1-26.pdf`** — Wells Fargo PHM note (5/1/26) — completes the Wells Fargo Tier-1 set (DHI 4-23, TOL 2-20, PHM 5-1).
+
 ## How to use these in the deep dive
 
-DHI = volume leader. TOL = move-up/luxury. NVR = high-margin build-to-order. **Three distinct operating models** in Tier 1, each with different rate-sensitivity. Use all three clusters as **calibration points** for what the Street is saying — confirms / disconfirms / extends Wyatt's Five-Factor Framework reads. Specifically:
+DHI = volume leader. TOL = move-up/luxury. NVR = high-margin build-to-order. PHM = mix-shift across entry/move-up/active-adult. **Four distinct operating models** in Tier 1, each with different rate-sensitivity. Use all four clusters as **calibration points** for what the Street is saying — confirms / disconfirms / extends Wyatt's Five-Factor Framework reads. Specifically:
 
-- The DHI / NVR / TOL notes have order/backlog/cancel commentary that maps directly to our `homebuilder_ops.csv` Q1 2026 data. Cross-checking these against our Haiku-extracted ops gives us a sell-side ground-truth for cohort patterns.
+- The DHI / NVR / TOL / PHM notes have order/backlog/cancel commentary that maps directly to our `homebuilder_ops.csv` Q1 2026 data. Cross-checking these against our Haiku-extracted ops gives us a sell-side ground-truth for cohort patterns.
 - **The NVR weakness vs TOL strength is itself signal** — NVR's build-to-order model means they need confirmed contracts; weak Q1 demand hits them first. TOL's luxury cohort is more rate-insensitive and is reiterating guidance. Map this to Wyatt's Step 2 (Demand Cohorts) as the bifurcating affordability story.
-- TOL ASP ~$977K vs DHI ASP ~$361K vs NVR ASP ~$457K spans the affordability spectrum — direct support for the median-buyer-age findings in Apollo deck slides 31–32.
+- **PHM is the mid-cycle tell** — guide reiterated but margins at the lower end, mix shift back-half-loaded, valuation calls turning cautious. If PHM (which is the most "average" Tier-1 by mix) starts under-delivering on margins while TOL's luxury holds, that's confirmation the affordability bifurcation is real — not just a TOL-luxury halo.
+- TOL ASP ~$977K vs DHI ASP ~$361K vs NVR ASP ~$457K vs PHM ASP ~$570K spans the affordability spectrum — direct support for the median-buyer-age findings in Apollo deck slides 31–32.
 - The HLMN/JELD/TOL multi-name note is useful for Step 3 (Value Chain) — building products vs homebuilders read.
 - The Morningstar fair-value framework is the right lens for the Stock-Scoring section (Step 5 of Part 12).
 - The Apollo deck is the **macro spine** for the Structural Map (Step 1) and Wave Position (Step 4) sections — its thesis-direction frames where we are in the cycle.
@@ -61,4 +73,4 @@ These materials are NOT a substitute for the framework — Wyatt's read is the v
 
 ## Coverage gaps
 
-We now have heavy DHI + TOL + NVR coverage spanning the three Tier-1 operating-model archetypes. Other Tier-1 builders (LEN, PHM, KBH, MTH, MHO) and the apartment REIT short basket (EQR, AVB, MAA, CPT, UDR, ESS) lack equivalent sell-side context. Wyatt: drop sell-side notes for those — especially the apartment REIT thesis — in this folder as `<source>_<ticker>_<date>.pdf` and re-run the README.
+We now have heavy DHI + TOL + NVR + PHM coverage spanning four Tier-1 operating-model archetypes. Other Tier-1 builders (LEN, KBH, MTH, MHO) and the apartment REIT short basket (EQR, AVB, MAA, CPT, UDR, ESS) lack equivalent sell-side context. Wyatt: drop sell-side notes for those — especially the apartment REIT thesis — in this folder as `<source>_<ticker>_<date>.pdf` and re-run the README.
