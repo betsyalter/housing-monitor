@@ -13,19 +13,37 @@
 # Last updated: 2026-05-01
 
 trusted:
+  # General financial / news of record
   - bloomberg.com
   - reuters.com
   - wsj.com
   - ft.com
   - nytimes.com
   - washingtonpost.com
+  - sec.gov
+  # Federal agencies & official sources
   - federalreserve.gov
   - fhfa.gov
   - hud.gov
+  - treasury.gov
+  - whitehouse.gov
+  - congress.gov
   - nar.realtor
-  - businesswire.com    # company press release wire — official primary source
-  - prnewswire.com      # company press release wire — official primary source
-  - sec.gov
+  # DC trade press — where housing/policy scuttlebutt breaks BEFORE Bloomberg
+  - politico.com         # promoted from normal — DC-first reporting
+  - politicopro.com
+  - punchbowl.news       # subscription DC newsletter, often has the early-breaks
+  - rollcall.com
+  - thehill.com          # promoted from normal
+  # Real estate trade press
+  - housingwire.com      # real estate / mortgage industry trade
+  - inman.com            # real estate trade
+  - realtormag.realtor   # NAR's own magazine — leading indicator on NAR positioning
+  - mba.org              # Mortgage Bankers Association
+  - nahb.org             # National Association of Home Builders
+  # Company press release wires
+  - businesswire.com
+  - prnewswire.com
 
 normal:
   - marketwatch.com
@@ -33,10 +51,7 @@ normal:
   - barrons.com
   - bnnbloomberg.ca
   - axios.com
-  - politico.com
-  - thehill.com
-  - rollcall.com
-  - benzinga.com         # debatable — has IR distribution + trader-blog content; keep in normal v1
+  - benzinga.com         # debatable — has IR distribution + trader-blog content
   - bizjournals.com      # local biz journals; useful for regional housing
   - investing.com
   - finance.yahoo.com

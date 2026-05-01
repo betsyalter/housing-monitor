@@ -44,12 +44,24 @@ FIRST_RUN_LOOKBACK_HOURS = 6   # only alert on articles within this window on fi
 # Keyword lists — multi-word phrases use substring match;
 # short single-tokens use word-boundary regex to avoid catching "narrow"/"binary".
 HIGH_SIGNAL = [
+    # Fed / monetary policy
     "federal reserve", "fomc", "rate cut", "rate hike", "fed cuts", "fed hikes",
-    "powell", "fed officials", "fed chair",
-    "housing legislation", "fannie mae", "freddie mac", "fhfa", "hud",
-    "assumable mortgage", "capital gains exclusion", "section 8",
-    "ginnie mae", "gse reform", "housing finance reform",
+    "powell", "fed officials", "fed chair", "warsh",
     "treasury yields", "central bank",
+    # Housing-specific federal agencies + named officials
+    "housing legislation", "fannie mae", "freddie mac", "fhfa", "hud",
+    "ginnie mae", "gse reform", "housing finance reform", "conservatorship",
+    "agency mbs", "loan-level price adjustment", "llpa",
+    "bessent", "secretary bessent",       # Treasury Sec
+    "pulte", "fhfa director",              # FHFA director
+    # Tax / legislative levers
+    "assumable mortgage", "capital gains exclusion", "section 121",
+    "1031 exchange", "section 8", "lihtc", "low income housing tax credit",
+    "down payment assistance", "first-time homebuyer credit",
+    "qm rule", "qualified mortgage",
+    # Trade groups & lobby (their public positioning often signals legislation)
+    "nahb", "national association of home builders",
+    "mba weekly", "mortgage bankers association",
 ]
 MEDIUM_SIGNAL = [
     "national association of realtors", "existing home sales",
@@ -57,17 +69,27 @@ MEDIUM_SIGNAL = [
     "homebuilder", "home price", "case-shiller", "case shiller",
     "homeownership", "household formation", "rent control", "single-family rental",
     "redfin", "zillow", "realtor.com",
+    # Trade press signals — NAR govt-affairs, housing policy think pieces
+    "vantagescore", "fico 10t", "credit scoring",
+    "executive order housing", "presidential memorandum",
 ]
 # Short tokens that need word-boundary matching (avoid 'nar' matching 'narrow')
-HIGH_SIGNAL_REGEX = [r"\bNAR\b"]   # case-sensitive: NAR (the org)
+HIGH_SIGNAL_REGEX = [
+    r"\bNAR\b",        # National Association of Realtors abbreviation
+    r"\bH\.?R\.?\s*\d+\b",  # House bills (e.g. "HR 1234" or "H.R. 1234")
+    r"\bS\.?\s*\d+\b",      # Senate bills (e.g. "S 567" or "S. 567")
+]
 MEDIUM_SIGNAL_REGEX = []
 
 # Hard-promote: if BOTH a macro-policy term AND a housing-transmission term hit,
 # article is immediate regardless of raw score (overrides press-release cap).
 MACRO_POLICY_TERMS = ["federal reserve", "fomc", "fhfa", "fannie", "freddie",
                       "hud", "housing legislation", "assumable mortgage",
-                      "capital gains exclusion", "powell", "fed officials",
-                      "national association of realtors"]
+                      "capital gains exclusion", "section 121", "1031 exchange",
+                      "powell", "warsh", "fed officials", "bessent", "pulte",
+                      "national association of realtors", "executive order",
+                      "presidential memorandum", "conservatorship",
+                      "lihtc", "qm rule", "ginnie mae"]
 HOUSING_TRANSMISSION_TERMS = ["mortgage", "housing", "home sales", "homebuilder",
                               "permits", "starts", "home price", "homeowner"]
 
