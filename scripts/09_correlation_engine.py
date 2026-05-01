@@ -103,26 +103,28 @@ def load_fred_monthly() -> pd.DataFrame:
 
     for col, meta in INDICATORS.items():
         if col not in raw.columns:
+            print(f"  [skip] {col}: not in fred_housing.csv columns")
             continue
         s = raw[col].dropna()
         if s.empty:
+            print(f"  [skip] {col}: column is all NaN")
             continue
 
-        # Resample to monthly: take last value in each month
         s_monthly = s.resample("MS").last()
-        # Forward-fill with cap (~1.5 months)
         s_filled = s_monthly.ffill(limit=2)
 
         if meta["transform"] == "diff_bps":
-            # First-difference in basis points (rate is in %, ×100 → bps)
             transformed = s_filled.diff() * 100.0
         elif meta["transform"] == "logdiff":
-            # Log-difference, robust to zeros via small-eps guard
             transformed = np.log(s_filled.replace({0: np.nan})).diff()
         else:
             transformed = s_filled.diff()
 
-        out[col] = out.index.map(lambda d: transformed.get(d, float("nan")))
+        # Use direct .reindex instead of .map to be robust to index dtype/timezone mismatches
+        out[col] = transformed.reindex(out.index)
+        non_null = out[col].notna().sum()
+        if non_null < 12:
+            print(f"  [warn] {col}: only {non_null} non-null monthly transformed obs")
 
     return out
 
@@ -150,7 +152,7 @@ def has_outlier(returns: pd.Series) -> bool:
 
 def correlate_window(rets: pd.Series, ind: pd.Series, n_min: int) -> tuple:
     """Pairwise correlation on overlapping months only."""
-    df = pd.concat([rets.rename("r"), ind.rename("i")], axis=1).dropna()
+    df = pd.concat([rets.rename("r"), ind.rename("i")], axis=1, sort=False).dropna()
     n = len(df)
     if n < n_min:
         return None
