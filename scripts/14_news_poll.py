@@ -63,20 +63,19 @@ HIGH_SIGNAL_REGEX = [r"\bNAR\b"]   # case-sensitive: NAR (the org)
 MEDIUM_SIGNAL_REGEX = []
 
 # Hard-promote: if BOTH a macro-policy term AND a housing-transmission term hit,
-# article is immediate regardless of raw score
+# article is immediate regardless of raw score (overrides press-release cap).
 MACRO_POLICY_TERMS = ["federal reserve", "fomc", "fhfa", "fannie", "freddie",
                       "hud", "housing legislation", "assumable mortgage",
-                      "capital gains exclusion", "powell", "fed officials"]
+                      "capital gains exclusion", "powell", "fed officials",
+                      "national association of realtors"]
 HOUSING_TRANSMISSION_TERMS = ["mortgage", "housing", "home sales", "homebuilder",
                               "permits", "starts", "home price", "homeowner"]
 
-# Tighter rule for ambiguous terms: require co-occurrence in same article.
-# These keywords STILL hit, but get stripped (in score AND title bonus) if the
-# article has no housing-transmission term anywhere.
-AMBIGUOUS_REQUIRES_HOUSING = ["federal reserve", "fomc", "rate cut", "rate hike",
-                              "fed cuts", "fed hikes", "30-year",
-                              "treasury yields", "central bank",
-                              "powell", "fed officials", "fed chair"]
+# Tighter rule for *genuinely ambiguous* terms: 30-year can mean a 30-year
+# sentence, a 30-year career, or the 30-year mortgage. Require housing context.
+# (Fed/FOMC/rate-hike/Powell are NOT ambiguous in financial news context —
+# they're directly thesis-relevant even without 'mortgage' in the same article.)
+AMBIGUOUS_REQUIRES_HOUSING = ["30-year"]
 
 # Press release wires — relevant for FMP /news/stock when ticker is in our universe,
 # but they overlap with 8-K stream coverage. Cap their score so they don't drown
@@ -250,11 +249,16 @@ def score_article(title, body, site, publisher, sources):
     title_medium = [m for m in medium_hits if m in title_lower or
                     (m in MEDIUM_SIGNAL_REGEX and re.search(m, title or ""))]
 
-    score = 2 * len(high_hits) + len(medium_hits) + len(title_high) + len(title_medium) // 2
+    keyword_score = 2 * len(high_hits) + len(medium_hits) + len(title_high) + len(title_medium) // 2
+    score = keyword_score
 
-    # Source tier adjustment
+    # Source tier adjustment.
+    # Trusted bonus only fires when there's at least one keyword hit, so we
+    # don't promote random Reuters/WSJ articles about unrelated topics
+    # (UK retail, biofuels, etc) into the digest just for being trusted.
+    # Penalty applies regardless — it's a strict signal of low quality.
     tier = source_tier(site, publisher, sources)
-    if tier == "trusted":
+    if tier == "trusted" and keyword_score > 0:
         score += 2
     elif tier == "penalty":
         score -= 2
@@ -263,6 +267,8 @@ def score_article(title, body, site, publisher, sources):
     # Press-release cap: BusinessWire/PRNewswire ticker articles overlap with the
     # 8-K stream pipeline (Script 11 already alerts on those). Cap their score so
     # they don't double-fire emails for company earnings.
+    # NOTE: hard-promote (below) overrides this cap for genuine policy-source
+    # press releases like NAR's monthly EHS data drop.
     if is_press_release(site, publisher):
         score = min(score, 2)  # hard cap below digest threshold (3)
 
@@ -272,9 +278,10 @@ def score_article(title, body, site, publisher, sources):
     if (set(high_hits) - set(title_high)) or (set(medium_hits) - set(title_medium)):
         matched_in.append("text")
 
-    # Hard-promote: macro + housing combo
+    # Hard-promote: macro + housing combo overrides press-release cap so
+    # NAR/government data drops still alert.
     has_macro = any(t in combined_lower for t in MACRO_POLICY_TERMS)
-    promote = has_macro and has_housing and not is_press_release(site, publisher)
+    promote = has_macro and has_housing
 
     return {
         "score": score,
