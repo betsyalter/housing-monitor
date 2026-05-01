@@ -1,0 +1,60 @@
+# News source quality tiers for Script 14 dispatch.
+# Wyatt-owned config (analyst/ domain). Update as we observe what FMP serves.
+#
+# Score adjustment applied to each article:
+#   trusted: +2  (high-trust journalism + official sources)
+#   normal:   0  (decent but not authoritative)
+#   penalty: -2  (aggregators, listicles, low signal)
+#   exclude: drop entirely before scoring (pure SEO / clickbait)
+#
+# Match by `site` field (preferred — domain) or `publisher` field (fallback).
+# Match is substring/case-insensitive: "bloomberg.com" in "www.bloomberg.com" → trusted.
+#
+# Last updated: 2026-05-01
+
+trusted:
+  - bloomberg.com
+  - reuters.com
+  - wsj.com
+  - ft.com
+  - nytimes.com
+  - washingtonpost.com
+  - federalreserve.gov
+  - fhfa.gov
+  - hud.gov
+  - nar.realtor
+  - businesswire.com    # company press release wire — official primary source
+  - prnewswire.com      # company press release wire — official primary source
+  - sec.gov
+
+normal:
+  - marketwatch.com
+  - cnbc.com
+  - barrons.com
+  - bnnbloomberg.ca
+  - axios.com
+  - politico.com
+  - thehill.com
+  - rollcall.com
+  - benzinga.com         # debatable — has IR distribution + trader-blog content; keep in normal v1
+  - bizjournals.com      # local biz journals; useful for regional housing
+  - investing.com
+  - finance.yahoo.com
+
+penalty:
+  - zacks.com
+  - fool.com             # Motley Fool
+  - seekingalpha.com
+  - investorplace.com
+  - tipranks.com
+  - marketbeat.com
+  - insidermonkey.com
+  - thestreet.com
+  - 247wallst.com
+
+exclude:
+  - smartreads.com
+  - simplywall.st
+  - finbold.com
+  - investorobserver.com
+  - amigobulls.com

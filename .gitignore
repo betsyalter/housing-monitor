@@ -17,4 +17,6 @@ build_*.py
 FTDR_*.xlsx
 data/last_run.json
 data/alert_state.json
+data/news_state.json
+data/news_stream_log.csv
 get-pip.py

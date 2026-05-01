@@ -408,6 +408,66 @@ def section_correlations():
     return body, state
 
 
+def section_news():
+    """Top 5 high-signal news articles from last 24h. Compact summary."""
+    df, status = _safe_read_csv(f"{DATA_DIR}/news_stream_log.csv")
+    state = {"name": "news", "status": status}
+    if df is None:
+        return _missing_block("Recent High-Signal News (last 24h)",
+                              "news stream log not yet generated",
+                              "run scripts/14_news_poll.py (or wait for the 5-min cron)"), state
+
+    df["detected_at"] = pd.to_datetime(df["detected_at"], errors="coerce", utc=True)
+    cutoff = pd.Timestamp.now(tz="UTC") - pd.Timedelta(hours=24)
+    recent = df[df["detected_at"] >= cutoff]
+    # Drop log-only and excluded; keep immediate + digest, dedupe on dedupe_key
+    relevant = recent[recent["alert_priority"].isin(["immediate", "digest"])]
+    relevant = relevant.drop_duplicates(subset=["dedupe_key"]).sort_values("score", ascending=False)
+
+    body = "## Recent High-Signal News (last 24h)\n\n"
+
+    n_imm = int((recent["alert_priority"] == "immediate").sum())
+    n_dig = int((recent["alert_priority"] == "digest").sum())
+    body += f"_{n_imm} immediate, {n_dig} digest-priority, "
+    body += f"{int((recent['alert_priority'] == 'log').sum())} log-only since {cutoff.strftime('%Y-%m-%d %H:%M UTC')}._\n\n"
+
+    if relevant.empty:
+        body += "_No high-signal news in the last 24 hours._\n"
+        state["count_immediate_24h"] = n_imm
+        state["count_digest_24h"] = n_dig
+        state["top_articles"] = []
+        return body, state
+
+    # Cap at 3 macro/policy + 2 ticker-specific per codex
+    macro = relevant[relevant["stream"] == "topic"].head(3)
+    ticker_news = relevant[relevant["stream"] == "ticker"].head(2)
+    top = pd.concat([macro, ticker_news]).head(5)
+
+    json_rows = []
+    for _, r in top.iterrows():
+        title = (r.get("title", "") or "")[:120]
+        publisher = r.get("publisher", "") or "?"
+        ticker = r.get("ticker", "") or "(macro)"
+        score = int(r.get("score", 0))
+        url = r.get("url", "") or ""
+        priority = r.get("alert_priority", "")
+        keywords = ((r.get("keyword_hits_high", "") or "").replace("|", ", ")
+                   or (r.get("keyword_hits_medium", "") or "").replace("|", ", ")
+                   or "—")
+        body += f"- **[{score}] {ticker}** — [{title}]({url})\n"
+        body += f"    {publisher} &middot; *{priority}* &middot; keywords: {keywords}\n"
+        json_rows.append({
+            "title": title, "ticker": ticker, "publisher": publisher,
+            "url": url, "score": score, "priority": priority,
+            "keywords": keywords, "published_at": r.get("published_at", ""),
+        })
+
+    state["count_immediate_24h"] = n_imm
+    state["count_digest_24h"] = n_dig
+    state["top_articles"] = json_rows
+    return body, state
+
+
 def section_recent_8ks():
     df, status = _safe_read_csv(f"{DATA_DIR}/sec_stream_log.csv")
     state = {"name": "recent_8ks", "status": status}
@@ -527,7 +587,7 @@ def main():
 
     for fn in [section_macro, section_coiled_spring, section_homebuilders,
                section_reits, section_price_action, section_correlations,
-               section_recent_8ks, section_insider]:
+               section_news, section_recent_8ks, section_insider]:
         try:
             md, state = fn()
             md_parts.append(md)

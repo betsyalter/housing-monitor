@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.housing-monitor.news-digest</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/bin/bash</string>
+        <string>/Users/macmini3/housing_monitor/scripts/run_news_digest.sh</string>
+    </array>
+
+    <key>WorkingDirectory</key>
+    <string>/Users/macmini3/housing_monitor</string>
+
+    <!-- 4:15 PM ET = 1:15 PM PT (Mac mini local time during DST).
+         15 min after market close, before evening commute. -->
+    <key>StartCalendarInterval</key>
+    <dict>
+        <key>Hour</key>
+        <integer>13</integer>
+        <key>Minute</key>
+        <integer>15</integer>
+    </dict>
+
+    <key>RunAtLoad</key>
+    <false/>
+
+    <key>StandardOutPath</key>
+    <string>/Users/macmini3/housing_monitor/logs/news_digest.stdout.log</string>
+
+    <key>StandardErrorPath</key>
+    <string>/Users/macmini3/housing_monitor/logs/news_digest.stderr.log</string>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>HOME</key>
+        <string>/Users/macmini3</string>
+        <key>PATH</key>
+        <string>/opt/homebrew/Caskroom/miniforge/base/envs/housing/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin</string>
+    </dict>
+</dict>
+</plist>

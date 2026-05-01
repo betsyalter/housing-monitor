@@ -8,6 +8,8 @@ Two scheduled jobs make this a real-time monitor instead of a manually-run tool.
 |-------|----------|--------------|
 | `com.housing-monitor.hourly`   | Every hour, 24/7 | `06b_sec_8k_scan.py` → `11_sec_alert_dispatcher.py`. Pulls new 8-Ks from sec-api, classifies them, emails alerts on hits. |
 | `com.housing-monitor.daily`    | 6:00 AM Mac mini local time | `10_context_generator.py` then `git commit + push` if `housing_context.md` changed. Refreshes the GitHub Pages dashboard. |
+| `com.housing-monitor.news`     | Every 5 min, 24/7 (script throttles internally to 5 min market hours / 15 min after-market / 30 min off-hours) | `14_news_poll.py` → `14b_news_alert_dispatcher.py`. Polls FMP news, scores articles, emails high-priority alerts. Medium-priority queued for digest. |
+| `com.housing-monitor.news-digest` | 1:15 PM Mac mini local (= 4:15 PM ET) | `14b_news_alert_dispatcher.py --digest`. Sends the day's batched medium-priority news as one email. |
 
 Schedules are intentionally simple — every hour and once a day. 8-Ks land any time (not just market hours), and the alert dispatcher is a no-op when nothing's new, so over-running it costs nothing.
 
@@ -22,10 +24,14 @@ chmod +x ~/housing_monitor/scripts/run_daily.sh
 mkdir -p ~/Library/LaunchAgents
 ln -sf ~/housing_monitor/launchd/com.housing-monitor.hourly.plist ~/Library/LaunchAgents/
 ln -sf ~/housing_monitor/launchd/com.housing-monitor.daily.plist ~/Library/LaunchAgents/
+ln -sf ~/housing_monitor/launchd/com.housing-monitor.news.plist ~/Library/LaunchAgents/
+ln -sf ~/housing_monitor/launchd/com.housing-monitor.news-digest.plist ~/Library/LaunchAgents/
 
 # Load them
 launchctl load ~/Library/LaunchAgents/com.housing-monitor.hourly.plist
 launchctl load ~/Library/LaunchAgents/com.housing-monitor.daily.plist
+launchctl load ~/Library/LaunchAgents/com.housing-monitor.news.plist
+launchctl load ~/Library/LaunchAgents/com.housing-monitor.news-digest.plist
 
 # Verify they're loaded
 launchctl list | grep housing-monitor

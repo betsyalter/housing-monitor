@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.housing-monitor.news</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/bin/bash</string>
+        <string>/Users/macmini3/housing_monitor/scripts/run_news_poll.sh</string>
+    </array>
+
+    <key>WorkingDirectory</key>
+    <string>/Users/macmini3/housing_monitor</string>
+
+    <!-- Wakes every 5 min; script's internal cadence guard throttles to
+         15 min after-hours and 30 min off-hours to be polite to FMP -->
+    <key>StartInterval</key>
+    <integer>300</integer>
+
+    <key>RunAtLoad</key>
+    <false/>
+
+    <key>StandardOutPath</key>
+    <string>/Users/macmini3/housing_monitor/logs/news_poll.stdout.log</string>
+
+    <key>StandardErrorPath</key>
+    <string>/Users/macmini3/housing_monitor/logs/news_poll.stderr.log</string>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>HOME</key>
+        <string>/Users/macmini3</string>
+        <key>PATH</key>
+        <string>/opt/homebrew/Caskroom/miniforge/base/envs/housing/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin</string>
+    </dict>
+</dict>
+</plist>
