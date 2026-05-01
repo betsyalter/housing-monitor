@@ -497,11 +497,12 @@ def section_insider():
     return body, state
 
 
-FOOTER = """## Structural vs Cyclical Framework
+FOOTER = """## Five-Factor Framework
 
-**Cyclical** (rate-driven, reversible): rate lock-in (most mortgaged owners are below current 30yr); affordability (ownership-vs-rent spread at historic highs); Fed constrained by oil/inflation outlook.
+The full analyst write-up — rate lock-in, REIT absorption, second-home turnover, demographics ceiling, rent-own spread — lives in [`analyst/five_factor_framework.md`](analyst/five_factor_framework.md). The factor weights consumed by Script 09 / future scoring layers are in [`analyst/factor_weights.yaml`](analyst/factor_weights.yaml). Both are working drafts as of 2026-05-01; canonical weights pending.
 
-**Structural** (demographic/supply, slower to reverse): SFR REITs absorbed existing-home supply and are not sellers; homeownership ceiling (younger cohorts shifting to renting); 2nd/3rd-home owners turn over less frequently than primary.
+## Apartment REIT Short Basket (Tier 4 thesis)
+The short-on-unlock basket write-up lives in [`analyst/apartment_reit_short_basket.md`](analyst/apartment_reit_short_basket.md). Sizing + final basket members pending.
 
 ## Unlock Trigger Checklist
 - [ ] 30yr drops below 5.5% (partial unlock, ~13M homes incremental)
@@ -514,7 +515,7 @@ FOOTER = """## Structural vs Cyclical Framework
 - **FMP** — prices, financials, transcripts, insider trades for 262-ticker universe
 - **sec-api.io** — 10-K Item 1+2+7 for REITs, 8-K stream
 - **FHFA** — mortgage rate distribution
-- **Anthropic Claude Haiku** — extracts homebuilder operational KPIs from earnings press releases
+- **Anthropic Claude Haiku** — extracts homebuilder operational KPIs from 8-K Item 2.02 press releases
 """
 
 
