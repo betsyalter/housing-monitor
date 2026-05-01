@@ -229,18 +229,28 @@ function renderMacro(s) {
       : fmt(m.value);
     let deltaStr = "";
     let deltaClass = "";
-    if (m.delta_4w != null && !isNaN(m.delta_4w)) {
-      const sign = m.delta_4w >= 0 ? "+" : "−";
-      deltaClass = m.delta_4w >= 0 ? "up" : "down";
-      const absD = Math.abs(m.delta_4w);
+    // delta_vs_prior is the cadence-aware delta (vs the prior unique observation,
+    // which could be a week, month, or quarter ago depending on series cadence).
+    // delta_4w retained as fallback for older JSON format.
+    const delta = m.delta_vs_prior != null ? m.delta_vs_prior : m.delta_4w;
+    if (delta != null && !isNaN(delta)) {
+      const sign = delta >= 0 ? "+" : "−";
+      deltaClass = delta >= 0 ? "up" : "down";
+      const absD = Math.abs(delta);
       deltaStr = isPct ? `${sign}${absD.toFixed(2)}%`
         : isDollar ? `${sign}$${fmt(absD)}`
         : `${sign}${fmt(absD)}`;
     }
+    // If the cadence is quarterly-ish, show "vs <prior_date>" so the reader
+    // doesn't read it as a 4-week move.
+    let cadenceTag = "";
+    if (m.cadence_days != null && m.cadence_days >= 60 && m.prior_date) {
+      cadenceTag = `<span class="muted" style="font-size:11px"> vs ${m.prior_date}</span>`;
+    }
     return `<div class="metric">
       <div class="label">${m.label}</div>
       <div class="value">${valStr}</div>
-      <div class="delta ${deltaClass}">${deltaStr} <span class="muted">(${m.days_stale}d)</span></div>
+      <div class="delta ${deltaClass}">${deltaStr}${cadenceTag} <span class="muted">(${m.days_stale}d)</span></div>
     </div>`;
   }).join("");
 }

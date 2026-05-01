@@ -111,19 +111,40 @@ def section_macro():
         stale = _days_stale(latest['date'])
         latest_observed = max(latest_observed, latest['date']) if latest_observed else latest['date']
 
-        four_wk_ago = latest['date'] - timedelta(days=28)
-        prior = sub[sub['date'] <= four_wk_ago]
+        # Cadence-aware delta: find the prior UNIQUE observation. Works
+        # regardless of whether series is weekly, monthly, or quarterly —
+        # avoids the "Δ vs 4w ago" trap where quarterly data shows the same
+        # value (delta=0 or noise) because no new print happened in that window.
+        unique_obs = sub.drop_duplicates(subset=[col]).sort_values('date')
+        prior = unique_obs[unique_obs['date'] < latest['date']]
         delta = None
+        prior_date_str = ""
+        cadence_days = None
         if not prior.empty:
-            delta = (latest[col] - prior.iloc[-1][col]) * scale
+            prior_row = prior.iloc[-1]
+            delta = (latest[col] - prior_row[col]) * scale
+            prior_date_str = prior_row['date'].strftime("%Y-%m-%d")
+            cadence_days = (latest['date'] - prior_row['date']).days
         delta_str = _fmt_delta(delta, decimals, suffix, prefix)
 
+        # Show prior date in the cell when cadence is materially different
+        # from "weekly-ish" — helps the reader read the delta correctly.
+        cadence_label = ""
+        if cadence_days is not None:
+            if cadence_days >= 60:
+                cadence_label = f" (vs {prior_date_str})"
+            elif cadence_days >= 14:
+                cadence_label = f" (vs {prior_date_str})"
+
         rows.append(
-            f"| {label} | {_fmt_num(latest_val, decimals, suffix, prefix)} | {delta_str} | {latest_date} | {stale}d |"
+            f"| {label} | {_fmt_num(latest_val, decimals, suffix, prefix)} | "
+            f"{delta_str}{cadence_label} | {latest_date} | {stale}d |"
         )
         json_rows.append({
             "metric": col, "label": label, "value": float(latest_val),
-            "delta_4w": float(delta) if delta is not None else None,
+            "delta_vs_prior": float(delta) if delta is not None else None,
+            "prior_date": prior_date_str,
+            "cadence_days": cadence_days,
             "as_of": latest_date, "days_stale": stale,
         })
 
